@@ -1,0 +1,86 @@
+name: "Phase 0 Task"
+description: "Predefined Phase 0 tasks for the AADL project (basic queue-based model)."
+title: "[Phase 0] <Task>"
+labels: ["phase-0"]
+assignees: []
+
+body:
+  - type: dropdown
+    id: task
+    attributes:
+      label: "Select Phase 0 Task"
+      description: "Choose a predefined task from the Phase 0 roadmap."
+      options:
+        - "Setup Repository and Project Board"
+        - "Write Phase 0 Architecture Document"
+        - "Initialize Solidity Project with Foundry"
+        - "Implement Queue Functions in Contract"
+        - "Simple CLI for Queue Interaction"
+        - "Implement Unit Tests for Queue Contract"
+        - "Document Phase 0 Progress"
+        - "Final Review and Retrospective"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Task Description"
+      description: "Pre-filled description based on selected task. Edit if needed."
+      placeholder: |
+        - Setup Repository and Project Board:
+          Create a GitHub repository, add README.md and CONTRIBUTING.md, and configure GitHub Projects board for task tracking.
+
+        - Write Phase 0 Architecture Document:
+          Document the basic one-queue architecture (actors, workflow, and minimal data flow). Store in docs/architecture-phase0.md.
+
+        - Initialize Solidity Project with Foundry:
+          Create a new Foundry project. Set up initial contract files, forge.toml, and verify compilation.
+
+        - Implement Queue Functions in Contract:
+          Implement basic queue contract with enqueue and dequeue logic. Store applicants with address + metadata.
+
+        - Simple CLI for Queue Interaction:
+          Write a small Node.js/TypeScript CLI script to enqueue/dequeue users from the contract.
+
+        - Implement Unit Tests for Queue Contract:
+          Write unit tests in Foundry to cover queue logic (enqueue, dequeue, error cases).
+
+        - Document Phase 0 Progress:
+          Write a short markdown report summarizing what’s built and lessons learned.
+
+        - Final Review and Retrospective:
+          Review the Phase 0 project, check alignment with future AADL needs, and list improvements for Phase 1.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: estimate
+    attributes:
+      label: "Estimated Time"
+      description: "Effort size for the selected task."
+      options:
+        - XS (0.5 day)
+        - S (1 day)
+        - M (2–3 days)
+        - L (4–5 days)
+        - XL (1 week+)
+    validations:
+      required: true
+
+  - type: textarea
+    id: completion
+    attributes:
+      label: "Definition of Done"
+      description: "Pre-filled completion criteria. Adjust if needed."
+      placeholder: |
+        - Repo: Repo initialized, README + CONTRIBUTING committed, project board configured.
+        - Architecture: docs/architecture-phase0.md exists, reviewed, and committed.
+        - Foundry Init: Contract compiles successfully with forge build.
+        - Queue Functions: Contract deployed locally, enqueue/dequeue works.
+        - CLI: CLI can enqueue/dequeue to local chain.
+        - Tests: forge test passes for all core functions.
+        - Docs: Report committed in docs/progress-phase0.md.
+        - Review: Retrospective document added with next steps.
+    validations:
+      required: true
