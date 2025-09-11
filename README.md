@@ -28,24 +28,6 @@ This project contains:
 
 ---
 
-## Repository structure
-
-/
-├─ contracts/ # Solidity contracts
-├─ foundry.toml # Foundry configuration
-├─ script/ # Deployment & helper scripts
-├─ test/ # Foundry tests
-├─ backend/ # Node.js indexer & worker
-├─ frontend/ # React admin & citizen UI
-├─ docs/ # Architecture diagrams, privacy runbook, deployment notes
-├─ .github/ # CI and issue templates
-└─ README.md
-
-yaml
-Copy code
-
----
-
 ## Quick start (developer)
 
 ### Prerequisites
