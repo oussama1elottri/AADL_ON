@@ -7,10 +7,10 @@ AADL_ON, a transparent, verifiable, and tamper-proof system for fair housing all
 
 ## Overview
 
-aadl_on is a minimal, production-oriented proof-of-concept that implements an auditable single FIFO queue per *wilaya* (province) for Algeria’s national housing program (AADL). The repository demonstrates how verified applicant records can be anchored on-chain as immutable commitments, how a deterministic queue can be managed in a gas-efficient manner, and how citizens can obtain verifiable receipts. It is intentionally scoped as an undergraduate-friendly learning project and a scaffold for future, production-grade extensions (multi-tier queues, aging/escalation, appeals, multisig governance, and public anchoring).
+aadl_on is a minimal, production-oriented proof-of-concept that implements an auditable single FIFO queue per *wilaya* (province) for Algeria’s national housing program (AADL). The repository demonstrates how verified applicant records can be anchored on-chain as immutable commitments, how a deterministic queue can be managed in a gas-efficient manner, and how citizens can obtain verifiable receipts.
 
 This project contains:
-- Smart contracts (Solidity) and automated tests (Foundry).
+- Smart contracts (Solidity) and tests (Foundry).
 - A minimal backend (Node.js) that stores off-chain metadata and indexes on-chain events.
 - A lightweight React frontend for admin verification and citizen receipts.
 - Scripts and documentation to run a local development environment.
