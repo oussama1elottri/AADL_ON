@@ -1,7 +1,7 @@
-# aadl_on — Auditable Housing Application Queue (MVP)
+# AADL_ON — Auditable Housing Application Queue (MVP)
 
 **One-line description:**  
-Auditable, tamper-resistant FIFO queue MVP for AADL housing applications — Foundry + Solidity + React prototype for verifiable applicant anchoring and selection.
+Auditable, tamper-resistant FIFO queue MVP for AADL housing applications, Foundry + Solidity + React prototype for verifiable applicant anchoring and selection.
 
 ---
 
