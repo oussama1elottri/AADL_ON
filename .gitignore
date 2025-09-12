@@ -1,6 +1,3 @@
-# Compiler files
-cache/
-out/
 
 # Ignores development broadcast logs
 !/broadcast
@@ -10,5 +7,39 @@ out/
 # Docs
 docs/
 
-# Dotenv file
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# Solidity / Foundry
+cache/
+out/
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
 .env
+
+# General
+.DS_Store
+Thumbs.db
+*.log
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
