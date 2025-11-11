@@ -1,0 +1,16 @@
+python-dotenv
+
+web3
+merkletools
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# Environment Variables
+python-dotenv
+
+# API Server (FastAPI & Uvicorn)
+fastapi
+uvicorn[standard]
+pydantic

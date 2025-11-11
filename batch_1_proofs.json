@@ -1,0 +1,30 @@
+{
+  "b6926d28a7ba596c5632fd4df21b693d208547aaaf163f7f9f4000f93d30b40f": {
+    "position": 0,
+    "proof": [
+      "9b6f9a7f51a425b92e3077a23f867b7b7c2e7c1219fb4bb178a87c64f5470d90",
+      "8b7cbd83384ae7fa5bcb700e50748fa9ea35699502546647880d7f031025aa4d"
+    ]
+  },
+  "9b6f9a7f51a425b92e3077a23f867b7b7c2e7c1219fb4bb178a87c64f5470d90": {
+    "position": 1,
+    "proof": [
+      "b6926d28a7ba596c5632fd4df21b693d208547aaaf163f7f9f4000f93d30b40f",
+      "8b7cbd83384ae7fa5bcb700e50748fa9ea35699502546647880d7f031025aa4d"
+    ]
+  },
+  "a87fb63e6dfdecab1fcb8c5d18e98cba19ccc66ce72126bf0e021b52ed4387ab": {
+    "position": 2,
+    "proof": [
+      "94d40afa1d3e5246449ca46cb5da891f9cb4e73f91d48364c8d464fcd0db2e77",
+      "71a51a9dcbac4b9b17e8c2b67e42def95700e90a3362ad617d0f5be98a102cf6"
+    ]
+  },
+  "94d40afa1d3e5246449ca46cb5da891f9cb4e73f91d48364c8d464fcd0db2e77": {
+    "position": 3,
+    "proof": [
+      "a87fb63e6dfdecab1fcb8c5d18e98cba19ccc66ce72126bf0e021b52ed4387ab",
+      "71a51a9dcbac4b9b17e8c2b67e42def95700e90a3362ad617d0f5be98a102cf6"
+    ]
+  }
+}

@@ -1,45 +1,64 @@
-
-# Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/**/dry-run/
-
-# Docs
-docs/
-
-
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-package-lock.json
-yarn.lock
-.pnpm-debug.log
-
-# Solidity / Foundry
-cache/
-out/
-*.tsbuildinfo
-
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.pdb
-*.egg-info/
-.env
-
-# General
+# ===================================================================
+# --- General & OS-specific files ---
+# ===================================================================
 .DS_Store
 Thumbs.db
 *.log
-.env.local
-.env.*.local
 
-# IDE
-.vscode/
+# ===================================================================
+# --- Secrets & Environment Variables ---
+# ===================================================================
+# Never commit environment variables or secret keys
+.env
+.env.*
+!.env.example # Use ! to make an exception if you have a template
+
+# ===================================================================
+# --- Python ---
+# ===================================================================
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Byte-compiled / optimized / C extensions
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+
+# Test artifacts
+.coverage
+htmlcov/
+
+# ===================================================================
+# --- Solidity / Foundry ---
+# ===================================================================
+# Build artifacts and cache
+cache/
+out/
+
+# Local testnet broadcast logs
+# Note: Keep the main broadcast directory, but ignore chain-specific runs
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# ===================================================================
+# --- Docker ---
+# ===================================================================
+# Ignore the data volume for the PostgreSQL database
+postgres-data/
+
+# ===================================================================
+# --- IDE & Editor ---
+# ===================================================================
 .idea/
+.vscode/
 *.swp
+*.swo
