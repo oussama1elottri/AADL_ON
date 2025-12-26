@@ -36,10 +36,10 @@ class Batch(Base):
 
     id = Column(BigInteger, primary_key=True, index=True)
     merkle_root = Column(String(66), unique=True, index=True, nullable=False)
-    created_at = Column(DateTime, server_default=func.now()) 
+    tx_hash = Column(String(66), unique=True, index=True, nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
 
     leaves = relationship("Leaf", back_populates="batch")
-
 
 class Leaf(Base):
     __tablename__ = "leaves"

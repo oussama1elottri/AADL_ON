@@ -3,6 +3,9 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .services import blockchain_service
 
+from typing import List 
+from .services import merkle_service
+
 # Import all the modules we've built
 from . import models, schemas, security
 from .database import SessionLocal, engine
@@ -94,7 +97,7 @@ def trigger_batch_creation(db: Session = Depends(get_db)):
 
     try:
         # For this POC, we'll hardcode wilaya and metadata.
-        # A real system would take this as input.
+        # 111revise: make dynamic later
         tx_hash = blockchain_service.create_and_commit_batch(
             eligible_applicants=eligible_applicants,
             wilaya_code=16,
@@ -102,10 +105,10 @@ def trigger_batch_creation(db: Session = Depends(get_db)):
         )
 
         # 3. Update the status of applicants in the DB
-        for app in eligible_applicants:
-            app.status = models.ApplicantStatus.BATCHED
+        # for app in eligible_applicants:
+        #     app.status = models.ApplicantStatus.BATCHED
         
-        db.commit()
+        # db.commit()
 
         return {
             "message": "Batch creation successful.",
@@ -119,3 +122,72 @@ def trigger_batch_creation(db: Session = Depends(get_db)):
             status_code=500,
             detail=f"An error occurred during batch creation: {e}"
         )
+
+
+### Verify Applicant Status Endpoint ###
+
+@app.get("/v1/applicants/{national_id}/status", response_model=schemas.ApplicantStatusResponse, tags=["Applicants"])
+def check_applicant_status(national_id: str, db: Session = Depends(get_db)):
+    """
+    Checks the status of an applicant. 
+    If they are BATCHED, this calculates and returns their Merkle Proof.
+    """
+    # 1. Hash the ID to look it up
+    applicant_hash = security.hash_identifier(national_id)
+
+    # 2. Find the applicant
+    applicant = db.query(models.Applicant).filter(models.Applicant.applicant_hash == applicant_hash).first()
+    if not applicant:
+        raise HTTPException(status_code=404, detail="Applicant not found")
+
+    response = {
+        "national_id": national_id,
+        "status": applicant.status.value, # Convert Enum to string
+        "batch_id": None,
+        "offset": None,
+        "merkle_root": None,
+        "merkle_proof": None
+    }
+
+    # 3. If they are not batched, just return the status
+
+    if applicant.status != models.ApplicantStatus.BATCHED:
+        return response
+
+    # 4. If they ARE batched, we need to fetch the proof data from the 'leaves' and 'batches' tables
+    leaf_record = db.query(models.Leaf).filter(models.Leaf.applicant_hash == applicant_hash).first()
+    if not leaf_record:
+
+        # This shouldn't happen if the Indexer is working correctly, but good to handle
+        return response 
+
+    batch_record = db.query(models.Batch).filter(models.Batch.id == leaf_record.batch_id).first()
+    
+    response["batch_id"] = leaf_record.batch_id
+    response["offset"] = leaf_record.offset
+    response["merkle_root"] = batch_record.merkle_root
+
+    # --- 5. Generate the Merkle Proof ---
+    # To generate a proof, we need ALL leaves from this batch to rebuild the tree.
+    # In a massive production system, we might store proofs, but rebuilding 
+    # for small batches (<10k) is fast and cheap.
+    
+    # Fetch all leaves for this batch, ordered by offset
+    all_leaves = db.query(models.Leaf).filter(models.Leaf.batch_id == leaf_record.batch_id).order_by(models.Leaf.offset).all()
+    
+    # Extract the hashes (we assume the leaf_hash column is populated)
+    leaf_hashes = [leaf.leaf_hash for leaf in all_leaves]
+    
+    # Rebuild the tree
+    try:
+        tree = merkle_service.MerkleTree(leaf_hashes)
+        proof = tree.get_proof(leaf_record.leaf_hash)
+        
+        # Convert proof bytes to hex strings for the API response
+        response["merkle_proof"] = [p.hex() if isinstance(p, bytes) else p for p in proof]
+    except Exception as e:
+        print(f"Error creating proof: {e}")
+        # We don't fail the request, just return no proof
+        pass
+
+    return response

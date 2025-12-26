@@ -2,13 +2,6 @@
 pragma solidity ^0.8.13;
 
 contract aadl_on {
-// registerApplicant(bytes32 nationalIdHash, bytes32 fileHash, uint16 wilayaCode)
-
-// dequeueApplicant(uint16 wilayaCode)
-
-// startSelection(wilayaCode, count) 
-// executeSelectionBatch(jobId, batchSize)
-
 // --------------------------------------------------------------
     // Events
 
