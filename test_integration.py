@@ -39,9 +39,9 @@ def main():
     
     # 1. Register Applicants
     applicants = [
-        {"national_id": "222333444555", "full_name": "Fatim Al-Wahrani", "address": "Oran, Algeria", "wilaya_code": 31},
-        {"national_id": "666777888999", "full_name": "Ahma Al-Jazairi", "address": "Algiers, Algeria", "wilaya_code": 16},
-        {"national_id": "888999000111", "full_name": "Oma Al-Qasentini", "address": "Constantine, Algeria", "wilaya_code": 25}
+        {"national_id": "222333444555", "full_name": "Mohamed Al-Djelfaoui", "address": "Oran, Algeria", "wilaya_code": 31},
+        {"national_id": "666777888999", "full_name": "Ahmed Al-Jazairi", "address": "Algiers, Algeria", "wilaya_code": 16},
+        {"national_id": "888999000111", "full_name": "Omaima Al-Qasentinia", "address": "Constantine, Algeria", "wilaya_code": 25}
     ]
     
     for app in applicants:
