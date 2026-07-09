@@ -12,7 +12,64 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  blockchain:
+    image: ghcr.io/foundry-rs/foundry:latest
+    container_name: aadl_on_blockchain
+    restart: always
+    ports:
+      - "8545:8545"
+    entrypoint: [
+      "anvil", 
+      "--host", "0.0.0.0", 
+      "--port", "8545", 
+      "--mnemonic", "test test test test test test test test test test test junk", 
+      "-s", "1"
+    ]
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: aadl_on_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/aadl_on_db
+      - SEPOLIA_RPC_URL=http://blockchain:8545
+      - SEPOLIA_WEBSOCKET_RPC_URL=ws://blockchain:8545
+      - CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+      - SEPOLIA_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+    depends_on:
+      - db
+      - blockchain
+
+  indexer:
+    build:
+      context: .
+      dockerfile: indexer/Dockerfile
+    container_name: aadl_on_indexer
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/aadl_on_db
+      - SEPOLIA_RPC_URL=http://blockchain:8545
+      - SEPOLIA_WEBSOCKET_RPC_URL=ws://blockchain:8545
+      - CONTRACT_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+    depends_on:
+      - db
+      - blockchain
+      - backend
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: aadl_on_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
-
-  
