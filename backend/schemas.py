@@ -33,3 +33,12 @@ class ApplicantStatusResponse(BaseModel):
     
     class Config:
         orm_mode = True
+
+class BatchResponse(BaseModel):
+    id: int
+    merkle_root: str
+    tx_hash: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        orm_mode = True

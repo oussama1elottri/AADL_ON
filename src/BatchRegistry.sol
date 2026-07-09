@@ -2,9 +2,8 @@
 pragma solidity ^0.8.20;
 
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract BatchRegistry is AccessControl, ReentrancyGuard {
+contract BatchRegistry is AccessControl {
     // STATE VARIABLES
     bytes32 public constant OPERATOR_ROLE = keccak256("OPERATOR_ROLE");
 
@@ -30,7 +29,6 @@ contract BatchRegistry is AccessControl, ReentrancyGuard {
     function commitBatch(bytes32 _merkleRoot, uint16 _wilaya, uint256 _batchSize, bytes calldata _metadata)
         public
         virtual
-        nonReentrant
         onlyRole(OPERATOR_ROLE)
         returns (uint256)
     {

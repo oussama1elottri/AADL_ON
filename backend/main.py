@@ -10,6 +10,8 @@ from .services import merkle_service
 from . import models, schemas, security
 from .database import SessionLocal, engine
 
+from fastapi.middleware.cors import CORSMiddleware
+
 # This line ensures that if the API starts before the DB is initialized,
 # it will create the necessary tables.
 models.Base.metadata.create_all(bind=engine)
@@ -18,6 +20,20 @@ app = FastAPI(
     title="AADL_ON API",
     description="The official API for the AADL_ON housing application system.",
     version="0.1.0"
+)
+
+# --- CORS CONFIGURATION ---
+origins = [
+    "http://localhost:3000", 
+    "http://127.0.0.1:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # --- Dependency for Database Session ---
@@ -84,44 +100,128 @@ def trigger_batch_creation(db: Session = Depends(get_db)):
     """
     Triggers the creation of a new batch.
 
-    1. Fetches all applicants with 'eligible' status.
-    2. Builds a Merkle Tree and commits the root to the blockchain.
-    3. Updates the status of included applicants to 'batched'.
-    (Note: For simplicity, this POC batches all eligible applicants together)
+    1. Queries the blockchain to get the next Batch ID.
+    2. Fetches all applicants with 'eligible' status, ordered deterministically.
+    3. Builds the Merkle Tree, pre-allocates the Batch and Leaves in the DB.
+    4. Commits the Merkle Root on-chain and updates the batch transaction hash.
     """
-    # 1. Fetch eligible applicants from the database
-    eligible_applicants = db.query(models.Applicant).filter(models.Applicant.status == models.ApplicantStatus.ELIGIBLE).all()
+    # 1. Fetch next batch ID from the blockchain
+    try:
+        current_batch_id = blockchain_service.get_current_batch_id()
+        next_batch_id = current_batch_id + 1
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Could not connect to smart contract to query next batch ID: {e}"
+        )
+
+    # Check for duplicate Batch ID in database
+    existing_batch = db.query(models.Batch).filter(models.Batch.id == next_batch_id).first()
+    if existing_batch:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Batch ID {next_batch_id} already exists in database. Indexer sync may be pending."
+        )
+
+    # 2. Fetch eligible applicants ordered deterministically
+    eligible_applicants = db.query(models.Applicant).filter(
+        models.Applicant.status == models.ApplicantStatus.ELIGIBLE
+    ).order_by(models.Applicant.id.asc()).all()
 
     if not eligible_applicants:
         return {"message": "No eligible applicants to batch."}
 
+    # 3. Calculate Merkle Tree leaves and root
+    leaves_hashes = []
+    leaves_bytes = []
+    for app in eligible_applicants:
+        timestamp = int(app.created_at.timestamp())
+        leaf_hash_bytes = merkle_service.create_applicant_leaf(
+            app.applicant_hash,
+            app.file_hash,
+            timestamp,
+            app.wilaya_code
+        )
+        leaves_bytes.append(leaf_hash_bytes)
+        leaves_hashes.append(f"0x{leaf_hash_bytes.hex()}")
+
+    tree = merkle_service.MerkleTree(leaves_bytes)
+    merkle_root_bytes = tree.get_root()
+    merkle_root_hex = f"0x{merkle_root_bytes.hex()}"
+
+    # 4. Pre-create the Batch and Leaves in database
     try:
-        # For this POC, we'll hardcode wilaya and metadata.
-        # 111revise: make dynamic later
-        tx_hash = blockchain_service.create_and_commit_batch(
-            eligible_applicants=eligible_applicants,
+        new_batch = models.Batch(
+            id=next_batch_id,
+            merkle_root=merkle_root_hex,
+            tx_hash=None
+        )
+        db.add(new_batch)
+
+        for offset, app in enumerate(eligible_applicants):
+            new_leaf = models.Leaf(
+                applicant_hash=app.applicant_hash,
+                leaf_hash=leaves_hashes[offset],
+                batch_id=next_batch_id,
+                offset=offset
+            )
+            db.add(new_leaf)
+            app.status = models.ApplicantStatus.BATCHED
+
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=f"Database transaction failed while pre-allocating batch: {e}"
+        )
+
+    # 5. Commit Merkle Root on-chain
+    try:
+        tx_hash = blockchain_service.commit_batch_on_chain(
+            merkle_root=merkle_root_bytes,
             wilaya_code=16,
+            batch_size=len(eligible_applicants),
             metadata=b"Q4_2025_BATCH"
         )
 
-        # 3. Update the status of applicants in the DB
-        # for app in eligible_applicants:
-        #     app.status = models.ApplicantStatus.BATCHED
-        
-        # db.commit()
+        # Update batch with transaction hash
+        batch_record = db.query(models.Batch).filter(models.Batch.id == next_batch_id).first()
+        batch_record.tx_hash = tx_hash
+        db.commit()
 
         return {
-            "message": "Batch creation successful.",
+            "message": "Batch creation successful and committed on-chain.",
+            "batch_id": next_batch_id,
             "transaction_hash": tx_hash,
+            "merkle_root": merkle_root_hex,
             "applicants_batched": len(eligible_applicants)
         }
     except Exception as e:
-        # If anything goes wrong (e.g., out of gas), we raise an error
-        # and do NOT change the status of applicants in the DB.
+        # Revert database changes on transaction failure
+        db.rollback()
+        try:
+            db.query(models.Leaf).filter(models.Leaf.batch_id == next_batch_id).delete()
+            db.query(models.Batch).filter(models.Batch.id == next_batch_id).delete()
+            for app in eligible_applicants:
+                app.status = models.ApplicantStatus.ELIGIBLE
+            db.commit()
+        except Exception as rollback_err:
+            print(f"Failed to rollback database state after blockchain failure: {rollback_err}")
+            pass
+
         raise HTTPException(
             status_code=500,
-            detail=f"An error occurred during batch creation: {e}"
+            detail=f"Failed to commit batch on-chain (database state reverted): {e}"
         )
+    
+@app.get("/v1/batches/", response_model=List[schemas.BatchResponse], tags=["Batches"])
+def list_batches(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
+    """
+    Returns a list of all committed batches.
+    """
+    batches = db.query(models.Batch).order_by(models.Batch.id.desc()).offset(skip).limit(limit).all()
+    return batches
 
 
 ### Verify Applicant Status Endpoint ###
@@ -191,3 +291,4 @@ def check_applicant_status(national_id: str, db: Session = Depends(get_db)):
         pass
 
     return response
+

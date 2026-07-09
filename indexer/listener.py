@@ -39,65 +39,61 @@ batch_registry_contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=contract
 
 def process_and_save_batch(db: Session, event: dict):
     """
-    Processes a BatchCommitted event and saves the relevant data to the database
-    in a single atomic transaction.
+    Processes a BatchCommitted event and reconciles it with the database.
+    Performs an audit verification check between local and on-chain Merkle Roots.
     """
     event_args = event.args
     tx_hash = event.transactionHash.hex()
     
-    logging.info(f"Processing event from transaction: {tx_hash}")
+    logging.info(f"Processing event for Batch ID {event_args.batchId} from transaction: {tx_hash}")
 
     try:
-        # Step 1: Check if we've already processed this batch to prevent duplicates.
+        # Check if the batch was pre-allocated in the database
         existing_batch = db.query(models.Batch).filter(models.Batch.id == event_args.batchId).first()
+        
         if existing_batch:
-            logging.warning(f"Batch ID {event_args.batchId} has already been processed. Skipping.")
-            return
+            # Check if this transaction has already been synced
+            if existing_batch.tx_hash == tx_hash:
+                logging.info(f"Batch ID {event_args.batchId} already fully synchronized. Skipping.")
+                return
 
-        # Step 2: Fetch the applicants that were supposed to be in this batch.
-        # This is the "verification" step. We find the applicants who were marked
-        # 'eligible' and are now being included in this on-chain batch.
-
-        #111revise: batch to applicant linking
-        applicants_to_batch = db.query(models.Applicant).filter(
-            models.Applicant.status == models.ApplicantStatus.ELIGIBLE
-        ).all()
-
-        if not applicants_to_batch:
-            logging.warning(f"Received batch event for batch {event_args.batchId}, but found no eligible applicants in DB to process.")
-            return
-
-        # Step 3: Create the new Batch database object.
-        new_batch = models.Batch(
-            id=event_args.batchId,
-            merkle_root=event_args.merkleRoot.hex(),
-            tx_hash=tx_hash
-        )
-        db.add(new_batch)
-
-        # Step 4: Create a Leaf for each applicant and update their status.
-        for offset, applicant in enumerate(applicants_to_batch):
-            # 111revise: re-calculat leaf_hash against the Merkle root
-            new_leaf = models.Leaf(
-                applicant_hash=applicant.applicant_hash,
-                # 111revise: re-calculate leaf_hash from applicant data. Placeholder for now.
-                leaf_hash=Web3.keccak(text=f"leaf_{applicant.applicant_hash}").hex(),
-                batch_id=new_batch.id,
-                offset=offset
-            )
-            db.add(new_leaf)
+            # Perform AUDIT CHECK: verify that the local Merkle root matches the on-chain Merkle root
+            local_root = existing_batch.merkle_root.lower().replace("0x", "")
+            chain_root = event_args.merkleRoot.hex().lower().replace("0x", "")
             
-            # Update the applicant's status to BATCHED
-            applicant.status = models.ApplicantStatus.BATCHED
-
-        # Step 5: Commit the transaction.
-        # All the above changes are committed to the DB in one atomic operation.
-        db.commit()
-        logging.info(f"Successfully processed and saved batch {new_batch.id} with {len(applicants_to_batch)} applicants.")
+            if local_root != chain_root:
+                logging.critical(
+                    f"AUDIT TAMPER ALARM: Merkle Root mismatch for Batch ID {event_args.batchId}! "
+                    f"Local database root: {existing_batch.merkle_root}, On-chain root: 0x{chain_root}. "
+                    f"This indicates database tampering or blockchain drift!"
+                )
+                return
+            
+            # If verified, update the transaction hash (which might have been pending)
+            existing_batch.tx_hash = tx_hash
+            db.commit()
+            logging.info(f"Successfully audited and confirmed Batch {event_args.batchId} on-chain.")
+        
+        else:
+            # The batch was committed directly on-chain, bypassing the API.
+            # We record it as an external/unmapped batch to keep a consistent ledger mirror.
+            chain_root_hex = f"0x{event_args.merkleRoot.hex().lower().replace('0x', '')}"
+            new_batch = models.Batch(
+                id=event_args.batchId,
+                merkle_root=chain_root_hex,
+                tx_hash=tx_hash
+            )
+            db.add(new_batch)
+            db.commit()
+            logging.warning(
+                f"Successfully indexed external Batch ID {event_args.batchId} (Merkle Root: {chain_root_hex}) "
+                f"which was committed directly to the smart contract."
+            )
 
     except Exception as e:
         logging.error(f"Error processing event for tx {tx_hash}: {e}")
-        db.rollback() # If anything fails, undo all changes for this event.
+        db.rollback()
+
 
 
 def handle_event(event: dict):

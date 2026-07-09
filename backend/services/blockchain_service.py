@@ -29,46 +29,21 @@ with open(ABI_PATH, "r") as f:
 batch_registry_contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=contract_abi)
 
 
-def create_and_commit_batch(eligible_applicants: list, wilaya_code: int, metadata: bytes) -> str:
+def get_current_batch_id() -> int:
     """
-    Takes a list of eligible applicants, builds a Merkle tree, and commits the
-    root to the blockchain.
-
-    Args:
-        eligible_applicants: A list of applicant objects from the database.
-        wilaya_code: The wilaya code for this batch.
-        metadata: The metadata for this batch.
-
-    Returns:
-        The transaction hash of the on-chain commitment as a hex string.
+    Queries the smart contract to get the current batch counter.
     """
-    if not eligible_applicants:
-        raise ValueError("Cannot create a batch with no applicants.")
+    return batch_registry_contract.functions.getCurrentBatchId().call()
 
-    print(f"Starting batch creation for {len(eligible_applicants)} applicants...")
 
-    # 1. Prepare leaves from applicant data
-    leaves = []
-    for app in eligible_applicants:
-        # Convert DB datetime to Unix timestamp
-        timestamp = int(app.created_at.timestamp())
-        
-        leaf = create_applicant_leaf(
-            app.applicant_hash,
-            app.file_hash,
-            timestamp,
-            app.wilaya_code
-        )
-        leaves.append(leaf)
+def commit_batch_on_chain(merkle_root: bytes, wilaya_code: int, batch_size: int, metadata: bytes) -> str:
+    """
+    Takes a pre-calculated Merkle root, wilaya, batch size, and metadata, and commits it
+    on-chain. Returns the transaction hash as a hex string.
+    """
+    print(f"Starting batch commitment on-chain for Merkle Root {merkle_root.hex()}...")
 
-    # 2. Build the Merkle Tree
-    tree = MerkleTree(leaves)
-    merkle_root = tree.get_root()
-    batch_size = len(leaves)
-
-    print(f"  - Calculated Merkle Root: {merkle_root.hex()}")
-
-    # 3. Build and send the transaction
+    # Build and send the transaction
     function_call = batch_registry_contract.functions.commitBatch(
         merkle_root,
         wilaya_code,
