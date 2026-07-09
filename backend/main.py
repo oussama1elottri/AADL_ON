@@ -246,7 +246,11 @@ def check_applicant_status(national_id: str, db: Session = Depends(get_db)):
         "batch_id": None,
         "offset": None,
         "merkle_root": None,
-        "merkle_proof": None
+        "merkle_proof": None,
+        "file_hash": applicant.file_hash,
+        "wilaya_code": applicant.wilaya_code,
+        "timestamp": int(applicant.created_at.timestamp()),
+        "full_name": applicant.full_name
     }
 
     # 3. If they are not batched, just return the status

@@ -30,6 +30,10 @@ class ApplicantStatusResponse(BaseModel):
     merkle_root: Optional[str] = None
     # The proof is a list of hashes (sibling nodes) needed for verification
     merkle_proof: Optional[List[str]] = None 
+    file_hash: Optional[str] = None
+    wilaya_code: Optional[int] = None
+    timestamp: Optional[int] = None
+    full_name: Optional[str] = None
     
     class Config:
         orm_mode = True
