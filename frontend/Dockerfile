@@ -11,5 +11,5 @@ COPY . .
 
 EXPOSE 3000
 
-# Start Next.js development server
-CMD ["npm", "run", "dev"]
+# Start Next.js development server binding to all interfaces
+CMD ["npx", "next", "dev", "-H", "0.0.0.0"]
