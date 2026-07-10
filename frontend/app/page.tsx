@@ -23,7 +23,10 @@ import {
   ChevronRight,
   UserPlus,
   Send,
-  Building
+  Building,
+  Settings,
+  RefreshCw,
+  CheckCircle
 } from "lucide-react";
 import { encodePacked, keccak256, stringToHex } from "viem";
 
@@ -108,7 +111,7 @@ export default function PublicExplorer() {
   const [batchesError, setBatchesError] = useState<string | null>(null);
 
   // Active tab state
-  const [activeTab, setActiveTab] = useState<"register" | "citizen" | "explorer">("register");
+  const [activeTab, setActiveTab] = useState<"register" | "citizen" | "explorer" | "admin">("register");
 
   // Citizen search state
   const [searchId, setSearchId] = useState("");
@@ -124,6 +127,16 @@ export default function PublicExplorer() {
   const [regLoading, setRegLoading] = useState(false);
   const [regError, setRegError] = useState<string | null>(null);
   const [regSuccess, setRegSuccess] = useState<any | null>(null);
+
+  // Admin approval registry state
+  const [registry, setRegistry] = useState<any[]>([]);
+  const [registryLoading, setRegistryLoading] = useState(false);
+  const [registryError, setRegistryError] = useState<string | null>(null);
+
+  // Batch notarization trigger state
+  const [batchTriggerLoading, setBatchTriggerLoading] = useState(false);
+  const [batchTriggerSuccess, setBatchTriggerSuccess] = useState<any | null>(null);
+  const [batchTriggerError, setBatchTriggerError] = useState<string | null>(null);
 
   // Copy state
   const [copiedText, setCopiedText] = useState<string | null>(null);
@@ -145,6 +158,20 @@ export default function PublicExplorer() {
       console.error("Failed to fetch batches:", err);
       setBatchesError("Could not connect to the Backend API. Is it running?");
       setBatchesLoading(false);
+    }
+  };
+
+  const fetchRegistry = async () => {
+    setRegistryLoading(true);
+    setRegistryError(null);
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/v1/applicants/");
+      setRegistry(response.data);
+      setRegistryLoading(false);
+    } catch (err) {
+      console.error("Failed to fetch registry:", err);
+      setRegistryError("Could not fetch applicant list. Is the backend running?");
+      setRegistryLoading(false);
     }
   };
 
@@ -215,6 +242,37 @@ export default function PublicExplorer() {
         setRegError("Could not submit registration. Is the backend running?");
       }
       setRegLoading(false);
+    }
+  };
+
+  const approveCitizen = async (nid: string) => {
+    try {
+      await axios.put(`http://127.0.0.1:8000/v1/applicants/${nid}/approve`);
+      fetchRegistry();
+    } catch (err: any) {
+      console.error("Failed to approve applicant:", err);
+      alert(err.response?.data?.detail || "Failed to approve applicant.");
+    }
+  };
+
+  const triggerBatchNotarization = async () => {
+    setBatchTriggerLoading(true);
+    setBatchTriggerSuccess(null);
+    setBatchTriggerError(null);
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/v1/batches/");
+      if (response.status === 202) {
+        setBatchTriggerSuccess(response.data);
+        fetchRegistry();
+        fetchBatches();
+      } else {
+        setBatchTriggerError("No eligible applicants to batch or batch already active.");
+      }
+      setBatchTriggerLoading(false);
+    } catch (err: any) {
+      console.error("Failed to trigger batch:", err);
+      setBatchTriggerError(err.response?.data?.detail || "Failed to commit batch on-chain.");
+      setBatchTriggerLoading(false);
     }
   };
 
@@ -332,6 +390,8 @@ export default function PublicExplorer() {
     handleSearch(undefined, nid);
   };
 
+  const eligibleCount = registry.filter((app) => app.status === "eligible").length;
+
   return (
     <main className="min-h-screen bg-[#fafaf9] p-4 md:p-8 font-sans text-slate-800">
       <div className="max-w-5xl mx-auto">
@@ -345,11 +405,11 @@ export default function PublicExplorer() {
             <Building className="w-8 h-8 text-emerald-300 animate-pulse" />
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">
+          <h1 className="text-xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">
             الجمهورية الجزائرية الديمقراطية الشعبية
           </h1>
-          <h2 className="text-xl md:text-2xl font-bold text-emerald-200 mt-2 tracking-wide font-serif">
-            AADL_ON Verification Notary
+          <h2 className="text-3xl md:text-2xl font-bold text-emerald-200 mt-2 tracking-wide font-serif">
+            AADL_ON
           </h2>
           <p className="text-sm md:text-base text-emerald-100/80 mt-2 max-w-xl mx-auto">
             Algorithmically transparent, cryptographically verifiable, and permanently anchored on Ethereum Sepolia Testnet.
@@ -357,10 +417,10 @@ export default function PublicExplorer() {
         </header>
 
         {/* Tab Controls */}
-        <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-lg shadow-sm border">
+        <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-lg shadow-sm border overflow-x-auto gap-1">
           <button
             onClick={() => setActiveTab("register")}
-            className={`flex-1 flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
               activeTab === "register"
                 ? "bg-emerald-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
@@ -371,21 +431,35 @@ export default function PublicExplorer() {
           </button>
           <button
             onClick={() => setActiveTab("citizen")}
-            className={`flex-1 flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
               activeTab === "citizen"
                 ? "bg-emerald-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
             <UserCheck className="w-4 h-4 mr-2" />
-            Citizen Audit Portal
+            Verify Receipt
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("admin");
+              fetchRegistry();
+            }}
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+              activeTab === "admin"
+                ? "bg-emerald-700 text-white shadow"
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+            }`}
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Admin Console
           </button>
           <button
             onClick={() => {
               setActiveTab("explorer");
               fetchBatches();
             }}
-            className={`flex-1 flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
               activeTab === "explorer"
                 ? "bg-emerald-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
@@ -828,7 +902,165 @@ export default function PublicExplorer() {
           </div>
         )}
 
-        {/* Tab 3: Blockchain Explorer */}
+        {/* Tab 3: Admin Console (Operational Approval and Batch trigger) */}
+        {activeTab === "admin" && (
+          <div className="space-y-8">
+            
+            {/* Top Widget: Batch Notarization Control */}
+            <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
+              <div>
+                <h3 className="text-xl font-bold text-slate-900 flex items-center border-b pb-3 mb-2">
+                  <Settings className="w-5.5 h-5.5 mr-2 text-emerald-600" />
+                  On-Chain Batch Notarization Controller
+                </h3>
+                <p className="text-slate-500 text-sm">
+                  Commit all approved citizens' queue slots to the Ethereum blockchain as an immutable cryptographic batch.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div className="md:col-span-2 bg-slate-50 p-5 rounded-lg border border-slate-100">
+                  <span className="text-slate-400 text-xxs uppercase block font-bold">Approved Queue Status</span>
+                  <div className="text-2xl font-bold text-slate-800 mt-1 flex items-baseline">
+                    {eligibleCount}
+                    <span className="text-slate-500 text-xs font-normal ml-2">
+                      {eligibleCount === 1 ? "applicant is" : "applicants are"} approved and waiting in the pool
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={triggerBatchNotarization}
+                  disabled={eligibleCount === 0 || batchTriggerLoading}
+                  className="bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white font-bold py-4 rounded-lg flex items-center justify-center transition-colors cursor-pointer text-sm uppercase tracking-wide shadow"
+                >
+                  {batchTriggerLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  ) : (
+                    <Cpu className="w-4 h-4 mr-2" />
+                  )}
+                  Commit Batch On-Chain
+                </button>
+              </div>
+
+              {batchTriggerSuccess && (
+                <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg space-y-2">
+                  <h4 className="font-bold text-sm flex items-center text-emerald-900">
+                    <CheckCircle className="w-4 h-4 mr-2 text-emerald-600" />
+                    Batch Anchored Successfully!
+                  </h4>
+                  <div className="font-mono text-xs space-y-1 mt-1 text-emerald-700">
+                    <div><strong>Batch ID:</strong> #{batchTriggerSuccess.batch_id}</div>
+                    <div className="truncate"><strong>Merkle Root:</strong> {batchTriggerSuccess.merkle_root}</div>
+                    <div className="truncate"><strong>Transaction Hash:</strong> {batchTriggerSuccess.transaction_hash}</div>
+                  </div>
+                </div>
+              )}
+
+              {batchTriggerError && (
+                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-xs flex items-center">
+                  <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                  {batchTriggerError}
+                </div>
+              )}
+            </div>
+
+            {/* Bottom Widget: Applicant Registry Approval list */}
+            <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
+              <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                <h3 className="text-lg font-bold text-slate-900 flex items-center">
+                  <UserCheck className="w-5 h-5 mr-2 text-emerald-600" />
+                  Applicant Approval Registry
+                </h3>
+                <button
+                  onClick={fetchRegistry}
+                  className="text-xs text-emerald-700 hover:underline flex items-center font-semibold cursor-pointer"
+                >
+                  <RefreshCw className="w-3.5 h-3.5 mr-1" />
+                  Refresh List
+                </button>
+              </div>
+
+              {registryError && (
+                <div className="m-6 bg-rose-50 text-rose-600 p-4 rounded-lg border border-rose-100 text-center text-sm">
+                  {registryError}
+                </div>
+              )}
+
+              {registryLoading ? (
+                <div className="flex flex-col justify-center items-center h-48">
+                  <Loader2 className="w-8 h-8 animate-spin text-emerald-700" />
+                  <span className="mt-2 text-sm text-slate-500">Querying registry database...</span>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="bg-[#fafaf9] border-b border-slate-200">
+                      <tr>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Citizen Name</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">National ID</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Wilaya</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {registry.map((app) => (
+                        <tr key={app.id} className="hover:bg-slate-50/50 transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">
+                            {app.full_name}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500">
+                            {app.national_id ? `${app.national_id.substring(0, 4)}••••${app.national_id.substring(8)}` : "Masked ID"}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                            {ALGERIAN_WILAYAS.find((w) => w.code === app.wilaya_code)?.name || app.wilaya_code}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${
+                              app.status === "pending"
+                                ? "bg-amber-50 text-amber-700 border-amber-200"
+                                : app.status === "eligible"
+                                ? "bg-blue-50 text-blue-700 border-blue-200"
+                                : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            }`}>
+                              {app.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right">
+                            {app.status === "pending" ? (
+                              <button
+                                onClick={() => approveCitizen(app.national_id)}
+                                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1 px-3.5 rounded text-xs transition-colors cursor-pointer"
+                              >
+                                Approve
+                              </button>
+                            ) : app.status === "eligible" ? (
+                              <span className="text-slate-400 text-xs italic">Awaiting Notarization</span>
+                            ) : (
+                              <span className="text-emerald-700 text-xs font-semibold flex items-center justify-end">
+                                <ShieldCheck className="w-3.5 h-3.5 mr-1" />
+                                Notarized
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
+                  {registry.length === 0 && (
+                    <div className="p-12 text-center text-slate-400 text-sm">
+                      No applicant applications have been registered in the database yet.
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Tab 4: Blockchain Explorer */}
         {activeTab === "explorer" && (
           <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-slate-100">
             <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">

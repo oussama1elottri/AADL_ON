@@ -91,6 +91,39 @@ def create_applicant(applicant_data: schemas.ApplicantCreate, db: Session = Depe
 
     return db_applicant
 
+@app.get("/v1/applicants/", response_model=List[schemas.Applicant], tags=["Applicants"])
+def list_applicants(db: Session = Depends(get_db)):
+    """
+    Retrieves all registered applicants from the database, ordered by registration ID descending.
+    """
+    return db.query(models.Applicant).order_by(models.Applicant.id.desc()).all()
+
+@app.put("/v1/applicants/{national_id}/approve", response_model=schemas.Applicant, tags=["Applicants"])
+def approve_applicant(national_id: str, db: Session = Depends(get_db)):
+    """
+    Approves a pending applicant, changing their status to 'eligible' so they can be batched on-chain.
+    """
+    # Hash the national_id to find their record in the database
+    applicant_hash = security.hash_identifier(national_id)
+    applicant = db.query(models.Applicant).filter(models.Applicant.applicant_hash == applicant_hash).first()
+    
+    if not applicant:
+        raise HTTPException(
+            status_code=404,
+            detail="Applicant not found."
+        )
+        
+    if applicant.status != models.ApplicantStatus.PENDING:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot approve applicant in state: {applicant.status.value}"
+        )
+        
+    applicant.status = models.ApplicantStatus.ELIGIBLE
+    db.commit()
+    db.refresh(applicant)
+    return applicant
+
 @app.get("/", tags=["Status"])
 def read_root():
     return {"status": "ok", "message": "Welcome to the AADL_ON API"}
