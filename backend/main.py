@@ -98,13 +98,11 @@ def list_applicants(db: Session = Depends(get_db)):
     """
     return db.query(models.Applicant).order_by(models.Applicant.id.desc()).all()
 
-@app.put("/v1/applicants/{national_id}/approve", response_model=schemas.Applicant, tags=["Applicants"])
-def approve_applicant(national_id: str, db: Session = Depends(get_db)):
+@app.put("/v1/applicants/{applicant_hash}/approve", response_model=schemas.Applicant, tags=["Applicants"])
+def approve_applicant(applicant_hash: str, db: Session = Depends(get_db)):
     """
     Approves a pending applicant, changing their status to 'eligible' so they can be batched on-chain.
     """
-    # Hash the national_id to find their record in the database
-    applicant_hash = security.hash_identifier(national_id)
     applicant = db.query(models.Applicant).filter(models.Applicant.applicant_hash == applicant_hash).first()
     
     if not applicant:

@@ -245,9 +245,9 @@ export default function PublicExplorer() {
     }
   };
 
-  const approveCitizen = async (nid: string) => {
+  const approveCitizen = async (applicantHash: string) => {
     try {
-      await axios.put(`http://127.0.0.1:8000/v1/applicants/${nid}/approve`);
+      await axios.put(`http://127.0.0.1:8000/v1/applicants/${applicantHash}/approve`);
       fetchRegistry();
     } catch (err: any) {
       console.error("Failed to approve applicant:", err);
@@ -1030,7 +1030,7 @@ export default function PublicExplorer() {
                           <td className="px-6 py-4 whitespace-nowrap text-right">
                             {app.status === "pending" ? (
                               <button
-                                onClick={() => approveCitizen(app.national_id)}
+                                onClick={() => approveCitizen(app.applicant_hash)}
                                 className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1 px-3.5 rounded text-xs transition-colors cursor-pointer"
                               >
                                 Approve
