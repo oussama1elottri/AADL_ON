@@ -20,7 +20,10 @@ import {
   Calendar,
   AlertTriangle,
   Award,
-  ChevronRight
+  ChevronRight,
+  UserPlus,
+  Send,
+  Building
 } from "lucide-react";
 import { encodePacked, keccak256, stringToHex } from "viem";
 
@@ -38,10 +41,26 @@ interface ApplicantStatus {
   timestamp: number | null;
 }
 
+const ALGERIAN_WILAYAS = [
+  { code: 1, name: "01 - Adrar (أدرار)" },
+  { code: 2, name: "02 - Chlef (الشلف)" },
+  { code: 9, name: "09 - Blida (البليدة)" },
+  { code: 16, name: "16 - Algiers (الجزائر)" },
+  { code: 17, name: "17 - Djelfa (الجلفة)" },
+  { code: 19, name: "19 - Sétif (سطيف)" },
+  { code: 25, name: "25 - Constantine (قسنطينة)" },
+  { code: 31, name: "31 - Oran (وهران)" },
+  { code: 35, name: "35 - Boumerdès (بومرداس)" },
+  { code: 47, name: "47 - Ghardaïa (غرداية)" }
+];
+
 export default function PublicExplorer() {
   const [batches, setBatches] = useState<Batch[]>([]);
   const [batchesLoading, setBatchesLoading] = useState(true);
   const [batchesError, setBatchesError] = useState<string | null>(null);
+
+  // Active tab state
+  const [activeTab, setActiveTab] = useState<"register" | "citizen" | "explorer">("register");
 
   // Citizen search state
   const [searchId, setSearchId] = useState("");
@@ -49,8 +68,14 @@ export default function PublicExplorer() {
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
-  // Active tab state
-  const [activeTab, setActiveTab] = useState<"citizen" | "explorer">("citizen");
+  // Registration form state
+  const [regFullName, setRegFullName] = useState("");
+  const [regNationalId, setRegNationalId] = useState("");
+  const [regAddress, setRegAddress] = useState("");
+  const [regWilaya, setRegWilaya] = useState(16); // Default to Algiers (16)
+  const [regLoading, setRegLoading] = useState(false);
+  const [regError, setRegError] = useState<string | null>(null);
+  const [regSuccess, setRegSuccess] = useState<any | null>(null);
 
   // Copy state
   const [copiedText, setCopiedText] = useState<string | null>(null);
@@ -79,9 +104,10 @@ export default function PublicExplorer() {
     fetchBatches();
   }, []);
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchId.trim()) return;
+  const handleSearch = async (e?: React.FormEvent, targetId?: string) => {
+    if (e) e.preventDefault();
+    const idToSearch = targetId || searchId;
+    if (!idToSearch.trim()) return;
 
     setSearchLoading(true);
     setSearchError(null);
@@ -90,7 +116,7 @@ export default function PublicExplorer() {
     setVerificationSteps([]);
 
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/v1/applicants/${searchId}/status`);
+      const response = await axios.get(`http://127.0.0.1:8000/v1/applicants/${idToSearch}/status`);
       setApplicant(response.data);
       setSearchLoading(false);
     } catch (err: any) {
@@ -101,6 +127,46 @@ export default function PublicExplorer() {
         setSearchError("Could not connect to the Backend API. Is it running?");
       }
       setSearchLoading(false);
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRegError(null);
+    setRegSuccess(null);
+
+    // Inputs check
+    if (!regFullName.trim() || !regNationalId.trim() || !regAddress.trim()) {
+      setRegError("Please fill out all fields.");
+      return;
+    }
+
+    // 12-digit numeric validation
+    const digitsOnly = /^\d{12}$/;
+    if (!digitsOnly.test(regNationalId.trim())) {
+      setRegError("National ID must be exactly 12 numeric digits.");
+      return;
+    }
+
+    setRegLoading(true);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/v1/applicants/", {
+        national_id: regNationalId.trim(),
+        full_name: regFullName.trim(),
+        address: regAddress.trim(),
+        wilaya_code: Number(regWilaya)
+      });
+      setRegSuccess(response.data);
+      setRegLoading(false);
+    } catch (err: any) {
+      console.error("Registration failed:", err);
+      if (err.response && err.response.status === 409) {
+        setRegError("An application with this National ID has already been registered.");
+      } else {
+        setRegError("Could not submit registration. Is the backend running?");
+      }
+      setRegLoading(false);
     }
   };
 
@@ -132,7 +198,6 @@ export default function PublicExplorer() {
     };
 
     try {
-      // Step 1: Compute applicant hash from ID
       addStep("Initiating cryptographic audit verification...");
       await new Promise((r) => setTimeout(r, 600));
 
@@ -141,7 +206,6 @@ export default function PublicExplorer() {
       await new Promise((r) => setTimeout(r, 600));
       addStep(`  └─ Applicant Hash: ${applicantHash.substring(0, 16)}...`);
 
-      // Step 2: Combine inputs and hash to get leaf
       addStep("Step 2: Packing and hashing leaf inputs (Solidity ABI encoded)...");
       await new Promise((r) => setTimeout(r, 600));
       
@@ -159,7 +223,6 @@ export default function PublicExplorer() {
       addStep(`  └─ Generated Leaf Hash: ${leafHash.substring(0, 16)}...`);
       await new Promise((r) => setTimeout(r, 600));
 
-      // Step 3: Hashing up the Merkle Proof
       addStep(`Step 3: Iterating through ${applicant.merkle_proof.length} Merkle Proof sibling hashes...`);
       await new Promise((r) => setTimeout(r, 600));
 
@@ -184,7 +247,6 @@ export default function PublicExplorer() {
         addStep(`  │   └─ Resulting Hash: ${current.substring(0, 16)}...`);
       }
 
-      // Step 4: Compare roots
       addStep("Step 4: Validating local reconstructed root against on-chain anchor...");
       await new Promise((r) => setTimeout(r, 800));
 
@@ -207,6 +269,21 @@ export default function PublicExplorer() {
     }
   };
 
+  const startNewApplication = () => {
+    setRegFullName("");
+    setRegNationalId("");
+    setRegAddress("");
+    setRegWilaya(16);
+    setRegSuccess(null);
+    setRegError(null);
+  };
+
+  const proceedToVerify = (nid: string) => {
+    setSearchId(nid);
+    setActiveTab("citizen");
+    handleSearch(undefined, nid);
+  };
+
   return (
     <main className="min-h-screen bg-[#fafaf9] p-4 md:p-8 font-sans text-slate-800">
       <div className="max-w-5xl mx-auto">
@@ -216,9 +293,8 @@ export default function PublicExplorer() {
           <div className="absolute -left-16 -top-16 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
           <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-emerald-300/10 rounded-full blur-3xl"></div>
           
-          {/* Decorative Emblem Element */}
           <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-emerald-600/35 border border-emerald-500/30">
-            <Globe className="w-8 h-8 text-emerald-300 animate-pulse" />
+            <Building className="w-8 h-8 text-emerald-300 animate-pulse" />
           </div>
           
           <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">
@@ -234,6 +310,17 @@ export default function PublicExplorer() {
 
         {/* Tab Controls */}
         <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-lg shadow-sm border">
+          <button
+            onClick={() => setActiveTab("register")}
+            className={`flex-1 flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+              activeTab === "register"
+                ? "bg-emerald-700 text-white shadow"
+                : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+            }`}
+          >
+            <UserPlus className="w-4 h-4 mr-2" />
+            Apply for Housing
+          </button>
           <button
             onClick={() => setActiveTab("citizen")}
             className={`flex-1 flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
@@ -261,7 +348,182 @@ export default function PublicExplorer() {
           </button>
         </div>
 
-        {/* Tab 1: Citizen Audit Portal */}
+        {/* Tab 1: Apply for Housing (Registration) */}
+        {activeTab === "register" && (
+          <div className="max-w-2xl mx-auto">
+            {!regSuccess ? (
+              <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900 flex items-center border-b pb-3 mb-2">
+                    <UserPlus className="w-5.5 h-5.5 mr-2 text-emerald-600" />
+                    Housing Application Form (استمارة طلب سكن)
+                  </h3>
+                  <p className="text-slate-500 text-sm">
+                    Please submit your citizen information accurately. Once approved, your queue placement is cryptographically locked on-chain.
+                  </p>
+                </div>
+
+                <form onSubmit={handleRegister} className="space-y-4">
+                  {/* Name field */}
+                  <div>
+                    <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
+                      Full Name (الاسم الكامل)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Mohamed Al-Djelfaoui"
+                      value={regFullName}
+                      onChange={(e) => setRegFullName(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                    />
+                  </div>
+
+                  {/* National ID */}
+                  <div>
+                    <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
+                      National Identification Number (رقم التعريف الوطني)
+                    </label>
+                    <input
+                      type="text"
+                      maxLength={12}
+                      placeholder="e.g. 222333444555"
+                      value={regNationalId}
+                      onChange={(e) => setRegNationalId(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] font-mono text-sm"
+                    />
+                    <span className="text-slate-400 text-xxs mt-1 block">
+                      Must be exactly 12 numeric digits.
+                    </span>
+                  </div>
+
+                  {/* Address */}
+                  <div>
+                    <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
+                      Residential Address (العنوان الكامل)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Cite 1200 logts, Djelfa"
+                      value={regAddress}
+                      onChange={(e) => setRegAddress(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                    />
+                  </div>
+
+                  {/* Wilaya selector */}
+                  <div>
+                    <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
+                      Wilaya (الولاية)
+                    </label>
+                    <select
+                      value={regWilaya}
+                      onChange={(e) => setRegWilaya(Number(e.target.value))}
+                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                    >
+                      {ALGERIAN_WILAYAS.map((wilaya) => (
+                        <option key={wilaya.code} value={wilaya.code}>
+                          {wilaya.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {regError && (
+                    <div className="bg-rose-50 text-rose-700 p-3 rounded-lg border border-rose-100 text-xs flex items-center">
+                      <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                      {regError}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={regLoading}
+                    className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-lg flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 mt-4 text-sm uppercase tracking-wide"
+                  >
+                    {regLoading ? (
+                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                    ) : (
+                      <Send className="w-4 h-4 mr-2" />
+                    )}
+                    Submit Application
+                  </button>
+                </form>
+              </div>
+            ) : (
+              /* Success view */
+              <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
+                <div className="bg-gradient-to-r from-emerald-800 to-emerald-700 text-white p-6 text-center">
+                  <div className="inline-flex p-3 rounded-full bg-emerald-600/40 border border-emerald-500/30 mb-3">
+                    <ShieldCheck className="w-10 h-10 text-emerald-200" />
+                  </div>
+                  <h4 className="text-xl font-bold">Application Received Successfully!</h4>
+                  <p className="text-xs text-emerald-100/80 mt-1">
+                    Your records have been notarized in the AADL local register.
+                  </p>
+                </div>
+
+                <div className="p-6 md:p-8 space-y-6">
+                  <div className="bg-slate-50 border border-slate-100 rounded-lg p-5 space-y-4">
+                    <div className="grid grid-cols-2 gap-4 border-b pb-3.5">
+                      <div>
+                        <span className="text-slate-400 text-xxs uppercase block">Full Name</span>
+                        <span className="font-bold text-slate-800 text-sm">{regSuccess.full_name}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 text-xxs uppercase block">National ID</span>
+                        <span className="font-mono font-bold text-slate-800 text-sm">{regSuccess.national_id}</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 border-b pb-3.5">
+                      <div>
+                        <span className="text-slate-400 text-xxs uppercase block">Wilaya Code</span>
+                        <span className="font-bold text-slate-800 text-sm">{regSuccess.wilaya_code}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 text-xxs uppercase block">Initial Status</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 capitalize">
+                          {regSuccess.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="font-mono text-xs space-y-1 bg-slate-900 text-emerald-400 p-4 rounded border border-slate-950 shadow-inner relative overflow-hidden">
+                      <span className="text-slate-500 text-xxs uppercase block">Applicant Unique Key Hash</span>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="truncate mr-3">{regSuccess.applicant_hash}</span>
+                        <button
+                          onClick={() => handleCopy(regSuccess.applicant_hash, "appHash")}
+                          className="text-slate-500 hover:text-emerald-300 flex-shrink-0 cursor-pointer"
+                        >
+                          {copiedText === "appHash" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={startNewApplication}
+                      className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-lg transition-colors cursor-pointer text-sm"
+                    >
+                      New Application
+                    </button>
+                    <button
+                      onClick={() => proceedToVerify(regSuccess.national_id)}
+                      className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-lg transition-colors cursor-pointer text-sm flex items-center justify-center"
+                    >
+                      Verify Status
+                      <ChevronRight className="w-4 h-4 ml-1" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tab 2: Citizen Audit Portal */}
         {activeTab === "citizen" && (
           <div className="space-y-8">
             
@@ -325,33 +587,33 @@ export default function PublicExplorer() {
                     </div>
 
                     {/* Timeline Node 2: Approved / Eligible */}
-                    <div className="relative">
+                    <div className={`relative ${
+                      applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
+                        ? "text-slate-850"
+                        : "text-slate-450"
+                    }`}>
                       <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${
                         applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
                           ? "bg-emerald-600"
                           : "bg-slate-200"
                       }`}></div>
-                      <div className={`font-semibold text-sm ${
-                        applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
-                          ? "text-slate-800"
-                          : "text-slate-400"
-                      }`}>Approved & Eligible</div>
-                      <div className="text-slate-400 text-xs mt-0.5">Audited by administration</div>
+                      <div className="font-semibold text-sm">Approved & Eligible</div>
+                      <div className="text-slate-450 text-xs mt-0.5">Audited by administration</div>
                     </div>
 
                     {/* Timeline Node 3: Batched / Notarized */}
-                    <div className="relative">
+                    <div className={`relative ${
+                      applicant.status === "batched" || applicant.status === "selected"
+                        ? "text-slate-850"
+                        : "text-slate-455"
+                    }`}>
                       <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${
                         applicant.status === "batched" || applicant.status === "selected"
                           ? "bg-emerald-600"
                           : "bg-slate-200"
-                      }`}>Notarized on Ethereum</div>
-                      <div className={`font-semibold text-sm ${
-                        applicant.status === "batched" || applicant.status === "selected"
-                          ? "text-slate-800"
-                          : "text-slate-400"
-                      }`}>Commitment Anchored</div>
-                      <div className="text-slate-400 text-xs mt-0.5">Merkle root published</div>
+                      }`}></div>
+                      <div className="font-semibold text-sm">Notarized on Ethereum</div>
+                      <div className="text-slate-455 text-xs mt-0.5 font-serif">Commitment Anchored</div>
                     </div>
                   </div>
                 </div>
@@ -359,7 +621,7 @@ export default function PublicExplorer() {
                 {/* Right Panel: Digital Receipt & Verification Card */}
                 <div className="lg:col-span-2 space-y-6">
                   
-                  {/* Digital Receipt Receipt */}
+                  {/* Digital Receipt Card */}
                   <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
                     <div className="bg-gradient-to-r from-emerald-800 to-emerald-700 text-white px-6 py-4 flex justify-between items-center">
                       <div>
@@ -518,7 +780,7 @@ export default function PublicExplorer() {
           </div>
         )}
 
-        {/* Tab 2: Blockchain Explorer */}
+        {/* Tab 3: Blockchain Explorer */}
         {activeTab === "explorer" && (
           <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-slate-100">
             <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
