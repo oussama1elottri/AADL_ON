@@ -76,12 +76,29 @@ def create_applicant(applicant_data: schemas.ApplicantCreate, db: Session = Depe
     mock_file_hash = "0x" + secrets.token_hex(32)
 
     # Create the SQLAlchemy model instance with all the required data.
+    score = 0
+    if 30 <= applicant_data.age <= 45:
+        score += 20
+    if applicant_data.is_married:
+        score += 15
+    score += applicant_data.number_of_children * 10
+    if applicant_data.monthly_income < 50000:
+        score += 30
+    if applicant_data.is_disabled:
+        score += 50
+
     db_applicant = models.Applicant(
         applicant_hash=applicant_hash,
         full_name=applicant_data.full_name,
         address=applicant_data.address,
         wilaya_code=applicant_data.wilaya_code,
-        file_hash=mock_file_hash # Using our generated mock hash
+        file_hash=mock_file_hash, # Using our generated mock hash
+        age=applicant_data.age,
+        is_married=applicant_data.is_married,
+        number_of_children=applicant_data.number_of_children,
+        monthly_income=applicant_data.monthly_income,
+        is_disabled=applicant_data.is_disabled,
+        priority_score=score
     )
 
     # Add to session, commit to DB, and refresh to get the new ID and timestamps.
@@ -154,10 +171,13 @@ def trigger_batch_creation(db: Session = Depends(get_db)):
             detail=f"Batch ID {next_batch_id} already exists in database. Indexer sync may be pending."
         )
 
-    # 2. Fetch eligible applicants ordered deterministically
+    # 2. Fetch eligible applicants ordered by priority score descending, then by id ascending (FIFO tie-breaker)
     eligible_applicants = db.query(models.Applicant).filter(
         models.Applicant.status == models.ApplicantStatus.ELIGIBLE
-    ).order_by(models.Applicant.id.asc()).all()
+    ).order_by(
+        models.Applicant.priority_score.desc(),
+        models.Applicant.id.asc()
+    ).all()
 
     if not eligible_applicants:
         return {"message": "No eligible applicants to batch."}
@@ -281,7 +301,8 @@ def check_applicant_status(national_id: str, db: Session = Depends(get_db)):
         "file_hash": applicant.file_hash,
         "wilaya_code": applicant.wilaya_code,
         "timestamp": int(applicant.created_at.timestamp()),
-        "full_name": applicant.full_name
+        "full_name": applicant.full_name,
+        "priority_score": applicant.priority_score
     }
 
     # 3. If they are not batched, just return the status

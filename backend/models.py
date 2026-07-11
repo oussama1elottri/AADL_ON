@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, BigInteger, ForeignKey, DateTime, func, Enum
+from sqlalchemy import Column, Integer, String, BigInteger, ForeignKey, DateTime, func, Enum, Boolean
 from sqlalchemy.orm import relationship
 import enum
 
@@ -25,6 +25,14 @@ class Applicant(Base):
     wilaya_code = Column(Integer, nullable=False)
     # For now, we'll store a mock file_hash. Later, this would come from a document upload service.
     file_hash = Column(String(66), nullable=False) 
+
+    # --- Priority Engine Criteria ---
+    age = Column(Integer, default=0, nullable=False)
+    is_married = Column(Boolean, default=False, nullable=False)
+    number_of_children = Column(Integer, default=0, nullable=False)
+    monthly_income = Column(Integer, default=0, nullable=False)
+    is_disabled = Column(Boolean, default=False, nullable=False)
+    priority_score = Column(Integer, default=0, index=True, nullable=False)
 
     # --- System Fields ---
     status = Column(Enum(ApplicantStatus), default=ApplicantStatus.PENDING, nullable=False)

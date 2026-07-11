@@ -124,6 +124,11 @@ export default function PublicExplorer() {
   const [regNationalId, setRegNationalId] = useState("");
   const [regAddress, setRegAddress] = useState("");
   const [regWilaya, setRegWilaya] = useState(16); // Default to Algiers (16)
+  const [regAge, setRegAge] = useState<number>(35);
+  const [regIsMarried, setRegIsMarried] = useState<boolean>(false);
+  const [regChildren, setRegChildren] = useState<number>(0);
+  const [regIncome, setRegIncome] = useState<number>(45000);
+  const [regIsDisabled, setRegIsDisabled] = useState<boolean>(false);
   const [regLoading, setRegLoading] = useState(false);
   const [regError, setRegError] = useState<string | null>(null);
   const [regSuccess, setRegSuccess] = useState<any | null>(null);
@@ -230,7 +235,12 @@ export default function PublicExplorer() {
         national_id: regNationalId.trim(),
         full_name: regFullName.trim(),
         address: regAddress.trim(),
-        wilaya_code: Number(regWilaya)
+        wilaya_code: Number(regWilaya),
+        age: Number(regAge),
+        is_married: regIsMarried,
+        number_of_children: Number(regChildren),
+        monthly_income: Number(regIncome),
+        is_disabled: regIsDisabled
       });
       setRegSuccess(response.data);
       setRegLoading(false);
@@ -380,6 +390,11 @@ export default function PublicExplorer() {
     setRegNationalId("");
     setRegAddress("");
     setRegWilaya(16);
+    setRegAge(35);
+    setRegIsMarried(false);
+    setRegChildren(0);
+    setRegIncome(45000);
+    setRegIsDisabled(false);
     setRegSuccess(null);
     setRegError(null);
   };
@@ -532,6 +547,78 @@ export default function PublicExplorer() {
                     />
                   </div>
 
+                  {/* Age & Children Grid */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
+                        Age (العمر)
+                      </label>
+                      <input
+                        type="number"
+                        min={18}
+                        max={120}
+                        value={regAge}
+                        onChange={(e) => setRegAge(Number(e.target.value))}
+                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
+                        Number of Children (عدد الأطفال)
+                      </label>
+                      <input
+                        type="number"
+                        min={0}
+                        max={20}
+                        value={regChildren}
+                        onChange={(e) => setRegChildren(Number(e.target.value))}
+                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Monthly Income */}
+                  <div>
+                    <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
+                      Monthly Income (DZD) (الدخل الشهري بالدينار)
+                    </label>
+                    <div className="relative rounded-lg shadow-sm">
+                      <input
+                        type="number"
+                        min={0}
+                        placeholder="e.g. 45000"
+                        value={regIncome}
+                        onChange={(e) => setRegIncome(Number(e.target.value))}
+                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm pr-12"
+                      />
+                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <span className="text-slate-400 text-xs font-bold">DZD</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Married & Disability Checkboxes */}
+                  <div className="grid grid-cols-2 gap-4 py-1">
+                    <label className="flex items-center space-x-3 bg-[#fafaf9] p-3 rounded-lg border border-slate-200 cursor-pointer select-none hover:bg-slate-50 transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={regIsMarried}
+                        onChange={(e) => setRegIsMarried(e.target.checked)}
+                        className="h-4.5 w-4.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 accent-emerald-600"
+                      />
+                      <span className="text-slate-700 text-xxs font-bold uppercase">Married (متزوج)</span>
+                    </label>
+                    <label className="flex items-center space-x-3 bg-[#fafaf9] p-3 rounded-lg border border-slate-200 cursor-pointer select-none hover:bg-slate-50 transition-colors">
+                      <input
+                        type="checkbox"
+                        checked={regIsDisabled}
+                        onChange={(e) => setRegIsDisabled(e.target.checked)}
+                        className="h-4.5 w-4.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 accent-emerald-600"
+                      />
+                      <span className="text-slate-700 text-xxs font-bold uppercase">Disability (ذوي الاحتياجات)</span>
+                    </label>
+                  </div>
+
                   {/* Wilaya selector */}
                   <div>
                     <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
@@ -597,10 +684,14 @@ export default function PublicExplorer() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 border-b pb-3.5">
+                    <div className="grid grid-cols-3 gap-4 border-b pb-3.5">
                       <div>
                         <span className="text-slate-400 text-xxs uppercase block">Wilaya Code</span>
                         <span className="font-bold text-slate-800 text-sm">{regSuccess.wilaya_code}</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 text-xxs uppercase block">Priority Score</span>
+                        <span className="font-bold text-emerald-700 text-sm">{regSuccess.priority_score ?? 0} pts</span>
                       </div>
                       <div>
                         <span className="text-slate-400 text-xxs uppercase block">Initial Status</span>
@@ -769,8 +860,8 @@ export default function PublicExplorer() {
                         </div>
                       </div>
 
-                      {/* Batch ID, Offset & Wilaya */}
-                      <div className="grid grid-cols-3 gap-4 border-b pb-4">
+                      {/* Batch ID, Offset, Wilaya & Score */}
+                      <div className="grid grid-cols-4 gap-4 border-b pb-4">
                         <div>
                           <span className="text-slate-400 text-xs block uppercase">Batch ID</span>
                           <span className="font-bold text-slate-800">
@@ -787,6 +878,12 @@ export default function PublicExplorer() {
                           <span className="text-slate-400 text-xs block uppercase">Wilaya Code</span>
                           <span className="font-bold text-slate-800">
                             {applicant.wilaya_code || "Pending"}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400 text-xs block uppercase">Priority Score</span>
+                          <span className="font-bold text-emerald-700">
+                            {applicant.priority_score !== undefined ? `${applicant.priority_score} pts` : "N/A"}
                           </span>
                         </div>
                       </div>
@@ -1000,6 +1097,7 @@ export default function PublicExplorer() {
                         <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Citizen Name</th>
                         <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">National ID</th>
                         <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Wilaya</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Priority Score</th>
                         <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                         <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
                       </tr>
@@ -1015,6 +1113,9 @@ export default function PublicExplorer() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                             {ALGERIAN_WILAYAS.find((w) => w.code === app.wilaya_code)?.name || app.wilaya_code}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-700">
+                            {app.priority_score ?? 0} pts
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${

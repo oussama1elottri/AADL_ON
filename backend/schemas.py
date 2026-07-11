@@ -7,6 +7,11 @@ class ApplicantCreate(BaseModel):
     full_name: str = Field(..., max_length=100)
     address: str = Field(..., max_length=255)
     wilaya_code: conint(gt=0) 
+    age: int = Field(..., ge=18, le=120)
+    is_married: bool
+    number_of_children: int = Field(..., ge=0, le=20)
+    monthly_income: int = Field(..., ge=0)
+    is_disabled: bool
 
 class Applicant(BaseModel):
     id: int
@@ -15,6 +20,12 @@ class Applicant(BaseModel):
     address: str
     wilaya_code: int
     file_hash: str
+    age: int
+    is_married: bool
+    number_of_children: int
+    monthly_income: int
+    is_disabled: bool
+    priority_score: int
     status: str 
     created_at: datetime
     updated_at: datetime
@@ -34,6 +45,7 @@ class ApplicantStatusResponse(BaseModel):
     wilaya_code: Optional[int] = None
     timestamp: Optional[int] = None
     full_name: Optional[str] = None
+    priority_score: Optional[int] = None
     
     class Config:
         orm_mode = True

@@ -23,25 +23,50 @@ def verify_merkle_proof(leaf_hash: bytes, proof: list, root: str, index: int) ->
 def main():
     print("=== STARTING INTEGRATION TEST ===")
     
-    # 0. Clear tables in SQLite DB for a clean test run
-    print("Clearing tables in local database for a clean run...")
-    try:
-        conn = sqlite3.connect("aadl_on.db")
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM leaves")
-        cursor.execute("DELETE FROM batches")
-        cursor.execute("DELETE FROM applicants")
-        conn.commit()
-        conn.close()
-        print("  - Database tables cleared successfully.")
-    except Exception as e:
-        print(f"  - (Skip) Could not clear database tables: {e}")
-    
-    # 1. Register Applicants
+    # 0. Delete local SQLite DB to force schema rebuild
+    import os
+    if os.path.exists("aadl_on.db"):
+        try:
+            os.remove("aadl_on.db")
+            print("  - Deleted old database aadl_on.db for a clean schema build.")
+        except Exception as e:
+            print(f"  - Could not delete aadl_on.db: {e}")
+            
+    # 1. Register Applicants with new priority parameters
     applicants = [
-        {"national_id": "222333444555", "full_name": "Mohamed Al-Djelfaoui", "address": "Oran, Algeria", "wilaya_code": 31},
-        {"national_id": "666777888999", "full_name": "Ahmed Al-Jazairi", "address": "Algiers, Algeria", "wilaya_code": 16},
-        {"national_id": "888999000111", "full_name": "Omaima Al-Qasentinia", "address": "Constantine, Algeria", "wilaya_code": 25}
+        {
+            "national_id": "222333444555",
+            "full_name": "Mohamed Al-Djelfaoui",
+            "address": "Oran, Algeria",
+            "wilaya_code": 31,
+            "age": 35,
+            "is_married": False,
+            "number_of_children": 0,
+            "monthly_income": 70000,
+            "is_disabled": False
+        },
+        {
+            "national_id": "666777888999",
+            "full_name": "Ahmed Al-Jazairi",
+            "address": "Algiers, Algeria",
+            "wilaya_code": 16,
+            "age": 42,
+            "is_married": True,
+            "number_of_children": 2,
+            "monthly_income": 40000,
+            "is_disabled": False
+        },
+        {
+            "national_id": "888999000111",
+            "full_name": "Omaima Al-Qasentinia",
+            "address": "Constantine, Algeria",
+            "wilaya_code": 25,
+            "age": 31,
+            "is_married": True,
+            "number_of_children": 1,
+            "monthly_income": 35000,
+            "is_disabled": True
+        }
     ]
     
     for app in applicants:
