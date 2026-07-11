@@ -78,6 +78,8 @@ def main():
         r = requests.put(f"{API_URL}/v1/applicants/{h}/approve", headers={"X-Admin-Key": "government-secret-notary-key"})
         if r.status_code == 200:
             print("    - Status: Approved")
+        elif r.status_code == 400 and "Cannot approve applicant in state" in r.text:
+            print("    - Status: Already Approved / Batched (Skipping)")
         else:
             print(f"    - Error approving: {r.text}")
             return
