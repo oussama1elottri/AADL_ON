@@ -85,7 +85,7 @@ def create_applicant(applicant_data: schemas.ApplicantCreate, db: Session = Depe
     if applicant_data.monthly_income < 50000:
         score += 30
     if applicant_data.is_disabled:
-        score += 50
+        score += 40
 
     db_applicant = models.Applicant(
         applicant_hash=applicant_hash,

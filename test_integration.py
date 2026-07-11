@@ -1,5 +1,4 @@
 import time
-import sqlite3
 import requests
 from web3 import Web3
 
@@ -21,17 +20,8 @@ def verify_merkle_proof(leaf_hash: bytes, proof: list, root: str, index: int) ->
     return current.hex().lower().replace("0x", "") == root.lower().replace("0x", "")
 
 def main():
-    print("=== STARTING INTEGRATION TEST ===")
+    print("=== STARTING INTEGRATION TEST (DATABASE-AGNOSTIC) ===")
     
-    # 0. Delete local SQLite DB to force schema rebuild
-    import os
-    if os.path.exists("aadl_on.db"):
-        try:
-            os.remove("aadl_on.db")
-            print("  - Deleted old database aadl_on.db for a clean schema build.")
-        except Exception as e:
-            print(f"  - Could not delete aadl_on.db: {e}")
-            
     # 1. Register Applicants with new priority parameters
     applicants = [
         {
@@ -69,30 +59,28 @@ def main():
         }
     ]
     
+    registered_hashes = []
     for app in applicants:
         print(f"Registering applicant: {app['full_name']}...")
         r = requests.post(f"{API_URL}/v1/applicants/", json=app)
         if r.status_code in (201, 409):
-            print(f"  - Status: {r.status_code} (Success or Already Existed)")
+            app_hash = get_applicant_hash(app["national_id"])
+            registered_hashes.append(app_hash)
+            print(f"  - Status: {r.status_code} (Success, Hash: {app_hash})")
         else:
             print(f"  - Error: {r.text}")
             return
             
-    # 2. Simulate administrative approval by setting status to ELIGIBLE in SQLite
-    print("Setting applicants' status to ELIGIBLE in database...")
-    conn = sqlite3.connect("aadl_on.db")
-    cursor = conn.cursor()
-    cursor.execute("UPDATE applicants SET status = 'ELIGIBLE'")
-    conn.commit()
-    
-    # Retrieve details to check
-    cursor.execute("SELECT id, applicant_hash, created_at, wilaya_code, file_hash FROM applicants ORDER BY id ASC")
-    db_apps = cursor.fetchall()
-    conn.close()
-    
-    print(f"Total eligible applicants in database: {len(db_apps)}")
-    for row in db_apps:
-        print(f"  - ID: {row[0]}, Hash: {row[1]}, Created At: {row[2]}, Wilaya: {row[3]}")
+    # 2. Approve applicants via the API
+    print("Approving applicants via Admin API...")
+    for h in registered_hashes:
+        print(f"  - Approving applicant hash: {h}...")
+        r = requests.put(f"{API_URL}/v1/applicants/{h}/approve")
+        if r.status_code == 200:
+            print("    - Status: Approved")
+        else:
+            print(f"    - Error approving: {r.text}")
+            return
         
     # 3. Trigger batch creation (commits on-chain)
     print("Triggering batch creation (API -> On-Chain)...")
@@ -110,56 +98,35 @@ def main():
         return
 
     # 4. Wait for Indexer to catch up
-    print("Waiting 5 seconds for background event indexer and audit loop...")
+    print("Waiting 5 seconds for background event indexer...")
     time.sleep(5)
     
-    # 5. Query status and get proof for Fatima
-    fatima_id = "222333444555"
-    print(f"Querying status and proof receipt for Fatima (ID: {fatima_id})...")
-    r = requests.get(f"{API_URL}/v1/applicants/{fatima_id}/status")
+    # 5. Query status and get proof for Mohamed
+    mohamed_id = "222333444555"
+    print(f"Querying status and proof receipt for Mohamed (ID: {mohamed_id})...")
+    r = requests.get(f"{API_URL}/v1/applicants/{mohamed_id}/status")
     if r.status_code == 200:
         status_res = r.json()
         print(f"Response: {status_res}")
         proof = status_res.get("merkle_proof")
         offset = status_res.get("offset")
         root_from_api = status_res.get("merkle_root")
+        file_hash = status_res.get("file_hash")
+        wilaya_code = status_res.get("wilaya_code")
+        timestamp = status_res.get("timestamp")
+        
         print(f"  - Status: {status_res.get('status')}")
         print(f"  - Batch ID: {status_res.get('batch_id')}")
-        print(f"  - Offset: {offset}")
-        print(f"  - Proof: {proof}")
+        print(f"  - Offset (Queue Position): {offset}")
+        print(f"  - Priority Score: {status_res.get('priority_score')} pts")
     else:
         print(f"Error querying status: {r.text}")
         return
 
-    # 6. Reconstruct leaf hash and verify proof off-chain
-    # Get database info for Fatima to compute the exact leaf
-    conn = sqlite3.connect("aadl_on.db")
-    cursor = conn.cursor()
-    fatima_hash = get_applicant_hash(fatima_id)
-    cursor.execute("SELECT applicant_hash, file_hash, created_at, wilaya_code FROM applicants WHERE applicant_hash = ?", (fatima_hash,))
-    fatima_row = cursor.fetchone()
-    conn.close()
-    
-    if not fatima_row:
-        print("Could not find Fatima's database record to verify proof.")
-        return
-        
-    app_hash, file_hash, created_at_str, wilaya_code = fatima_row
-    
-    # Parse created_at string
-    # SQLite datetime is stored as string 'YYYY-MM-DD HH:MM:SS.ffffff' or similar
-    # We parse it to convert to Unix timestamp
-    from datetime import datetime
-    try:
-        # FastAPI/SQLite created_at format
-        dt = datetime.strptime(created_at_str.split(".")[0], "%Y-%m-%d %H:%M:%S")
-    except Exception:
-        dt = datetime.fromisoformat(created_at_str)
-        
-    timestamp = int(dt.timestamp())
+    # 6. Reconstruct leaf hash and verify proof off-chain using API response values
+    app_hash = get_applicant_hash(mohamed_id)
     
     # Compute Solidity-compatible leaf hash
-    # Web3.solidity_keccak takes lists of types and values
     leaf_hash = Web3.solidity_keccak(
         ['bytes32', 'bytes32', 'uint64', 'uint16'],
         [
@@ -169,7 +136,7 @@ def main():
             wilaya_code
         ]
     )
-    print(f"Computed leaf hash for Fatima: 0x{leaf_hash.hex()}")
+    print(f"Computed leaf hash for Mohamed: 0x{leaf_hash.hex()}")
     
     # Verify Merkle Proof
     verified = verify_merkle_proof(leaf_hash, proof, merkle_root, offset)
