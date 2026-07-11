@@ -257,7 +257,11 @@ export default function PublicExplorer() {
 
   const approveCitizen = async (applicantHash: string) => {
     try {
-      await axios.put(`http://127.0.0.1:8000/v1/applicants/${applicantHash}/approve`);
+      await axios.put(
+        `http://127.0.0.1:8000/v1/applicants/${applicantHash}/approve`,
+        {},
+        { headers: { "X-Admin-Key": "government-secret-notary-key" } }
+      );
       fetchRegistry();
     } catch (err: any) {
       console.error("Failed to approve applicant:", err);
@@ -270,7 +274,11 @@ export default function PublicExplorer() {
     setBatchTriggerSuccess(null);
     setBatchTriggerError(null);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/v1/batches/");
+      const response = await axios.post(
+        "http://127.0.0.1:8000/v1/batches/",
+        {},
+        { headers: { "X-Admin-Key": "government-secret-notary-key" } }
+      );
       if (response.status === 202) {
         setBatchTriggerSuccess(response.data);
         fetchRegistry();

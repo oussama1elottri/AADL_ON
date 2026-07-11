@@ -1,5 +1,6 @@
 import secrets
-from fastapi import FastAPI, Depends, HTTPException
+import os
+from fastapi import FastAPI, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from .services import blockchain_service
 
@@ -15,6 +16,16 @@ from fastapi.middleware.cors import CORSMiddleware
 # This line ensures that if the API starts before the DB is initialized,
 # it will create the necessary tables.
 models.Base.metadata.create_all(bind=engine)
+
+# API Key Authentication dependency
+ADMIN_API_KEY = os.getenv("ADMIN_API_KEY", "government-secret-notary-key")
+
+def verify_admin_auth(x_admin_key: str = Header(None, alias="X-Admin-Key")):
+    if not x_admin_key or x_admin_key != ADMIN_API_KEY:
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized Admin Access: Invalid or missing X-Admin-Key header."
+        )
 
 app = FastAPI(
     title="AADL_ON API",
@@ -115,7 +126,7 @@ def list_applicants(db: Session = Depends(get_db)):
     """
     return db.query(models.Applicant).order_by(models.Applicant.id.desc()).all()
 
-@app.put("/v1/applicants/{applicant_hash}/approve", response_model=schemas.Applicant, tags=["Applicants"])
+@app.put("/v1/applicants/{applicant_hash}/approve", response_model=schemas.Applicant, dependencies=[Depends(verify_admin_auth)], tags=["Applicants"])
 def approve_applicant(applicant_hash: str, db: Session = Depends(get_db)):
     """
     Approves a pending applicant, changing their status to 'eligible' so they can be batched on-chain.
@@ -143,7 +154,7 @@ def approve_applicant(applicant_hash: str, db: Session = Depends(get_db)):
 def read_root():
     return {"status": "ok", "message": "Welcome to the AADL_ON API"}
 
-@app.post("/v1/batches/", status_code=202, tags=["Batches"])
+@app.post("/v1/batches/", status_code=202, dependencies=[Depends(verify_admin_auth)], tags=["Batches"])
 def trigger_batch_creation(db: Session = Depends(get_db)):
     """
     Triggers the creation of a new batch.

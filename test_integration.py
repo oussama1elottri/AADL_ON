@@ -75,7 +75,7 @@ def main():
     print("Approving applicants via Admin API...")
     for h in registered_hashes:
         print(f"  - Approving applicant hash: {h}...")
-        r = requests.put(f"{API_URL}/v1/applicants/{h}/approve")
+        r = requests.put(f"{API_URL}/v1/applicants/{h}/approve", headers={"X-Admin-Key": "government-secret-notary-key"})
         if r.status_code == 200:
             print("    - Status: Approved")
         else:
@@ -84,7 +84,7 @@ def main():
         
     # 3. Trigger batch creation (commits on-chain)
     print("Triggering batch creation (API -> On-Chain)...")
-    r = requests.post(f"{API_URL}/v1/batches/")
+    r = requests.post(f"{API_URL}/v1/batches/", headers={"X-Admin-Key": "government-secret-notary-key"})
     if r.status_code == 202:
         res = r.json()
         print(f"Batch creation accepted!")
