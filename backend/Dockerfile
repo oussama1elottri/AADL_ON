@@ -9,18 +9,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Download and install ZoKrates release binary directly matching container architecture
-RUN ARCH=$(uname -m) && \
-    if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then \
-      URL="https://github.com/ZoKrates/ZoKrates/releases/download/v0.8.8/zokrates-v0.8.8-aarch64-unknown-linux-gnu.tar.gz"; \
-    else \
-      URL="https://github.com/ZoKrates/ZoKrates/releases/download/v0.8.8/zokrates-v0.8.8-x86_64-unknown-linux-gnu.tar.gz"; \
-    fi && \
-    curl -L "$URL" -o zokrates.tar.gz && \
-    tar -xzf zokrates.tar.gz && \
-    mv zokrates /usr/local/bin/ && \
-    rm zokrates.tar.gz && \
-    chmod +x /usr/local/bin/zokrates
+# Install ZoKrates CLI binary via official get.zokrat.es installer
+RUN curl -LSfs get.zokrat.es | sh \
+    && mv /root/.zokrates/bin/zokrates /usr/local/bin/ \
+    && chmod +x /usr/local/bin/zokrates
 
 # Copy backend requirements and install dependencies
 COPY requirements.txt .
