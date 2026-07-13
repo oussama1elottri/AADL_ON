@@ -359,3 +359,36 @@ def check_applicant_status(national_id: str, db: Session = Depends(get_db)):
 
     return response
 
+@app.post("/v1/applicants/{national_id}/prove", tags=["Applicants"])
+def prove_applicant_priority(national_id: str, db: Session = Depends(get_db)):
+    """
+    Generates a Zero-Knowledge Proof verifying that the applicant's priority score 
+    was calculated correctly based on their private criteria (age, income, etc).
+    """
+    from . import zk_service
+    
+    # 1. Look up applicant
+    applicant_hash = security.hash_identifier(national_id)
+    applicant = db.query(models.Applicant).filter(models.Applicant.applicant_hash == applicant_hash).first()
+    
+    if not applicant:
+        raise HTTPException(status_code=404, detail="Applicant not found")
+        
+    # 2. Run ZoKrates witness and proof generation
+    try:
+        proof_payload = zk_service.generate_zk_proof(
+            age=applicant.age,
+            is_married=applicant.is_married,
+            children=applicant.number_of_children,
+            income=applicant.monthly_income,
+            is_disabled=applicant.is_disabled,
+            public_score=applicant.priority_score
+        )
+        return proof_payload
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"ZK Proof Generation Failed: {e}"
+        )
+
+

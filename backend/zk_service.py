@@ -10,8 +10,8 @@ def generate_zk_proof(age: int, is_married: bool, children: int, income: int, is
     Returns the JSON proof object containing the cryptographic keys.
     """
     # 1. Map python boolean to ZoKrates string input ("true"/"false")
-    married_str = "1" if is_married else "0"
-    disabled_str = "1" if is_disabled else "0"
+    married_str = "true" if is_married else "false"
+    disabled_str = "true" if is_disabled else "false"
     
     # 2. Run compute-witness natively
     witness_cmd = [

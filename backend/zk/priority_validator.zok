@@ -1,0 +1,19 @@
+def main(
+    private u32 age,
+    private bool is_married,
+    private u32 number_of_children,
+    private u32 monthly_income,
+    private bool is_disabled,
+    public u32 public_score
+) {
+    u32 age_points = if age >= 30 && age <= 45 { 20 } else { 0 };
+    u32 married_points = if is_married { 15 } else { 0 };
+    u32 children_points = number_of_children * 10;
+    u32 income_points = if monthly_income < 50000 { 30 } else { 0 };
+    u32 disabled_points = if is_disabled { 40 } else { 0 };
+
+    u32 computed_score = age_points + married_points + children_points + income_points + disabled_points;
+
+    assert(computed_score == public_score);
+    return;
+}
