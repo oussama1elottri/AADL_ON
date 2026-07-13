@@ -9,10 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install ZoKrates CLI binary directly via official installer
-RUN curl -LSfs https://zokrates.github.io/install.sh | sh \
-    && mv /root/.zokrates/bin/zokrates /usr/local/bin/ \
-    && chmod +x /usr/local/bin/zokrates
+# Copy ZoKrates CLI executable binary from official image
+COPY --from=zokrates/zokrates /home/zokrates/zokrates /usr/local/bin/zokrates
 
 # Copy backend requirements and install dependencies
 COPY requirements.txt .
