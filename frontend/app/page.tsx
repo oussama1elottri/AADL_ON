@@ -154,6 +154,12 @@ export default function PublicExplorer() {
     computedRoot?: string;
   } | null>(null);
 
+  // Zero-Knowledge Proof State
+  const [zkLoading, setZkLoading] = useState(false);
+  const [zkError, setZkError] = useState<string | null>(null);
+  const [zkProofData, setZkProofData] = useState<any | null>(null);
+  const [zkStatus, setZkStatus] = useState<string | null>(null);
+
   const fetchBatches = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/v1/batches/");
@@ -207,6 +213,27 @@ export default function PublicExplorer() {
         setSearchError("Could not connect to the Backend API. Is it running?");
       }
       setSearchLoading(false);
+    }
+  };
+
+  const generateZkProof = async (nationalId: string) => {
+    setZkLoading(true);
+    setZkError(null);
+    setZkProofData(null);
+    setZkStatus("Computing witness trace inside ZoKrates...");
+    
+    try {
+      const response = await axios.post(`http://127.0.0.1:8000/v1/applicants/${nationalId}/prove`);
+      setZkStatus("Synthesizing SNARK proof parameters...");
+      await new Promise((r) => setTimeout(r, 800));
+      setZkProofData(response.data);
+      setZkStatus("Cryptographic ZK Proof generated successfully!");
+    } catch (err: any) {
+      console.error("ZK Proof Generation failed:", err);
+      setZkError(err.response?.data?.detail || "Could not connect to ZK proving service.");
+      setZkStatus(null);
+    } finally {
+      setZkLoading(false);
     }
   };
 
@@ -425,13 +452,13 @@ export default function PublicExplorer() {
           <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-emerald-300/10 rounded-full blur-3xl"></div>
           
           <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-emerald-600/35 border border-emerald-500/30">
-            <Building className="w-8 h-8 text-emerald-300 animate-pulse" />
+            <Building className="w-6 h-6 text-emerald-300 animate-pulse" />
           </div>
           
-          <h1 className="text-xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">
+          <h1 className="text-xl md:text-2xl font-bold  text-emerald-200 tracking-tight drop-shadow-md">
             الجمهورية الجزائرية الديمقراطية الشعبية
           </h1>
-          <h2 className="text-3xl md:text-2xl font-bold text-emerald-200 mt-2 tracking-wide font-serif">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mt-2 tracking-wide font-serif">
             AADL_ON
           </h2>
           <p className="text-sm md:text-base text-emerald-100/80 mt-2 max-w-xl mx-auto">
@@ -997,6 +1024,77 @@ export default function PublicExplorer() {
                               </div>
                             </>
                           )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Zero-Knowledge Proof Widget */}
+                  {applicant && (
+                    <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 space-y-4">
+                      <div className="flex justify-between items-center border-b pb-4">
+                        <div>
+                          <h4 className="text-md font-bold text-slate-900 flex items-center">
+                            <ShieldCheck className="w-5 h-5 mr-2 text-emerald-600 animate-pulse" />
+                            Zero-Knowledge Priority Proof
+                          </h4>
+                          <p className="text-slate-500 text-xxs mt-0.5">
+                            Prove public score calculation accuracy without exposing private criteria.
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => generateZkProof(applicant.national_id)}
+                          disabled={zkLoading}
+                          className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center transition-all cursor-pointer disabled:opacity-50"
+                        >
+                          {zkLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+                          Generate ZK Proof
+                        </button>
+                      </div>
+
+                      {/* Proving Status Logs */}
+                      {zkStatus && (
+                        <div className="flex items-center text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 p-3 rounded-lg font-medium">
+                          <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                          {zkStatus}
+                        </div>
+                      )}
+
+                      {/* Error block */}
+                      {zkError && (
+                        <div className="bg-rose-50 text-rose-700 p-3 rounded-lg border border-rose-100 text-xs flex items-center font-medium">
+                          <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                          {zkError}
+                        </div>
+                      )}
+
+                      {/* Display Proof */}
+                      {zkProofData && (
+                        <div className="space-y-3 font-mono text-xs">
+                          <div className="bg-slate-900 text-emerald-400 p-4 rounded-lg overflow-y-auto max-h-60 border border-slate-950 shadow-inner space-y-3">
+                            <div>
+                              <span className="text-slate-500 text-xxs block uppercase">ZK-SNARK proof.json payload</span>
+                              <pre className="text-xxs leading-relaxed whitespace-pre-wrap select-all">
+                                {JSON.stringify(zkProofData.proof, null, 2)}
+                              </pre>
+                            </div>
+                            <div className="border-t border-slate-800 pt-3">
+                              <span className="text-slate-500 text-xxs block uppercase">Public Inputs</span>
+                              <pre className="text-xxs text-slate-300">
+                                {JSON.stringify(zkProofData.inputs, null, 2)}
+                              </pre>
+                            </div>
+                          </div>
+
+                          <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start">
+                            <CheckCircle className="w-5 h-5 mr-3 text-emerald-600 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <h5 className="font-bold text-sm">ZK Verification Verified Locally</h5>
+                              <p className="text-xxs text-emerald-700 mt-1 leading-relaxed">
+                                The proof contains variables proving mathematically that the private criteria input values result in the score of <strong>{applicant.priority_score} pts</strong>. You can verify this key on-chain at the <strong>Verifier.sol</strong> contract.
+                              </p>
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
