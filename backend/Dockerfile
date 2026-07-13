@@ -6,7 +6,11 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
+
+# Copy ZoKrates executable binary directly from official image
+COPY --from=zokrates/zokrates /usr/local/bin/zokrates /usr/local/bin/zokrates
 
 # Copy backend requirements and install dependencies
 COPY requirements.txt .

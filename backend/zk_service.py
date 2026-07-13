@@ -13,13 +13,11 @@ def generate_zk_proof(age: int, is_married: bool, children: int, income: int, is
     married_str = "1" if is_married else "0"
     disabled_str = "1" if is_disabled else "0"
     
-    # 2. Run compute-witness inside ZoKrates Docker container
+    # 2. Run compute-witness natively
     witness_cmd = [
-        "docker", "run", "--rm",
-        "-v", f"{ZK_DIR}:/home/zokrates/code",
-        "zokrates/zokrates", "zokrates", "compute-witness",
-        "-i", "code/out",
-        "-o", "code/witness",
+        "zokrates", "compute-witness",
+        "-i", os.path.join(ZK_DIR, "out"),
+        "-o", os.path.join(ZK_DIR, "witness"),
         "-a", str(age), married_str, str(children), str(income), disabled_str, str(public_score)
     ]
     
@@ -28,15 +26,13 @@ def generate_zk_proof(age: int, is_married: bool, children: int, income: int, is
     except subprocess.CalledProcessError as e:
         raise Exception(f"Failed to compute witness in ZK circuit: {e.stderr.decode()}")
 
-    # 3. Run generate-proof inside ZoKrates Docker container
+    # 3. Run generate-proof natively
     proof_cmd = [
-        "docker", "run", "--rm",
-        "-v", f"{ZK_DIR}:/home/zokrates/code",
-        "zokrates/zokrates", "zokrates", "generate-proof",
-        "-i", "code/out",
-        "-w", "code/witness",
-        "-p", "code/proving.key",
-        "-j", "code/proof.json"
+        "zokrates", "generate-proof",
+        "-i", os.path.join(ZK_DIR, "out"),
+        "-w", os.path.join(ZK_DIR, "witness"),
+        "-p", os.path.join(ZK_DIR, "proving.key"),
+        "-j", os.path.join(ZK_DIR, "proof.json")
     ]
     
     try:
