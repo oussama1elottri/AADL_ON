@@ -8,9 +8,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-playfair);
-  --font-arabic: var(--font-amiri);
+  --font-sans: var(--font-roboto);
+  --font-arabic: var(--font-noto-arabic);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,18 +22,19 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-roboto), var(--font-noto-arabic), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Official Government Executive Typography Rules */
+/* Classic Corporate Government Typography Rules */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-playfair), var(--font-amiri), Georgia, serif;
+  font-family: var(--font-roboto), var(--font-noto-arabic), sans-serif;
+  font-weight: 700;
   letter-spacing: -0.01em;
 }
 
 /* Formal Arabic Typography */
-[lang="ar"], .font-arabic, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
-  font-family: var(--font-amiri), var(--font-inter), serif !important;
+[lang="ar"], .font-arabic, [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] body {
+  font-family: var(--font-noto-arabic), var(--font-roboto), sans-serif !important;
 }

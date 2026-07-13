@@ -1,23 +1,17 @@
 import type { Metadata } from "next";
-import { Inter, Amiri, Playfair_Display } from "next/font/google";
+import { Roboto, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "700"],
 });
 
-const amiri = Amiri({
-  variable: "--font-amiri",
+const notoSansArabic = Noto_Sans_Arabic({
+  variable: "--font-noto-arabic",
   subsets: ["arabic"],
-  weight: ["400", "700"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -33,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl">
       <body
-        className={`${inter.variable} ${amiri.variable} ${playfair.variable} antialiased`}
+        className={`${roboto.variable} ${notoSansArabic.variable} antialiased`}
       >
         {children}
       </body>
