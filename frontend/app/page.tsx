@@ -447,32 +447,32 @@ export default function PublicExplorer() {
       <div className="max-w-5xl mx-auto">
         
         {/* Algerian Government Inspired Header */}
-        <header className="mb-10 text-center relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-950 p-6 md:p-10 shadow-xl border border-emerald-900/20">
-          <div className="absolute -left-16 -top-16 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-emerald-300/10 rounded-full blur-3xl"></div>
+        <header className="mb-10 text-center relative overflow-hidden rounded bg-gradient-to-r from-green-800 via-green-700 to-green-950 p-6 md:p-10 shadow-xl border border-green-900/20">
+          <div className="absolute -left-16 -top-16 w-40 h-40 bg-green-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-green-300/10 rounded-full blur-3xl"></div>
           
-          <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-emerald-600/35 border border-emerald-500/30">
-            <Building className="w-6 h-6 text-emerald-300 animate-pulse" />
+          <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-green-600/35 border border-green-500/30">
+            <Building className="w-6 h-6 text-green-300 animate-pulse" />
           </div>
           
-          <h1 className="text-xl md:text-2xl font-bold  text-emerald-200 tracking-tight drop-shadow-md">
+          <h1 className="text-xl md:text-2xl font-bold  text-green-200 tracking-tight drop-shadow-md">
             الجمهورية الجزائرية الديمقراطية الشعبية
           </h1>
           <h2 className="text-3xl md:text-5xl font-bold text-white mt-2 tracking-wide font-serif">
             AADL_ON
           </h2>
-          <p className="text-sm md:text-base text-emerald-100/80 mt-2 max-w-xl mx-auto">
+          <p className="text-sm md:text-base text-green-100/80 mt-2 max-w-xl mx-auto">
             Algorithmically transparent, cryptographically verifiable, and permanently anchored on Ethereum Sepolia Testnet.
           </p>
         </header>
 
         {/* Tab Controls */}
-        <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-lg shadow-sm border overflow-x-auto gap-1">
+        <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-sm shadow-sm border overflow-x-auto gap-1">
           <button
             onClick={() => setActiveTab("register")}
             className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
               activeTab === "register"
-                ? "bg-emerald-700 text-white shadow"
+                ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
@@ -483,7 +483,7 @@ export default function PublicExplorer() {
             onClick={() => setActiveTab("citizen")}
             className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
               activeTab === "citizen"
-                ? "bg-emerald-700 text-white shadow"
+                ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
@@ -497,7 +497,7 @@ export default function PublicExplorer() {
             }}
             className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
               activeTab === "admin"
-                ? "bg-emerald-700 text-white shadow"
+                ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
@@ -511,7 +511,7 @@ export default function PublicExplorer() {
             }}
             className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
               activeTab === "explorer"
-                ? "bg-emerald-700 text-white shadow"
+                ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
             }`}
           >
@@ -524,10 +524,10 @@ export default function PublicExplorer() {
         {activeTab === "register" && (
           <div className="max-w-2xl mx-auto">
             {!regSuccess ? (
-              <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
+              <div className="bg-white rounded shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 flex items-center border-b pb-3 mb-2">
-                    <UserPlus className="w-5.5 h-5.5 mr-2 text-emerald-600" />
+                    <UserPlus className="w-5.5 h-5.5 mr-2 text-green-600" />
                     Housing Application Form (استمارة طلب سكن)
                   </h3>
                   <p className="text-slate-500 text-sm">
@@ -546,7 +546,7 @@ export default function PublicExplorer() {
                       placeholder="Mohamed Al-Djelfaoui"
                       value={regFullName}
                       onChange={(e) => setRegFullName(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                      className="w-full px-4 py-2.5 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#fafaf9] text-sm"
                     />
                   </div>
 
@@ -561,7 +561,7 @@ export default function PublicExplorer() {
                       placeholder="e.g. 222333444555"
                       value={regNationalId}
                       onChange={(e) => setRegNationalId(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] font-mono text-sm"
+                      className="w-full px-4 py-2.5 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#fafaf9] font-mono text-sm"
                     />
                     <span className="text-slate-400 text-xxs mt-1 block">
                       Must be exactly 12 numeric digits.
@@ -578,7 +578,7 @@ export default function PublicExplorer() {
                       placeholder="Cite 1200 logts, Djelfa"
                       value={regAddress}
                       onChange={(e) => setRegAddress(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                      className="w-full px-4 py-2.5 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#fafaf9] text-sm"
                     />
                   </div>
 
@@ -594,7 +594,7 @@ export default function PublicExplorer() {
                         max={120}
                         value={regAge}
                         onChange={(e) => setRegAge(Number(e.target.value))}
-                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                        className="w-full px-4 py-2.5 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#fafaf9] text-sm"
                       />
                     </div>
                     <div>
@@ -607,7 +607,7 @@ export default function PublicExplorer() {
                         max={20}
                         value={regChildren}
                         onChange={(e) => setRegChildren(Number(e.target.value))}
-                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                        className="w-full px-4 py-2.5 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#fafaf9] text-sm"
                       />
                     </div>
                   </div>
@@ -617,14 +617,14 @@ export default function PublicExplorer() {
                     <label className="block text-slate-700 text-xs font-bold uppercase mb-1.5">
                       Monthly Income (DZD) (الدخل الشهري بالدينار)
                     </label>
-                    <div className="relative rounded-lg shadow-sm">
+                    <div className="relative rounded-sm shadow-sm">
                       <input
                         type="number"
                         min={0}
                         placeholder="e.g. 45000"
                         value={regIncome}
                         onChange={(e) => setRegIncome(Number(e.target.value))}
-                        className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm pr-12"
+                        className="w-full px-4 py-2.5 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#fafaf9] text-sm pr-12"
                       />
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <span className="text-slate-400 text-xs font-bold">DZD</span>
@@ -634,21 +634,21 @@ export default function PublicExplorer() {
 
                   {/* Married & Disability Checkboxes */}
                   <div className="grid grid-cols-2 gap-4 py-1">
-                    <label className="flex items-center space-x-3 bg-[#fafaf9] p-3 rounded-lg border border-slate-200 cursor-pointer select-none hover:bg-slate-50 transition-colors">
+                    <label className="flex items-center space-x-3 bg-[#fafaf9] p-3 rounded-sm border border-slate-200 cursor-pointer select-none hover:bg-slate-50 transition-colors">
                       <input
                         type="checkbox"
                         checked={regIsMarried}
                         onChange={(e) => setRegIsMarried(e.target.checked)}
-                        className="h-4.5 w-4.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 accent-emerald-600"
+                        className="h-4.5 w-4.5 rounded border-slate-300 text-green-600 focus:ring-green-500 accent-green-600"
                       />
                       <span className="text-slate-700 text-xxs font-bold uppercase">Married (متزوج)</span>
                     </label>
-                    <label className="flex items-center space-x-3 bg-[#fafaf9] p-3 rounded-lg border border-slate-200 cursor-pointer select-none hover:bg-slate-50 transition-colors">
+                    <label className="flex items-center space-x-3 bg-[#fafaf9] p-3 rounded-sm border border-slate-200 cursor-pointer select-none hover:bg-slate-50 transition-colors">
                       <input
                         type="checkbox"
                         checked={regIsDisabled}
                         onChange={(e) => setRegIsDisabled(e.target.checked)}
-                        className="h-4.5 w-4.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 accent-emerald-600"
+                        className="h-4.5 w-4.5 rounded border-slate-300 text-green-600 focus:ring-green-500 accent-green-600"
                       />
                       <span className="text-slate-700 text-xxs font-bold uppercase">Disability (ذوي الاحتياجات)</span>
                     </label>
@@ -662,7 +662,7 @@ export default function PublicExplorer() {
                     <select
                       value={regWilaya}
                       onChange={(e) => setRegWilaya(Number(e.target.value))}
-                      className="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-[#fafaf9] text-sm"
+                      className="w-full px-4 py-2.5 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 bg-[#fafaf9] text-sm"
                     >
                       {ALGERIAN_WILAYAS.map((wilaya) => (
                         <option key={wilaya.code} value={wilaya.code}>
@@ -673,7 +673,7 @@ export default function PublicExplorer() {
                   </div>
 
                   {regError && (
-                    <div className="bg-rose-50 text-rose-700 p-3 rounded-lg border border-rose-100 text-xs flex items-center">
+                    <div className="bg-rose-50 text-rose-700 p-3 rounded-sm border border-rose-100 text-xs flex items-center">
                       <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
                       {regError}
                     </div>
@@ -682,7 +682,7 @@ export default function PublicExplorer() {
                   <button
                     type="submit"
                     disabled={regLoading}
-                    className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-lg flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 mt-4 text-sm uppercase tracking-wide"
+                    className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded-sm flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 mt-4 text-sm uppercase tracking-wide"
                   >
                     {regLoading ? (
                       <Loader2 className="w-5 h-5 animate-spin mr-2" />
@@ -695,19 +695,19 @@ export default function PublicExplorer() {
               </div>
             ) : (
               /* Success view */
-              <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-emerald-800 to-emerald-700 text-white p-6 text-center">
-                  <div className="inline-flex p-3 rounded-full bg-emerald-600/40 border border-emerald-500/30 mb-3">
-                    <ShieldCheck className="w-10 h-10 text-emerald-200" />
+              <div className="bg-white rounded shadow-lg border border-slate-100 overflow-hidden">
+                <div className="bg-gradient-to-r from-green-800 to-green-700 text-white p-6 text-center">
+                  <div className="inline-flex p-3 rounded-full bg-green-600/40 border border-green-500/30 mb-3">
+                    <ShieldCheck className="w-10 h-10 text-green-200" />
                   </div>
                   <h4 className="text-xl font-bold">Application Received Successfully!</h4>
-                  <p className="text-xs text-emerald-100/80 mt-1">
+                  <p className="text-xs text-green-100/80 mt-1">
                     Your records have been notarized in the AADL local register.
                   </p>
                 </div>
 
                 <div className="p-6 md:p-8 space-y-6">
-                  <div className="bg-slate-50 border border-slate-100 rounded-lg p-5 space-y-4">
+                  <div className="bg-slate-50 border border-slate-100 rounded-sm p-5 space-y-4">
                     <div className="grid grid-cols-2 gap-4 border-b pb-3.5">
                       <div>
                         <span className="text-slate-400 text-xxs uppercase block">Full Name</span>
@@ -726,7 +726,7 @@ export default function PublicExplorer() {
                       </div>
                       <div>
                         <span className="text-slate-400 text-xxs uppercase block">Priority Score</span>
-                        <span className="font-bold text-emerald-700 text-sm">{regSuccess.priority_score ?? 0} pts</span>
+                        <span className="font-bold text-green-700 text-sm">{regSuccess.priority_score ?? 0} pts</span>
                       </div>
                       <div>
                         <span className="text-slate-400 text-xxs uppercase block">Initial Status</span>
@@ -736,15 +736,15 @@ export default function PublicExplorer() {
                       </div>
                     </div>
 
-                    <div className="font-mono text-xs space-y-1 bg-slate-900 text-emerald-400 p-4 rounded border border-slate-950 shadow-inner relative overflow-hidden">
+                    <div className="font-mono text-xs space-y-1 bg-slate-900 text-green-400 p-4 rounded border border-slate-950 shadow-inner relative overflow-hidden">
                       <span className="text-slate-500 text-xxs uppercase block">Applicant Unique Key Hash</span>
                       <div className="flex items-center justify-between mt-1">
                         <span className="truncate mr-3">{regSuccess.applicant_hash}</span>
                         <button
                           onClick={() => handleCopy(regSuccess.applicant_hash, "appHash")}
-                          className="text-slate-500 hover:text-emerald-300 flex-shrink-0 cursor-pointer"
+                          className="text-slate-500 hover:text-green-300 flex-shrink-0 cursor-pointer"
                         >
-                          {copiedText === "appHash" ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                          {copiedText === "appHash" ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
                         </button>
                       </div>
                     </div>
@@ -753,13 +753,13 @@ export default function PublicExplorer() {
                   <div className="flex gap-3">
                     <button
                       onClick={startNewApplication}
-                      className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-lg transition-colors cursor-pointer text-sm"
+                      className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-sm transition-colors cursor-pointer text-sm"
                     >
                       New Application
                     </button>
                     <button
                       onClick={() => proceedToVerify(regSuccess.national_id)}
-                      className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-lg transition-colors cursor-pointer text-sm flex items-center justify-center"
+                      className="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded-sm transition-colors cursor-pointer text-sm flex items-center justify-center"
                     >
                       Verify Status
                       <ChevronRight className="w-4 h-4 ml-1" />
@@ -776,9 +776,9 @@ export default function PublicExplorer() {
           <div className="space-y-8">
             
             {/* Search Input Box */}
-            <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6">
+            <div className="bg-white rounded shadow-lg border border-slate-100 p-6">
               <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center">
-                <Search className="w-5 h-5 mr-2 text-emerald-600" />
+                <Search className="w-5 h-5 mr-2 text-green-600" />
                 Query Applicant Notary Receipt
               </h3>
               <p className="text-slate-500 text-sm mb-4">
@@ -791,12 +791,12 @@ export default function PublicExplorer() {
                   placeholder="e.g. 222333444555"
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
-                  className="flex-1 px-4 py-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-base font-mono bg-[#fafaf9]"
+                  className="flex-1 px-4 py-3 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-base font-mono bg-[#fafaf9]"
                 />
                 <button
                   type="submit"
                   disabled={searchLoading}
-                  className="bg-emerald-700 hover:bg-emerald-800 text-white px-6 py-3 rounded-lg font-semibold flex items-center transition-colors disabled:opacity-50 cursor-pointer"
+                  className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-sm font-semibold flex items-center transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   {searchLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin mr-2" />
@@ -808,7 +808,7 @@ export default function PublicExplorer() {
               </form>
 
               {searchError && (
-                <div className="mt-4 bg-rose-50 text-rose-700 p-3 rounded-lg border border-rose-100 text-sm flex items-center">
+                <div className="mt-4 bg-rose-50 text-rose-700 p-3 rounded-sm border border-rose-100 text-sm flex items-center">
                   <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
                   {searchError}
                 </div>
@@ -820,7 +820,7 @@ export default function PublicExplorer() {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 
                 {/* Left Panel: Status Timeline */}
-                <div className="lg:col-span-1 bg-white rounded-xl shadow-lg border border-slate-100 p-6 h-fit">
+                <div className="lg:col-span-1 bg-white rounded shadow-lg border border-slate-100 p-6 h-fit">
                   <h4 className="text-md font-bold text-slate-900 mb-6 border-b pb-3">
                     Application Status
                   </h4>
@@ -829,7 +829,7 @@ export default function PublicExplorer() {
                     
                     {/* Timeline Node 1: Submitted */}
                     <div className="relative">
-                      <div className="absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white bg-emerald-600 shadow-sm flex items-center justify-center"></div>
+                      <div className="absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white bg-green-600 shadow-sm flex items-center justify-center"></div>
                       <div className="font-semibold text-slate-800 text-sm">Application Submitted</div>
                       <div className="text-slate-400 text-xs mt-0.5">Recorded in database</div>
                     </div>
@@ -842,7 +842,7 @@ export default function PublicExplorer() {
                     }`}>
                       <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${
                         applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
-                          ? "bg-emerald-600"
+                          ? "bg-green-600"
                           : "bg-slate-200"
                       }`}></div>
                       <div className="font-semibold text-sm">Approved & Eligible</div>
@@ -857,7 +857,7 @@ export default function PublicExplorer() {
                     }`}>
                       <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${
                         applicant.status === "batched" || applicant.status === "selected"
-                          ? "bg-emerald-600"
+                          ? "bg-green-600"
                           : "bg-slate-200"
                       }`}></div>
                       <div className="font-semibold text-sm">Notarized on Ethereum</div>
@@ -870,13 +870,13 @@ export default function PublicExplorer() {
                 <div className="lg:col-span-2 space-y-6">
                   
                   {/* Digital Receipt Card */}
-                  <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
-                    <div className="bg-gradient-to-r from-emerald-800 to-emerald-700 text-white px-6 py-4 flex justify-between items-center">
+                  <div className="bg-white rounded shadow-lg border border-slate-100 overflow-hidden">
+                    <div className="bg-gradient-to-r from-green-800 to-green-700 text-white px-6 py-4 flex justify-between items-center">
                       <div>
-                        <div className="text-xs text-emerald-200 uppercase tracking-widest font-mono">Official Queue Receipt</div>
+                        <div className="text-xs text-green-200 uppercase tracking-widest font-mono">Official Queue Receipt</div>
                         <div className="text-lg font-bold">AADL_ON Verification Notary</div>
                       </div>
-                      <FileText className="w-8 h-8 text-emerald-200/50" />
+                      <FileText className="w-8 h-8 text-green-200/50" />
                     </div>
 
                     <div className="p-6 space-y-4">
@@ -917,7 +917,7 @@ export default function PublicExplorer() {
                         </div>
                         <div>
                           <span className="text-slate-400 text-xs block uppercase">Priority Score</span>
-                          <span className="font-bold text-emerald-700">
+                          <span className="font-bold text-green-700">
                             {applicant.priority_score !== undefined ? `${applicant.priority_score} pts` : "N/A"}
                           </span>
                         </div>
@@ -932,9 +932,9 @@ export default function PublicExplorer() {
                             {applicant.merkle_root && (
                               <button
                                 onClick={() => handleCopy(applicant.merkle_root!, "root")}
-                                className="text-slate-400 hover:text-emerald-700 flex-shrink-0 cursor-pointer"
+                                className="text-slate-400 hover:text-green-700 flex-shrink-0 cursor-pointer"
                               >
-                                {copiedText === "root" ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                                {copiedText === "root" ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
                               </button>
                             )}
                           </div>
@@ -947,9 +947,9 @@ export default function PublicExplorer() {
                             {applicant.file_hash && (
                               <button
                                 onClick={() => handleCopy(applicant.file_hash!, "file")}
-                                className="text-slate-400 hover:text-emerald-700 flex-shrink-0 cursor-pointer"
+                                className="text-slate-400 hover:text-green-700 flex-shrink-0 cursor-pointer"
                               >
-                                {copiedText === "file" ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                                {copiedText === "file" ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
                               </button>
                             )}
                           </div>
@@ -960,16 +960,16 @@ export default function PublicExplorer() {
 
                   {/* Verification Widget */}
                   {applicant.status === "batched" && (
-                    <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 space-y-4">
+                    <div className="bg-white rounded shadow-lg border border-slate-100 p-6 space-y-4">
                       <div className="flex justify-between items-center border-b pb-4">
                         <h4 className="text-md font-bold text-slate-900 flex items-center">
-                          <Cpu className="w-5 h-5 mr-2 text-emerald-600" />
+                          <Cpu className="w-5 h-5 mr-2 text-green-600" />
                           Cryptographic Receipt Audit
                         </h4>
                         <button
                           onClick={verifyReceiptLocally}
                           disabled={verifying}
-                          className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-green-700 hover:bg-green-800 text-white font-semibold px-4 py-2 rounded-sm text-sm flex items-center transition-all cursor-pointer disabled:opacity-50"
                         >
                           {verifying && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                           Verify Receipt
@@ -978,7 +978,7 @@ export default function PublicExplorer() {
 
                       {/* Verification steps console */}
                       {verificationSteps.length > 0 && (
-                        <div className="bg-slate-900 text-emerald-400 p-4 rounded-lg font-mono text-xs overflow-y-auto max-h-56 border border-slate-950 space-y-1.5 shadow-inner">
+                        <div className="bg-slate-900 text-green-400 p-4 rounded-sm font-mono text-xs overflow-y-auto max-h-56 border border-slate-950 space-y-1.5 shadow-inner">
                           {verificationSteps.map((step, idx) => (
                             <div key={idx} className="whitespace-pre">
                               {step}
@@ -995,20 +995,20 @@ export default function PublicExplorer() {
 
                       {/* Successful Audit Notification */}
                       {verificationResult && (
-                        <div className={`p-4 rounded-lg border flex items-start ${
+                        <div className={`p-4 rounded-sm border flex items-start ${
                           verificationResult.success
-                            ? "bg-emerald-50 border-emerald-200 text-emerald-800"
+                            ? "bg-green-50 border-green-200 text-green-800"
                             : "bg-rose-50 border-rose-200 text-rose-800"
                         }`}>
                           {verificationResult.success ? (
                             <>
-                              <ShieldCheck className="w-6 h-6 mr-3 text-emerald-600 flex-shrink-0 mt-0.5" />
+                              <ShieldCheck className="w-6 h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                               <div>
                                 <h5 className="font-bold text-md flex items-center">
                                   Audit Successful
-                                  <Award className="w-4 h-4 ml-1.5 text-emerald-600" />
+                                  <Award className="w-4 h-4 ml-1.5 text-green-600" />
                                 </h5>
-                                <p className="text-xs text-emerald-700 mt-1 leading-relaxed">
+                                <p className="text-xs text-green-700 mt-1 leading-relaxed">
                                   Your local computed hash correctly matches the on-chain notarized Merkle Root <strong>{applicant.merkle_root}</strong>. Your registration timestamp and queue sequence are permanently locked in Block #1 on Sepolia.
                                 </p>
                               </div>
@@ -1031,11 +1031,11 @@ export default function PublicExplorer() {
 
                   {/* Zero-Knowledge Proof Widget */}
                   {applicant && (
-                    <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 space-y-4">
+                    <div className="bg-white rounded shadow-lg border border-slate-100 p-6 space-y-4">
                       <div className="flex justify-between items-center border-b pb-4">
                         <div>
                           <h4 className="text-md font-bold text-slate-900 flex items-center">
-                            <ShieldCheck className="w-5 h-5 mr-2 text-emerald-600 animate-pulse" />
+                            <ShieldCheck className="w-5 h-5 mr-2 text-green-600 animate-pulse" />
                             Zero-Knowledge Priority Proof
                           </h4>
                           <p className="text-slate-500 text-xxs mt-0.5">
@@ -1045,7 +1045,7 @@ export default function PublicExplorer() {
                         <button
                           onClick={() => generateZkProof(applicant.national_id)}
                           disabled={zkLoading}
-                          className="bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-4 py-2 rounded-lg text-sm flex items-center transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-green-700 hover:bg-green-800 text-white font-semibold px-4 py-2 rounded-sm text-sm flex items-center transition-all cursor-pointer disabled:opacity-50"
                         >
                           {zkLoading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                           Generate ZK Proof
@@ -1054,7 +1054,7 @@ export default function PublicExplorer() {
 
                       {/* Proving Status Logs */}
                       {zkStatus && (
-                        <div className="flex items-center text-xs text-emerald-700 bg-emerald-50 border border-emerald-100 p-3 rounded-lg font-medium">
+                        <div className="flex items-center text-xs text-green-700 bg-green-50 border border-green-100 p-3 rounded-sm font-medium">
                           <Loader2 className="w-4 h-4 animate-spin mr-2" />
                           {zkStatus}
                         </div>
@@ -1062,7 +1062,7 @@ export default function PublicExplorer() {
 
                       {/* Error block */}
                       {zkError && (
-                        <div className="bg-rose-50 text-rose-700 p-3 rounded-lg border border-rose-100 text-xs flex items-center font-medium">
+                        <div className="bg-rose-50 text-rose-700 p-3 rounded-sm border border-rose-100 text-xs flex items-center font-medium">
                           <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
                           {zkError}
                         </div>
@@ -1071,7 +1071,7 @@ export default function PublicExplorer() {
                       {/* Display Proof */}
                       {zkProofData && (
                         <div className="space-y-3 font-mono text-xs">
-                          <div className="bg-slate-900 text-emerald-400 p-4 rounded-lg overflow-y-auto max-h-60 border border-slate-950 shadow-inner space-y-3">
+                          <div className="bg-slate-900 text-green-400 p-4 rounded-sm overflow-y-auto max-h-60 border border-slate-950 shadow-inner space-y-3">
                             <div>
                               <span className="text-slate-500 text-xxs block uppercase">ZK-SNARK proof.json payload</span>
                               <pre className="text-xxs leading-relaxed whitespace-pre-wrap select-all">
@@ -1086,11 +1086,11 @@ export default function PublicExplorer() {
                             </div>
                           </div>
 
-                          <div className="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start">
-                            <CheckCircle className="w-5 h-5 mr-3 text-emerald-600 flex-shrink-0 mt-0.5" />
+                          <div className="p-4 rounded-sm bg-green-50 border border-green-200 text-green-800 flex items-start">
+                            <CheckCircle className="w-5 h-5 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                             <div>
                               <h5 className="font-bold text-sm">ZK Verification Verified Locally</h5>
-                              <p className="text-xxs text-emerald-700 mt-1 leading-relaxed">
+                              <p className="text-xxs text-green-700 mt-1 leading-relaxed">
                                 The proof contains variables proving mathematically that the private criteria input values result in the score of <strong>{applicant.priority_score} pts</strong>. You can verify this key on-chain at the <strong>Verifier.sol</strong> contract.
                               </p>
                             </div>
@@ -1110,10 +1110,10 @@ export default function PublicExplorer() {
           <div className="space-y-8">
             
             {/* Top Widget: Batch Notarization Control */}
-            <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
+            <div className="bg-white rounded shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
               <div>
                 <h3 className="text-xl font-bold text-slate-900 flex items-center border-b pb-3 mb-2">
-                  <Settings className="w-5.5 h-5.5 mr-2 text-emerald-600" />
+                  <Settings className="w-5.5 h-5.5 mr-2 text-green-600" />
                   On-Chain Batch Notarization Controller
                 </h3>
                 <p className="text-slate-500 text-sm">
@@ -1122,7 +1122,7 @@ export default function PublicExplorer() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                <div className="md:col-span-2 bg-slate-50 p-5 rounded-lg border border-slate-100">
+                <div className="md:col-span-2 bg-slate-50 p-5 rounded-sm border border-slate-100">
                   <span className="text-slate-400 text-xxs uppercase block font-bold">Approved Queue Status</span>
                   <div className="text-2xl font-bold text-slate-800 mt-1 flex items-baseline">
                     {eligibleCount}
@@ -1135,7 +1135,7 @@ export default function PublicExplorer() {
                 <button
                   onClick={triggerBatchNotarization}
                   disabled={eligibleCount === 0 || batchTriggerLoading}
-                  className="bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white font-bold py-4 rounded-lg flex items-center justify-center transition-colors cursor-pointer text-sm uppercase tracking-wide shadow"
+                  className="bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white font-bold py-4 rounded-sm flex items-center justify-center transition-colors cursor-pointer text-sm uppercase tracking-wide shadow"
                 >
                   {batchTriggerLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin mr-2" />
@@ -1147,12 +1147,12 @@ export default function PublicExplorer() {
               </div>
 
               {batchTriggerSuccess && (
-                <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg space-y-2">
-                  <h4 className="font-bold text-sm flex items-center text-emerald-900">
-                    <CheckCircle className="w-4 h-4 mr-2 text-emerald-600" />
+                <div className="p-4 bg-green-50 border border-green-200 text-green-800 rounded-sm space-y-2">
+                  <h4 className="font-bold text-sm flex items-center text-green-900">
+                    <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
                     Batch Anchored Successfully!
                   </h4>
-                  <div className="font-mono text-xs space-y-1 mt-1 text-emerald-700">
+                  <div className="font-mono text-xs space-y-1 mt-1 text-green-700">
                     <div><strong>Batch ID:</strong> #{batchTriggerSuccess.batch_id}</div>
                     <div className="truncate"><strong>Merkle Root:</strong> {batchTriggerSuccess.merkle_root}</div>
                     <div className="truncate"><strong>Transaction Hash:</strong> {batchTriggerSuccess.transaction_hash}</div>
@@ -1161,7 +1161,7 @@ export default function PublicExplorer() {
               )}
 
               {batchTriggerError && (
-                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-xs flex items-center">
+                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-sm text-xs flex items-center">
                   <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
                   {batchTriggerError}
                 </div>
@@ -1169,15 +1169,15 @@ export default function PublicExplorer() {
             </div>
 
             {/* Bottom Widget: Applicant Registry Approval list */}
-            <div className="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
+            <div className="bg-white rounded shadow-lg border border-slate-100 overflow-hidden">
               <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                 <h3 className="text-lg font-bold text-slate-900 flex items-center">
-                  <UserCheck className="w-5 h-5 mr-2 text-emerald-600" />
+                  <UserCheck className="w-5 h-5 mr-2 text-green-600" />
                   Applicant Approval Registry
                 </h3>
                 <button
                   onClick={fetchRegistry}
-                  className="text-xs text-emerald-700 hover:underline flex items-center font-semibold cursor-pointer"
+                  className="text-xs text-green-700 hover:underline flex items-center font-semibold cursor-pointer"
                 >
                   <RefreshCw className="w-3.5 h-3.5 mr-1" />
                   Refresh List
@@ -1185,14 +1185,14 @@ export default function PublicExplorer() {
               </div>
 
               {registryError && (
-                <div className="m-6 bg-rose-50 text-rose-600 p-4 rounded-lg border border-rose-100 text-center text-sm">
+                <div className="m-6 bg-rose-50 text-rose-600 p-4 rounded-sm border border-rose-100 text-center text-sm">
                   {registryError}
                 </div>
               )}
 
               {registryLoading ? (
                 <div className="flex flex-col justify-center items-center h-48">
-                  <Loader2 className="w-8 h-8 animate-spin text-emerald-700" />
+                  <Loader2 className="w-8 h-8 animate-spin text-green-700" />
                   <span className="mt-2 text-sm text-slate-500">Querying registry database...</span>
                 </div>
               ) : (
@@ -1220,7 +1220,7 @@ export default function PublicExplorer() {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                             {ALGERIAN_WILAYAS.find((w) => w.code === app.wilaya_code)?.name || app.wilaya_code}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-emerald-700">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-700">
                             {app.priority_score ?? 0} pts
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -1229,7 +1229,7 @@ export default function PublicExplorer() {
                                 ? "bg-amber-50 text-amber-700 border-amber-200"
                                 : app.status === "eligible"
                                 ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                : "bg-green-50 text-green-700 border-green-200"
                             }`}>
                               {app.status}
                             </span>
@@ -1238,14 +1238,14 @@ export default function PublicExplorer() {
                             {app.status === "pending" ? (
                               <button
                                 onClick={() => approveCitizen(app.applicant_hash)}
-                                className="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-1 px-3.5 rounded text-xs transition-colors cursor-pointer"
+                                className="bg-green-700 hover:bg-green-800 text-white font-bold py-1 px-3.5 rounded text-xs transition-colors cursor-pointer"
                               >
                                 Approve
                               </button>
                             ) : app.status === "eligible" ? (
                               <span className="text-slate-400 text-xs italic">Awaiting Notarization</span>
                             ) : (
-                              <span className="text-emerald-700 text-xs font-semibold flex items-center justify-end">
+                              <span className="text-green-700 text-xs font-semibold flex items-center justify-end">
                                 <ShieldCheck className="w-3.5 h-3.5 mr-1" />
                                 Notarized
                               </span>
@@ -1269,15 +1269,15 @@ export default function PublicExplorer() {
 
         {/* Tab 4: Blockchain Explorer */}
         {activeTab === "explorer" && (
-          <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-slate-100">
+          <div className="bg-white shadow-lg rounded overflow-hidden border border-slate-100">
             <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
               <h3 className="text-lg font-bold text-slate-900 flex items-center">
-                <Globe className="w-5 h-5 mr-2 text-emerald-600" />
+                <Globe className="w-5 h-5 mr-2 text-green-600" />
                 On-Chain Batch Registrations
               </h3>
               <button 
                 onClick={fetchBatches}
-                className="text-xs text-emerald-700 hover:underline flex items-center font-semibold cursor-pointer"
+                className="text-xs text-green-700 hover:underline flex items-center font-semibold cursor-pointer"
               >
                 <Clock className="w-3.5 h-3.5 mr-1" />
                 Refresh Registry
@@ -1285,14 +1285,14 @@ export default function PublicExplorer() {
             </div>
             
             {batchesError && (
-              <div className="m-6 bg-rose-50 text-rose-600 p-4 rounded-lg border border-rose-100 text-center text-sm">
+              <div className="m-6 bg-rose-50 text-rose-600 p-4 rounded-sm border border-rose-100 text-center text-sm">
                 {batchesError}
               </div>
             )}
 
             {batchesLoading ? (
               <div className="flex flex-col justify-center items-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-emerald-700" />
+                <Loader2 className="w-8 h-8 animate-spin text-green-700" />
                 <span className="mt-2 text-sm text-slate-500">Querying Block Registry...</span>
               </div>
             ) : (
@@ -1318,13 +1318,13 @@ export default function PublicExplorer() {
                         </td>
                         <td className="px-6 py-4 text-sm font-mono text-slate-600">
                           <div className="flex items-center space-x-2">
-                            <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                            <ShieldCheck className="w-4 h-4 text-green-600 flex-shrink-0" />
                             <span title={batch.merkle_root}>
                               {batch.merkle_root.substring(0, 10)}...{batch.merkle_root.substring(58)}
                             </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-emerald-700">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700">
                           {batch.tx_hash ? (
                             <a
                               href={`https://sepolia.etherscan.io/tx/${batch.tx_hash.startsWith("0x") ? batch.tx_hash : "0x" + batch.tx_hash}`}
