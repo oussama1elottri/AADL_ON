@@ -177,10 +177,21 @@ def trigger_batch_creation(db: Session = Depends(get_db)):
     # Check for duplicate Batch ID in database
     existing_batch = db.query(models.Batch).filter(models.Batch.id == next_batch_id).first()
     if existing_batch:
-        raise HTTPException(
-            status_code=409,
-            detail=f"Batch ID {next_batch_id} already exists in database. Indexer sync may be pending."
-        )
+        if current_batch_id == 0:
+            # Automatic local dev state reconciliation: Blockchain node was restarted (resets to 0),
+            # but DB volume persisted old batches. Reset stale batches/leaves to stay in sync with the fresh chain.
+            print("Detected local blockchain reset (current_batch_id == 0). Auto-reconciling DB state with fresh chain...")
+            db.query(models.Leaf).delete()
+            db.query(models.Batch).delete()
+            db.query(models.Applicant).filter(
+                models.Applicant.status == models.ApplicantStatus.NOTARIZED
+            ).update({models.Applicant.status: models.ApplicantStatus.ELIGIBLE}, synchronize_session=False)
+            db.commit()
+        else:
+            raise HTTPException(
+                status_code=409,
+                detail=f"Batch ID {next_batch_id} already exists in database. Indexer sync may be pending."
+            )
 
     # 2. Fetch eligible applicants ordered by priority score descending, then by id ascending (FIFO tie-breaker)
     eligible_applicants = db.query(models.Applicant).filter(
