@@ -470,7 +470,7 @@ export default function PublicExplorer() {
         <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-sm shadow-sm border overflow-x-auto gap-1">
           <button
             onClick={() => setActiveTab("register")}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
               activeTab === "register"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
@@ -481,7 +481,7 @@ export default function PublicExplorer() {
           </button>
           <button
             onClick={() => setActiveTab("citizen")}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
               activeTab === "citizen"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
@@ -495,7 +495,7 @@ export default function PublicExplorer() {
               setActiveTab("admin");
               fetchRegistry();
             }}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
               activeTab === "admin"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
@@ -509,7 +509,7 @@ export default function PublicExplorer() {
               setActiveTab("explorer");
               fetchBatches();
             }}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-md transition-all ${
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
               activeTab === "explorer"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
@@ -673,8 +673,8 @@ export default function PublicExplorer() {
                   </div>
 
                   {regError && (
-                    <div className="bg-rose-50 text-rose-700 p-3 rounded-sm border border-rose-100 text-xs flex items-center">
-                      <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                    <div className="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 p-3.5 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-xs flex items-center shadow-sm rounded-none">
+                      <AlertTriangle className="w-4.5 h-4.5 mr-2 text-rose-600 flex-shrink-0" />
                       {regError}
                     </div>
                   )}
@@ -730,7 +730,7 @@ export default function PublicExplorer() {
                       </div>
                       <div>
                         <span className="text-slate-400 text-xxs uppercase block">Initial Status</span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 capitalize">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 capitalize">
                           {regSuccess.status}
                         </span>
                       </div>
@@ -808,8 +808,8 @@ export default function PublicExplorer() {
               </form>
 
               {searchError && (
-                <div className="mt-4 bg-rose-50 text-rose-700 p-3 rounded-sm border border-rose-100 text-sm flex items-center">
-                  <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                <div className="mt-4 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 p-3.5 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-sm flex items-center shadow-sm rounded-none">
+                  <AlertTriangle className="w-4.5 h-4.5 mr-2 text-rose-600 flex-shrink-0" />
                   {searchError}
                 </div>
               )}
@@ -995,20 +995,18 @@ export default function PublicExplorer() {
 
                       {/* Successful Audit Notification */}
                       {verificationResult && (
-                        <div className={`p-4 rounded-sm border flex items-start ${
-                          verificationResult.success
-                            ? "bg-green-50 border-green-200 text-green-800"
-                            : "bg-rose-50 border-rose-200 text-rose-800"
+                        <div className={`p-4 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 flex items-start shadow-sm rounded-none bg-white dark:bg-slate-900 ${
+                          verificationResult.success ? "border-l-green-600" : "border-l-rose-600"
                         }`}>
                           {verificationResult.success ? (
                             <>
                               <ShieldCheck className="w-6 h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-md flex items-center">
+                                <h5 className="font-bold text-md flex items-center text-slate-900 dark:text-white">
                                   Audit Successful
                                   <Award className="w-4 h-4 ml-1.5 text-green-600" />
                                 </h5>
-                                <p className="text-xs text-green-700 mt-1 leading-relaxed">
+                                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                                   Your local computed hash correctly matches the on-chain notarized Merkle Root <strong>{applicant.merkle_root}</strong>. Your registration timestamp and queue sequence are permanently locked in Block #1 on Sepolia.
                                 </p>
                               </div>
@@ -1017,8 +1015,8 @@ export default function PublicExplorer() {
                             <>
                               <ShieldAlert className="w-6 h-6 mr-3 text-rose-600 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-md">Audit Failed</h5>
-                                <p className="text-xs text-rose-700 mt-1 leading-relaxed">
+                                <h5 className="font-bold text-md text-slate-900 dark:text-white">Audit Failed</h5>
+                                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                                   Reconstructed leaf hashes resolve to <strong>{verificationResult.computedRoot}</strong> which does NOT match the root stored on the block registry <strong>{applicant.merkle_root}</strong>.
                                 </p>
                               </div>
@@ -1054,16 +1052,16 @@ export default function PublicExplorer() {
 
                       {/* Proving Status Logs */}
                       {zkStatus && (
-                        <div className="flex items-center text-xs text-green-700 bg-green-50 border border-green-100 p-3 rounded-sm font-medium">
-                          <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        <div className="flex items-center text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-green-600 p-3.5 shadow-sm rounded-none font-medium">
+                          <Loader2 className="w-4 h-4 animate-spin mr-2 text-green-600" />
                           {zkStatus}
                         </div>
                       )}
 
                       {/* Error block */}
                       {zkError && (
-                        <div className="bg-rose-50 text-rose-700 p-3 rounded-sm border border-rose-100 text-xs flex items-center font-medium">
-                          <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                        <div className="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 p-3.5 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-xs flex items-center font-medium shadow-sm rounded-none">
+                          <AlertTriangle className="w-4 h-4 mr-2 text-rose-600 flex-shrink-0" />
                           {zkError}
                         </div>
                       )}
@@ -1086,11 +1084,11 @@ export default function PublicExplorer() {
                             </div>
                           </div>
 
-                          <div className="p-4 rounded-sm bg-green-50 border border-green-200 text-green-800 flex items-start">
+                          <div className="p-4 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-green-600 text-slate-800 dark:text-slate-200 flex items-start shadow-sm rounded-none">
                             <CheckCircle className="w-5 h-5 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                             <div>
                               <h5 className="font-bold text-sm">ZK Verification Verified Locally</h5>
-                              <p className="text-xxs text-green-700 mt-1 leading-relaxed">
+                              <p className="text-xxs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
                                 The proof contains variables proving mathematically that the private criteria input values result in the score of <strong>{applicant.priority_score} pts</strong>. You can verify this key on-chain at the <strong>Verifier.sol</strong> contract.
                               </p>
                             </div>
@@ -1147,12 +1145,12 @@ export default function PublicExplorer() {
               </div>
 
               {batchTriggerSuccess && (
-                <div className="p-4 bg-green-50 border border-green-200 text-green-800 rounded-sm space-y-2">
-                  <h4 className="font-bold text-sm flex items-center text-green-900">
+                <div className="p-4 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-green-600 text-slate-800 dark:text-slate-200 rounded-none shadow-sm space-y-2">
+                  <h4 className="font-bold text-sm flex items-center text-slate-900 dark:text-white font-bold">
                     <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
                     Batch Anchored Successfully!
                   </h4>
-                  <div className="font-mono text-xs space-y-1 mt-1 text-green-700">
+                  <div className="font-mono text-xs space-y-1 mt-1 text-slate-600 dark:text-slate-400">
                     <div><strong>Batch ID:</strong> #{batchTriggerSuccess.batch_id}</div>
                     <div className="truncate"><strong>Merkle Root:</strong> {batchTriggerSuccess.merkle_root}</div>
                     <div className="truncate"><strong>Transaction Hash:</strong> {batchTriggerSuccess.transaction_hash}</div>
@@ -1161,8 +1159,8 @@ export default function PublicExplorer() {
               )}
 
               {batchTriggerError && (
-                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-sm text-xs flex items-center">
-                  <AlertTriangle className="w-4 h-4 mr-2 flex-shrink-0" />
+                <div className="p-4 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-slate-700 dark:text-slate-300 text-xs flex items-center shadow-sm rounded-none">
+                  <AlertTriangle className="w-4 h-4 mr-2 text-rose-600 flex-shrink-0" />
                   {batchTriggerError}
                 </div>
               )}
@@ -1185,7 +1183,7 @@ export default function PublicExplorer() {
               </div>
 
               {registryError && (
-                <div className="m-6 bg-rose-50 text-rose-600 p-4 rounded-sm border border-rose-100 text-center text-sm">
+                <div className="m-6 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-slate-700 dark:text-slate-300 p-4 text-center text-sm shadow-sm rounded-none">
                   {registryError}
                 </div>
               )}
@@ -1224,7 +1222,7 @@ export default function PublicExplorer() {
                             {app.priority_score ?? 0} pts
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-semibold border ${
                               app.status === "pending"
                                 ? "bg-amber-50 text-amber-700 border-amber-200"
                                 : app.status === "eligible"
@@ -1285,7 +1283,7 @@ export default function PublicExplorer() {
             </div>
             
             {batchesError && (
-              <div className="m-6 bg-rose-50 text-rose-600 p-4 rounded-sm border border-rose-100 text-center text-sm">
+              <div className="m-6 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-slate-700 dark:text-slate-300 p-4 text-center text-sm shadow-sm rounded-none">
                 {batchesError}
               </div>
             )}
