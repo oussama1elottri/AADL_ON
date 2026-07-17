@@ -452,10 +452,10 @@ export default function PublicExplorer() {
 
         {/* Executive Document Header */}
         <header className="bg-[#006633] border-b-4 border-b-amber-500/80 p-8 md:p-10 text-center space-y-3 rounded-sm shadow-md text-white">
-          <div className="text-base md:text-lg font-bold text-amber-200 tracking-wide font-serif">
+          <div className="text-base md:text-lg font-bold text-amber-200 tracking-wide font-sans">
             الجمهورية الجزائرية الديمقراطية الشعبية
           </div>
-          <h1 className="text-3xl md:text-5xl font-bold text-white tracking-wide font-serif">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight font-sans">
             AADL_ON Verification Notary Portal
           </h1>
           <p className="text-xs md:text-sm text-green-100/90 tracking-wide max-w-2xl mx-auto pt-2 border-t border-green-500/40">
@@ -464,7 +464,7 @@ export default function PublicExplorer() {
         </header>
 
         {/* Executive Document Tab Controls */}
-        <div className="grid grid-cols-2 md:grid-cols-4 border border-[#e2e0d8] bg-white rounded-sm divide-x divide-y md:divide-y-0 divide-[#e2e0d8] font-serif text-xs uppercase tracking-wider shadow-sm">
+        <div className="grid grid-cols-2 md:grid-cols-4 border border-[#e2e0d8] bg-white rounded-sm divide-x divide-y md:divide-y-0 divide-[#e2e0d8] font-sans text-xs uppercase tracking-wider shadow-sm">
           <button
             onClick={() => setActiveTab("register")}
             className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "register"
@@ -515,7 +515,7 @@ export default function PublicExplorer() {
             {!regSuccess ? (
               <div className="bg-white border border-[#e2e0d8] p-6 md:p-8 space-y-6 rounded-sm shadow-sm text-slate-800">
                 <div className="border-b border-[#e2e0d8] pb-4">
-                  <h3 className="text-xl font-bold text-slate-900 font-serif">
+                  <h3 className="text-xl font-bold text-slate-900 font-sans">
                     Housing Application Form (استمارة طلب سكن)
                   </h3>
                   <p className="text-slate-500 text-xs font-sans mt-1">
@@ -669,7 +669,7 @@ export default function PublicExplorer() {
                   <button
                     type="submit"
                     disabled={regLoading}
-                    className="w-full bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold py-3.5 transition-colors cursor-pointer disabled:opacity-50 mt-4 text-xs uppercase tracking-widest rounded-sm shadow-sm"
+                    className="w-full bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold py-3.5 transition-colors cursor-pointer disabled:opacity-50 mt-4 text-xs uppercase tracking-widest rounded-sm shadow-sm"
                   >
                     Submit Application
                   </button>
@@ -678,7 +678,7 @@ export default function PublicExplorer() {
             ) : (
               /* Success view */
               <div className="bg-white border border-[#e2e0d8] rounded-sm shadow-sm overflow-hidden text-slate-800">
-                <div className="bg-[#006633] border-b-2 border-b-amber-500/80 text-white p-6 text-center space-y-2 font-serif">
+                <div className="bg-[#006633] border-b-2 border-b-amber-500/80 text-white p-6 text-center space-y-2 font-sans">
                   <h4 className="text-xl font-bold">Application Received Successfully!</h4>
                   <p className="text-xs text-green-100/90 font-sans">
                     Your records have been notarized in the AADL local register.
@@ -689,26 +689,26 @@ export default function PublicExplorer() {
                   <div className="bg-[#faf9f6] border border-[#e2e0d8] rounded-sm p-5 space-y-4">
                     <div className="grid grid-cols-2 gap-4 border-b border-[#e2e0d8] pb-3.5">
                       <div>
-                        <span className="text-slate-500 text-xxs uppercase block font-serif">Full Name</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-sans">Full Name</span>
                         <span className="font-bold text-slate-900 text-sm">{regSuccess.full_name}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 text-xxs uppercase block font-serif">National ID</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-sans">National ID</span>
                         <span className="font-mono font-bold text-slate-900 text-sm">{regSuccess.national_id}</span>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-3 gap-4 border-b border-[#e2e0d8] pb-3.5">
                       <div>
-                        <span className="text-slate-500 text-xxs uppercase block font-serif">Wilaya Code</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-sans">Wilaya Code</span>
                         <span className="font-bold text-slate-900 text-sm">{regSuccess.wilaya_code}</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 text-xxs uppercase block font-serif">Priority Score</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-sans">Priority Score</span>
                         <span className="font-bold text-[#006633] text-sm">{regSuccess.priority_score ?? 0} pts</span>
                       </div>
                       <div>
-                        <span className="text-slate-500 text-xxs uppercase block font-serif">Initial Status</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-sans">Initial Status</span>
                         <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-mono bg-[#f5f4ee] text-slate-800 border border-[#e2e0d8] capitalize">
                           {regSuccess.status}
                         </span>
@@ -732,13 +732,13 @@ export default function PublicExplorer() {
                   <div className="flex gap-3">
                     <button
                       onClick={startNewApplication}
-                      className="flex-1 bg-[#f5f4ee] hover:bg-[#e8e6dd] border border-[#e2e0d8] text-slate-800 font-serif font-semibold py-3 rounded-sm transition-colors cursor-pointer text-xs uppercase tracking-wider"
+                      className="flex-1 bg-[#f5f4ee] hover:bg-[#e8e6dd] border border-[#e2e0d8] text-slate-800 font-sans font-semibold py-3 rounded-sm transition-colors cursor-pointer text-xs uppercase tracking-wider"
                     >
                       New Application
                     </button>
                     <button
                       onClick={() => proceedToVerify(regSuccess.national_id)}
-                      className="flex-1 bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold py-3 rounded-sm transition-colors cursor-pointer text-xs uppercase tracking-wider flex items-center justify-center"
+                      className="flex-1 bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold py-3 rounded-sm transition-colors cursor-pointer text-xs uppercase tracking-wider flex items-center justify-center"
                     >
                       Verify Status
                     </button>
@@ -773,7 +773,7 @@ export default function PublicExplorer() {
                 <button
                   type="submit"
                   disabled={searchLoading}
-                  className="bg-[#006633] hover:bg-[#005229] text-white px-6 py-3 rounded-sm font-serif font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer"
+                  className="bg-[#006633] hover:bg-[#005229] text-white px-6 py-3 rounded-sm font-sans font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   Search
                 </button>
@@ -828,7 +828,7 @@ export default function PublicExplorer() {
                         : "bg-slate-200"
                         }`}></div>
                       <div className="font-semibold text-sm">Notarized on Ethereum</div>
-                      <div className="text-slate-455 text-xs mt-0.5 font-serif">Commitment Anchored</div>
+                      <div className="text-slate-455 text-xs mt-0.5 font-sans">Commitment Anchored</div>
                     </div>
                   </div>
                 </div>
@@ -929,13 +929,13 @@ export default function PublicExplorer() {
                   {applicant.status === "batched" && (
                     <div className="bg-white border border-[#e2e0d8] p-6 space-y-4 rounded-sm shadow-sm">
                       <div className="flex justify-between items-center border-b border-[#e2e0d8] pb-4">
-                        <h4 className="text-md font-bold text-slate-900 font-serif">
+                        <h4 className="text-md font-bold text-slate-900 font-sans">
                           Cryptographic Receipt Audit
                         </h4>
                         <button
                           onClick={verifyReceiptLocally}
                           disabled={verifying}
-                          className="bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
                         >
                           Verify Receipt
                         </button>
@@ -983,7 +983,7 @@ export default function PublicExplorer() {
                     <div className="bg-white border border-[#e2e0d8] p-6 space-y-4 rounded-sm shadow-sm">
                       <div className="flex justify-between items-center border-b border-[#e2e0d8] pb-4">
                         <div>
-                          <h4 className="text-md font-bold text-slate-900 font-serif">
+                          <h4 className="text-md font-bold text-slate-900 font-sans">
                             Zero-Knowledge Priority Proof
                           </h4>
                           <p className="text-slate-500 text-xxs font-sans mt-0.5">
@@ -993,7 +993,7 @@ export default function PublicExplorer() {
                         <button
                           onClick={() => generateZkProof(applicant.national_id)}
                           disabled={zkLoading}
-                          className="bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
                         >
                           Generate ZK Proof
                         </button>
@@ -1059,7 +1059,7 @@ export default function PublicExplorer() {
             {/* Top Widget: Batch Notarization Control */}
             <div className="bg-white border border-[#e2e0d8] p-6 md:p-8 space-y-6 rounded-sm shadow-sm text-slate-800">
               <div className="border-b border-[#e2e0d8] pb-3">
-                <h3 className="text-xl font-bold text-slate-900 font-serif">
+                <h3 className="text-xl font-bold text-slate-900 font-sans">
                   On-Chain Batch Notarization Controller
                 </h3>
                 <p className="text-slate-500 text-xs font-sans mt-1">
@@ -1069,7 +1069,7 @@ export default function PublicExplorer() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                 <div className="md:col-span-2 bg-[#faf9f6] p-5 rounded-sm border border-[#e2e0d8]">
-                  <span className="text-slate-500 text-xxs uppercase block font-serif font-bold">Approved Queue Status</span>
+                  <span className="text-slate-500 text-xxs uppercase block font-sans font-bold">Approved Queue Status</span>
                   <div className="text-2xl font-bold text-slate-900 mt-1 flex items-baseline font-mono">
                     {eligibleCount}
                     <span className="text-slate-500 text-xs font-sans font-normal ml-2">
@@ -1081,7 +1081,7 @@ export default function PublicExplorer() {
                 <button
                   onClick={triggerBatchNotarization}
                   disabled={eligibleCount === 0 || batchTriggerLoading}
-                  className="bg-[#006633] hover:bg-[#005229] disabled:opacity-50 text-white font-serif font-bold py-4 rounded-sm flex items-center justify-center transition-colors cursor-pointer text-xs uppercase tracking-widest shadow-sm"
+                  className="bg-[#006633] hover:bg-[#005229] disabled:opacity-50 text-white font-sans font-bold py-4 rounded-sm flex items-center justify-center transition-colors cursor-pointer text-xs uppercase tracking-widest shadow-sm"
                 >
                   Commit Batch On-Chain
                 </button>
@@ -1109,7 +1109,7 @@ export default function PublicExplorer() {
 
             {/* Bottom Widget: Applicant Registry Approval list */}
             <div className="bg-white border border-[#e2e0d8] rounded-sm shadow-sm overflow-hidden text-slate-800">
-              <div className="px-6 py-5 border-b border-[#e2e0d8] flex items-center justify-between font-serif">
+              <div className="px-6 py-5 border-b border-[#e2e0d8] flex items-center justify-between font-sans">
                 <h3 className="text-lg font-bold text-slate-900">
                   Applicant Approval Registry
                 </h3>
@@ -1129,12 +1129,12 @@ export default function PublicExplorer() {
 
               {registryLoading ? (
                 <div className="flex flex-col justify-center items-center h-48">
-                  <span className="mt-2 text-sm text-slate-500 font-serif">Querying registry database...</span>
+                  <span className="mt-2 text-sm text-slate-500 font-sans">Querying registry database...</span>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
-                    <thead className="bg-[#f5f4ee] border-b border-[#e2e0d8] font-serif text-xs text-slate-700 uppercase tracking-wider">
+                    <thead className="bg-[#f5f4ee] border-b border-[#e2e0d8] font-sans text-xs text-slate-700 uppercase tracking-wider">
                       <tr>
                         <th className="px-6 py-4">Citizen Name</th>
                         <th className="px-6 py-4">National ID</th>
@@ -1168,14 +1168,14 @@ export default function PublicExplorer() {
                             {app.status === "pending" ? (
                               <button
                                 onClick={() => approveCitizen(app.applicant_hash)}
-                                className="bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold py-1 px-3.5 rounded-sm text-xs transition-colors cursor-pointer uppercase"
+                                className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold py-1 px-3.5 rounded-sm text-xs transition-colors cursor-pointer uppercase"
                               >
                                 Approve
                               </button>
                             ) : app.status === "eligible" ? (
-                              <span className="text-slate-400 text-xs italic font-serif">Awaiting Notarization</span>
+                              <span className="text-slate-400 text-xs italic font-sans">Awaiting Notarization</span>
                             ) : (
-                              <span className="text-[#006633] text-xs font-bold font-serif uppercase">
+                              <span className="text-[#006633] text-xs font-bold font-sans uppercase">
                                 Notarized
                               </span>
                             )}
@@ -1199,7 +1199,7 @@ export default function PublicExplorer() {
         {/* Tab 4: Blockchain Explorer */}
         {activeTab === "explorer" && (
           <div className="bg-white border border-[#e2e0d8] rounded-sm shadow-sm overflow-hidden text-slate-800">
-            <div className="px-6 py-5 border-b border-[#e2e0d8] flex items-center justify-between font-serif">
+            <div className="px-6 py-5 border-b border-[#e2e0d8] flex items-center justify-between font-sans">
               <h3 className="text-lg font-bold text-slate-900">
                 On-Chain Batch Registrations
               </h3>
@@ -1218,13 +1218,13 @@ export default function PublicExplorer() {
             )}
 
             {batchesLoading ? (
-              <div className="flex flex-col justify-center items-center h-64 font-serif">
+              <div className="flex flex-col justify-center items-center h-64 font-sans">
                 <span className="mt-2 text-sm text-slate-500">Querying Block Registry...</span>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-[#f5f4ee] border-b border-[#e2e0d8] font-serif text-xs text-slate-700 uppercase tracking-wider">
+                  <thead className="bg-[#f5f4ee] border-b border-[#e2e0d8] font-sans text-xs text-slate-700 uppercase tracking-wider">
                     <tr>
                       <th className="px-6 py-4">Batch ID</th>
                       <th className="px-6 py-4">Commitment Timestamp</th>
@@ -1238,7 +1238,7 @@ export default function PublicExplorer() {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">
                           #{batch.id}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-serif">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-sans">
                           {new Date(batch.created_at).toLocaleString()}
                         </td>
                         <td className="px-6 py-4 text-sm font-mono text-slate-600">
@@ -1252,12 +1252,12 @@ export default function PublicExplorer() {
                               href={`https://sepolia.etherscan.io/tx/${batch.tx_hash.startsWith("0x") ? batch.tx_hash : "0x" + batch.tx_hash}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="hover:underline font-bold font-serif uppercase text-xs"
+                              className="hover:underline font-bold font-sans uppercase text-xs"
                             >
                               Etherscan
                             </a>
                           ) : (
-                            <span className="text-slate-400 italic font-serif">Pending Anchor</span>
+                            <span className="text-slate-400 italic font-sans">Pending Anchor</span>
                           )}
                         </td>
                       </tr>
