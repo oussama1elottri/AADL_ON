@@ -27,6 +27,7 @@ import {
   Settings,
   RefreshCw,
   CheckCircle,
+  XCircle,
   Fingerprint,
   KeyRound,
   Binary
@@ -672,8 +673,9 @@ export default function PublicExplorer() {
                   </div>
 
                   {regError && (
-                    <div className="bg-rose-950/5 border border-rose-800/20 backdrop-blur-md text-slate-800 p-3.5 rounded-none shadow-sm text-xs flex items-center font-medium">
-                      <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                    <div className="bg-rose-700/10 border border-rose-700/30 backdrop-blur-md text-rose-950 p-3.5 rounded-sm shadow-sm text-xs flex items-center font-medium">
+                      <XCircle className="w-4.5 h-4.5 mr-2.5 text-rose-700 flex-shrink-0" />
+                      <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
                       <span>{regError}</span>
                     </div>
                   )}
@@ -807,8 +809,9 @@ export default function PublicExplorer() {
               </form>
 
               {searchError && (
-                <div className="mt-4 bg-rose-950/5 border border-rose-800/20 backdrop-blur-md text-slate-800 p-3.5 rounded-none shadow-sm text-xs flex items-center font-medium">
-                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                <div className="mt-4 bg-rose-700/10 border border-rose-700/30 backdrop-blur-md text-rose-950 p-3.5 rounded-sm shadow-sm text-xs flex items-center font-medium">
+                  <XCircle className="w-4.5 h-4.5 mr-2.5 text-rose-700 flex-shrink-0" />
+                  <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
                   <span>{searchError}</span>
                 </div>
               )}
@@ -990,17 +993,19 @@ export default function PublicExplorer() {
 
                       {/* Successful Audit Notification */}
                       {verificationResult && (
-                        <div className={`p-4 rounded-none border backdrop-blur-md shadow-sm flex items-start ${verificationResult.success
-                            ? "bg-emerald-950/5 border-emerald-800/20 text-slate-800"
-                            : "bg-rose-950/5 border-rose-800/20 text-slate-800"
-                          }`}>
+                        <div className={`p-4 rounded-sm border backdrop-blur-md shadow-sm flex items-start ${
+                          verificationResult.success
+                            ? "bg-green-700/10 border-green-700/30 text-slate-900"
+                            : "bg-rose-700/10 border-rose-700/30 text-rose-950"
+                        }`}>
                           {verificationResult.success ? (
                             <>
-                              <Fingerprint className="w-4 h-4 mr-2.5 text-emerald-900 flex-shrink-0 mt-0.5" />
+                              <Fingerprint className="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-sm text-slate-900">
-                                  Audit Successful
-                                </h5>
+                                <div className="flex items-center gap-2">
+                                  <h5 className="font-bold text-sm text-green-950">Audit Successful</h5>
+                                  <span className="font-semibold text-green-900 uppercase tracking-wide text-[10px] bg-green-200/60 px-1.5 py-0.5 rounded border border-green-300/80">Verified</span>
+                                </div>
                                 <p className="text-xs text-slate-700 mt-1 leading-relaxed">
                                   Your local computed hash correctly matches the on-chain notarized Merkle Root <strong>{applicant.merkle_root}</strong>. Your registration timestamp and queue sequence are permanently locked in Block #1 on Sepolia.
                                 </p>
@@ -1008,10 +1013,13 @@ export default function PublicExplorer() {
                             </>
                           ) : (
                             <>
-                              <ShieldAlert className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0 mt-0.5" />
+                              <ShieldAlert className="w-5 h-5 mr-3 text-rose-700 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-sm text-slate-900">Audit Failed</h5>
-                                <p className="text-xs text-slate-700 mt-1 leading-relaxed">
+                                <div className="flex items-center gap-2">
+                                  <h5 className="font-bold text-sm text-rose-950">Audit Failed</h5>
+                                  <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80">Mismatch</span>
+                                </div>
+                                <p className="text-xs text-rose-900 mt-1 leading-relaxed">
                                   Reconstructed leaf hashes resolve to <strong>{verificationResult.computedRoot}</strong> which does NOT match the root stored on the block registry <strong>{applicant.merkle_root}</strong>.
                                 </p>
                               </div>
@@ -1047,16 +1055,25 @@ export default function PublicExplorer() {
 
                       {/* Proving Status Logs */}
                       {zkStatus && (
-                        <div className="flex items-center text-xs text-slate-800 bg-slate-900/5 border border-slate-700/20 backdrop-blur-md p-3.5 shadow-sm rounded-none font-medium">
-                          <Loader2 className="w-3.5 h-3.5 animate-spin mr-2.5 text-slate-600" />
-                          {zkStatus}
+                        <div className={`flex items-center text-xs backdrop-blur-md p-3.5 shadow-sm rounded-sm font-medium ${
+                          zkLoading
+                            ? "bg-slate-900/5 border border-slate-700/20 text-slate-800"
+                            : "bg-green-700/10 border border-green-700/30 text-green-950"
+                        }`}>
+                          {zkLoading ? (
+                            <Loader2 className="w-4 h-4 animate-spin mr-2.5 text-green-700 flex-shrink-0" />
+                          ) : (
+                            <CheckCircle className="w-4 h-4 mr-2.5 text-green-700 flex-shrink-0" />
+                          )}
+                          <span>{zkStatus}</span>
                         </div>
                       )}
 
                       {/* Error block */}
                       {zkError && (
-                        <div className="bg-rose-950/5 border border-rose-800/20 backdrop-blur-md p-3.5 text-xs flex items-center text-slate-800 shadow-sm rounded-none font-medium">
-                          <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                        <div className="bg-rose-700/10 border border-rose-700/30 backdrop-blur-md p-3.5 text-xs flex items-center text-rose-950 shadow-sm rounded-sm font-medium">
+                          <XCircle className="w-4.5 h-4.5 mr-2.5 text-rose-700 flex-shrink-0" />
+                          <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
                           <span>{zkError}</span>
                         </div>
                       )}
@@ -1079,10 +1096,13 @@ export default function PublicExplorer() {
                             </div>
                           </div>
 
-                          <div className="p-4 bg-emerald-950/5 border border-emerald-800/20 backdrop-blur-md text-slate-800 flex items-start shadow-sm rounded-none">
-                            <KeyRound className="w-4 h-4 mr-2.5 text-emerald-900 flex-shrink-0 mt-0.5" />
+                          <div className="p-4 bg-green-700/10 border border-green-700/30 backdrop-blur-md text-slate-900 flex items-start shadow-sm rounded-sm">
+                            <KeyRound className="w-5 h-5 mr-3 text-green-700 flex-shrink-0 mt-0.5" />
                             <div>
-                              <h5 className="font-bold text-sm text-slate-900">ZK Verification Verified Locally</h5>
+                              <div className="flex items-center gap-2">
+                                <h5 className="font-bold text-sm text-green-950">ZK Verification Verified Locally</h5>
+                                <span className="font-semibold text-green-900 uppercase tracking-wide text-[10px] bg-green-200/60 px-1.5 py-0.5 rounded border border-green-300/80">Verified</span>
+                              </div>
                               <p className="text-xs text-slate-700 mt-1 leading-relaxed">
                                 The proof contains variables proving mathematically that the private criteria input values result in the score of <strong>{applicant.priority_score} pts</strong>. You can verify this key on-chain at the <strong>Verifier.sol</strong> contract.
                               </p>
@@ -1140,11 +1160,14 @@ export default function PublicExplorer() {
               </div>
 
               {batchTriggerSuccess && (
-                <div className="p-4 bg-emerald-950/5 border border-emerald-800/20 backdrop-blur-md text-slate-800 rounded-none shadow-sm space-y-2">
-                  <h4 className="font-bold text-sm flex items-center text-slate-900">
-                    <Binary className="w-4 h-4 mr-2 text-emerald-900" />
-                    Batch Anchored Successfully!
-                  </h4>
+                <div className="p-4 bg-green-700/10 border border-green-700/30 backdrop-blur-md text-slate-900 rounded-sm shadow-sm space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-bold text-sm flex items-center text-green-950">
+                      <Binary className="w-5 h-5 mr-2 text-green-700" />
+                      Batch Anchored Successfully!
+                    </h4>
+                    <span className="font-semibold text-green-900 uppercase tracking-wide text-[10px] bg-green-200/60 px-2 py-0.5 rounded border border-green-300/80">Anchored On-Chain</span>
+                  </div>
                   <div className="font-mono text-xs space-y-1 mt-1 text-slate-700">
                     <div><strong>Batch ID:</strong> #{batchTriggerSuccess.batch_id}</div>
                     <div className="truncate"><strong>Merkle Root:</strong> {batchTriggerSuccess.merkle_root}</div>
@@ -1154,8 +1177,9 @@ export default function PublicExplorer() {
               )}
 
               {batchTriggerError && (
-                <div className="p-4 bg-rose-950/5 border border-rose-800/20 backdrop-blur-md text-slate-800 text-xs flex items-center font-medium shadow-sm rounded-none">
-                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                <div className="p-4 bg-rose-700/10 border border-rose-700/30 backdrop-blur-md text-rose-950 text-xs flex items-center font-medium shadow-sm rounded-sm">
+                  <XCircle className="w-4.5 h-4.5 mr-2.5 text-rose-700 flex-shrink-0" />
+                  <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
                   <span>{batchTriggerError}</span>
                 </div>
               )}
@@ -1178,8 +1202,10 @@ export default function PublicExplorer() {
               </div>
 
               {registryError && (
-                <div className="m-6 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm">
-                  {registryError}
+                <div className="m-6 bg-rose-700/10 border border-rose-700/30 backdrop-blur-md text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm flex items-center justify-center">
+                  <XCircle className="w-4.5 h-4.5 mr-2 text-rose-700 flex-shrink-0" />
+                  <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
+                  <span>{registryError}</span>
                 </div>
               )}
 
@@ -1277,8 +1303,10 @@ export default function PublicExplorer() {
             </div>
 
             {batchesError && (
-              <div className="m-6 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm">
-                {batchesError}
+              <div className="m-6 bg-rose-700/10 border border-rose-700/30 backdrop-blur-md text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm flex items-center justify-center">
+                <XCircle className="w-4.5 h-4.5 mr-2 text-rose-700 flex-shrink-0" />
+                <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
+                <span>{batchesError}</span>
               </div>
             )}
 
