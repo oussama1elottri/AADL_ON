@@ -451,9 +451,11 @@ export default function PublicExplorer() {
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* Executive Document Header */}
-        <header className="bg-[#006633] border-b-4 border-b-amber-500/80 p-8 md:p-10 text-center space-y-3 rounded-sm shadow-md text-white">
-          <div className="text-base md:text-lg font-bold text-amber-200 tracking-wide font-sans">
+        <header className="bg-[#006633] border-b-4 border-b-amber-500 p-8 md:p-10 text-center space-y-3 rounded-sm shadow-md text-white">
+          <div className="text-base md:text-lg font-bold text-amber-300 tracking-wide font-sans flex items-center justify-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
             الجمهورية الجزائرية الديمقراطية الشعبية
+            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight font-sans">
             AADL_ON Verification Notary Portal
@@ -468,7 +470,7 @@ export default function PublicExplorer() {
           <button
             onClick={() => setActiveTab("register")}
             className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "register"
-              ? "bg-[#006633] text-white"
+              ? "bg-[#006633] text-white border-b-2 border-b-amber-400"
               : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
@@ -477,7 +479,7 @@ export default function PublicExplorer() {
           <button
             onClick={() => setActiveTab("citizen")}
             className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "citizen"
-              ? "bg-[#006633] text-white"
+              ? "bg-[#006633] text-white border-b-2 border-b-amber-400"
               : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
@@ -489,7 +491,7 @@ export default function PublicExplorer() {
               fetchRegistry();
             }}
             className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "admin"
-              ? "bg-[#006633] text-white"
+              ? "bg-[#006633] text-white border-b-2 border-b-amber-400"
               : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
@@ -501,7 +503,7 @@ export default function PublicExplorer() {
               fetchBatches();
             }}
             className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "explorer"
-              ? "bg-[#006633] text-white"
+              ? "bg-[#006633] text-white border-b-2 border-b-amber-400"
               : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
@@ -669,8 +671,9 @@ export default function PublicExplorer() {
                   <button
                     type="submit"
                     disabled={regLoading}
-                    className="w-full bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold py-3.5 transition-colors cursor-pointer disabled:opacity-50 mt-4 text-xs uppercase tracking-widest rounded-sm shadow-sm"
+                    className="w-full bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold py-3.5 transition-colors cursor-pointer disabled:opacity-50 mt-4 text-xs uppercase tracking-widest rounded-sm shadow-sm flex items-center justify-center"
                   >
+                    {regLoading && <Loader2 className="w-4 h-4 animate-spin text-amber-400 mr-2" />}
                     Submit Application
                   </button>
                 </form>
@@ -773,8 +776,9 @@ export default function PublicExplorer() {
                 <button
                   type="submit"
                   disabled={searchLoading}
-                  className="bg-[#006633] hover:bg-[#005229] text-white px-6 py-3 rounded-sm font-sans font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer"
+                  className="bg-[#006633] hover:bg-[#005229] text-white px-6 py-3 rounded-sm font-sans font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer flex items-center justify-center"
                 >
+                  {searchLoading && <Loader2 className="w-4 h-4 animate-spin text-amber-400 mr-2" />}
                   Search
                 </button>
               </form>
@@ -935,8 +939,9 @@ export default function PublicExplorer() {
                         <button
                           onClick={verifyReceiptLocally}
                           disabled={verifying}
-                          className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 flex items-center"
                         >
+                          {verifying && <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400 mr-2" />}
                           Verify Receipt
                         </button>
                       </div>
@@ -993,18 +998,20 @@ export default function PublicExplorer() {
                         <button
                           onClick={() => generateZkProof(applicant.national_id)}
                           disabled={zkLoading}
-                          className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50 flex items-center"
                         >
+                          {zkLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-400 mr-2" />}
                           Generate ZK Proof
                         </button>
                       </div>
 
                       {/* Proving Status Logs */}
                       {zkStatus && (
-                        <div className={`p-3.5 text-xs rounded-r-sm border-t border-r border-b font-medium ${zkLoading
-                          ? "bg-slate-900/5 border-slate-700/20 border-l-4 border-l-slate-600 text-slate-800"
+                        <div className={`p-3.5 text-xs rounded-r-sm border-t border-r border-b font-medium flex items-center ${zkLoading
+                          ? "bg-amber-950/5 border-amber-500/20 border-l-4 border-l-amber-500 text-slate-800"
                           : "bg-green-700/10 border-green-700/30 border-l-4 border-l-green-700 text-green-950"
                           }`}>
+                          {zkLoading && <Loader2 className="w-3.5 h-3.5 animate-spin text-amber-500 mr-2 flex-shrink-0" />}
                           <span>{zkStatus}</span>
                         </div>
                       )}
@@ -1083,6 +1090,7 @@ export default function PublicExplorer() {
                   disabled={eligibleCount === 0 || batchTriggerLoading}
                   className="bg-[#006633] hover:bg-[#005229] disabled:opacity-50 text-white font-sans font-bold py-4 rounded-sm flex items-center justify-center transition-colors cursor-pointer text-xs uppercase tracking-widest shadow-sm"
                 >
+                  {batchTriggerLoading && <Loader2 className="w-4 h-4 animate-spin text-amber-400 mr-2" />}
                   Commit Batch On-Chain
                 </button>
               </div>
@@ -1129,7 +1137,8 @@ export default function PublicExplorer() {
 
               {registryLoading ? (
                 <div className="flex flex-col justify-center items-center h-48">
-                  <span className="mt-2 text-sm text-slate-500 font-sans">Querying registry database...</span>
+                  <Loader2 className="w-7 h-7 animate-spin text-amber-500 mb-2" />
+                  <span className="text-sm text-slate-500 font-sans">Querying registry database...</span>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
@@ -1219,7 +1228,8 @@ export default function PublicExplorer() {
 
             {batchesLoading ? (
               <div className="flex flex-col justify-center items-center h-64 font-sans">
-                <span className="mt-2 text-sm text-slate-500">Querying Block Registry...</span>
+                <Loader2 className="w-8 h-8 animate-spin text-amber-500 mb-2" />
+                <span className="text-sm text-slate-500">Querying Block Registry...</span>
               </div>
             ) : (
               <div className="overflow-x-auto">
