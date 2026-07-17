@@ -26,7 +26,10 @@ import {
   Building,
   Settings,
   RefreshCw,
-  CheckCircle
+  CheckCircle,
+  Fingerprint,
+  KeyRound,
+  Binary
 } from "lucide-react";
 import { encodePacked, keccak256, stringToHex } from "viem";
 
@@ -1002,11 +1005,10 @@ export default function PublicExplorer() {
                         }`}>
                           {verificationResult.success ? (
                             <>
-                              <ShieldCheck className="w-6 h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
+                              <Fingerprint className="w-6 h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                               <div>
                                 <h5 className="font-bold text-md flex items-center text-green-950">
                                   Audit Successful
-                                  <Award className="w-4 h-4 ml-1.5 text-green-600" />
                                 </h5>
                                 <p className="text-xs text-green-900/80 mt-1 leading-relaxed">
                                   Your local computed hash correctly matches the on-chain notarized Merkle Root <strong>{applicant.merkle_root}</strong>. Your registration timestamp and queue sequence are permanently locked in Block #1 on Sepolia.
@@ -1087,7 +1089,7 @@ export default function PublicExplorer() {
                           </div>
 
                           <div className="p-4 bg-green-500/5 backdrop-blur-md border border-green-500/20 text-green-950 flex items-start shadow-sm rounded-sm">
-                            <CheckCircle className="w-5 h-5 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
+                            <KeyRound className="w-5 h-5 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                             <div>
                               <h5 className="font-bold text-sm text-green-950">ZK Verification Verified Locally</h5>
                               <p className="text-xxs text-green-900/80 mt-1 leading-relaxed">
@@ -1149,7 +1151,7 @@ export default function PublicExplorer() {
               {batchTriggerSuccess && (
                 <div className="p-4 bg-green-500/5 backdrop-blur-md border border-green-500/20 text-green-950 rounded-sm shadow-sm space-y-2">
                   <h4 className="font-bold text-sm flex items-center text-green-950">
-                    <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
+                    <Binary className="w-4 h-4 mr-2 text-green-600" />
                     Batch Anchored Successfully!
                   </h4>
                   <div className="font-mono text-xs space-y-1 mt-1 text-green-900/80">
