@@ -455,10 +455,6 @@ export default function PublicExplorer() {
           <div className="absolute -left-16 -top-16 w-40 h-40 bg-green-500/10 rounded-full blur-3xl"></div>
           <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-green-300/10 rounded-full blur-3xl"></div>
 
-          <div className="inline-block px-3 py-1 mb-4 rounded bg-green-900/60 border border-green-700/50 text-green-200 font-mono text-xs font-bold tracking-widest uppercase">
-            REPUBLIQUE ALGERIENNE DEMOCRATIQUE ET POPULAIRE
-          </div>
-
           <h1 className="text-xl md:text-2xl font-bold  text-green-200 tracking-tight drop-shadow-md">
             الجمهورية الجزائرية الديمقراطية الشعبية
           </h1>
