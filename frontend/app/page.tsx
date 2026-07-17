@@ -454,8 +454,8 @@ export default function PublicExplorer() {
           <div className="absolute -left-16 -top-16 w-40 h-40 bg-green-500/10 rounded-full blur-3xl"></div>
           <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-green-300/10 rounded-full blur-3xl"></div>
           
-          <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-green-600/35 border border-green-500/30">
-            <Building className="w-6 h-6 text-green-300 animate-pulse" />
+          <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-green-900/60 border border-green-700/50">
+            <Building className="w-5 h-5 text-green-200" />
           </div>
           
           <h1 className="text-xl md:text-2xl font-bold  text-green-200 tracking-tight drop-shadow-md">
@@ -676,9 +676,9 @@ export default function PublicExplorer() {
                   </div>
 
                   {regError && (
-                    <div className="bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-3.5 rounded-sm shadow-sm text-xs flex items-center font-medium">
-                      <AlertTriangle className="w-4.5 h-4.5 mr-2 text-rose-600 flex-shrink-0" />
-                      {regError}
+                    <div className="bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 p-3.5 text-slate-800 text-xs flex items-center shadow-sm rounded-none">
+                      <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
+                      <span className="font-medium text-slate-800">{regError}</span>
                     </div>
                   )}
 
@@ -811,9 +811,9 @@ export default function PublicExplorer() {
               </form>
 
               {searchError && (
-                <div className="mt-4 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-3.5 rounded-sm shadow-sm text-sm flex items-center font-medium">
-                  <AlertTriangle className="w-4.5 h-4.5 mr-2 text-rose-600 flex-shrink-0" />
-                  {searchError}
+                <div className="mt-4 bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 p-3.5 text-slate-800 text-xs flex items-center shadow-sm rounded-none">
+                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
+                  <span className="font-medium text-slate-800">{searchError}</span>
                 </div>
               )}
             </div>
@@ -998,29 +998,27 @@ export default function PublicExplorer() {
 
                       {/* Successful Audit Notification */}
                       {verificationResult && (
-                        <div className={`p-4 rounded-sm border backdrop-blur-md shadow-sm flex items-start ${
-                          verificationResult.success
-                            ? "bg-green-500/5 border-green-500/20 text-green-950"
-                            : "bg-rose-500/5 border-rose-500/20 text-rose-950"
+                        <div className={`p-4 border border-slate-200 border-l-4 shadow-sm flex items-start rounded-none bg-slate-50 text-slate-800 ${
+                          verificationResult.success ? "border-l-emerald-800" : "border-l-rose-800"
                         }`}>
                           {verificationResult.success ? (
                             <>
-                              <Fingerprint className="w-6 h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
+                              <Fingerprint className="w-4 h-4 mr-2.5 text-emerald-800 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-md flex items-center text-green-950">
+                                <h5 className="font-bold text-sm text-slate-900">
                                   Audit Successful
                                 </h5>
-                                <p className="text-xs text-green-900/80 mt-1 leading-relaxed">
+                                <p className="text-xs text-slate-700 mt-1 leading-relaxed">
                                   Your local computed hash correctly matches the on-chain notarized Merkle Root <strong>{applicant.merkle_root}</strong>. Your registration timestamp and queue sequence are permanently locked in Block #1 on Sepolia.
                                 </p>
                               </div>
                             </>
                           ) : (
                             <>
-                              <ShieldAlert className="w-6 h-6 mr-3 text-rose-600 flex-shrink-0 mt-0.5" />
+                              <ShieldAlert className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-md text-rose-950">Audit Failed</h5>
-                                <p className="text-xs text-rose-900/80 mt-1 leading-relaxed">
+                                <h5 className="font-bold text-sm text-slate-900">Audit Failed</h5>
+                                <p className="text-xs text-slate-700 mt-1 leading-relaxed">
                                   Reconstructed leaf hashes resolve to <strong>{verificationResult.computedRoot}</strong> which does NOT match the root stored on the block registry <strong>{applicant.merkle_root}</strong>.
                                 </p>
                               </div>
@@ -1037,7 +1035,7 @@ export default function PublicExplorer() {
                       <div className="flex justify-between items-center border-b pb-4">
                         <div>
                           <h4 className="text-md font-bold text-slate-900 flex items-center">
-                            <ShieldCheck className="w-5 h-5 mr-2 text-green-600 animate-pulse" />
+                            <ShieldCheck className="w-4 h-4 mr-2 text-slate-600" />
                             Zero-Knowledge Priority Proof
                           </h4>
                           <p className="text-slate-500 text-xxs mt-0.5">
@@ -1056,16 +1054,16 @@ export default function PublicExplorer() {
 
                       {/* Proving Status Logs */}
                       {zkStatus && (
-                        <div className="flex items-center text-xs text-green-950 bg-green-500/5 backdrop-blur-md border border-green-500/20 p-3.5 rounded-sm shadow-sm font-medium">
-                          <Loader2 className="w-4 h-4 animate-spin mr-2 text-green-600" />
+                        <div className="flex items-center text-xs text-slate-800 bg-slate-50 border border-slate-200 border-l-4 border-l-slate-600 p-3.5 shadow-sm rounded-none font-medium">
+                          <Loader2 className="w-3.5 h-3.5 animate-spin mr-2.5 text-slate-600" />
                           {zkStatus}
                         </div>
                       )}
 
                       {/* Error block */}
                       {zkError && (
-                        <div className="bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-3.5 rounded-sm shadow-sm text-xs flex items-center font-medium">
-                          <AlertTriangle className="w-4 h-4 mr-2 text-rose-600 flex-shrink-0" />
+                        <div className="bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 p-3.5 text-slate-800 text-xs flex items-center shadow-sm rounded-none font-medium">
+                          <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
                           {zkError}
                         </div>
                       )}
@@ -1088,11 +1086,11 @@ export default function PublicExplorer() {
                             </div>
                           </div>
 
-                          <div className="p-4 bg-green-500/5 backdrop-blur-md border border-green-500/20 text-green-950 flex items-start shadow-sm rounded-sm">
-                            <KeyRound className="w-5 h-5 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
+                          <div className="p-4 bg-slate-50 border border-slate-200 border-l-4 border-l-emerald-800 text-slate-800 flex items-start shadow-sm rounded-none">
+                            <KeyRound className="w-4 h-4 mr-2.5 text-emerald-800 flex-shrink-0 mt-0.5" />
                             <div>
-                              <h5 className="font-bold text-sm text-green-950">ZK Verification Verified Locally</h5>
-                              <p className="text-xxs text-green-900/80 mt-1 leading-relaxed">
+                              <h5 className="font-bold text-sm text-slate-900">ZK Verification Verified Locally</h5>
+                              <p className="text-xs text-slate-700 mt-1 leading-relaxed">
                                 The proof contains variables proving mathematically that the private criteria input values result in the score of <strong>{applicant.priority_score} pts</strong>. You can verify this key on-chain at the <strong>Verifier.sol</strong> contract.
                               </p>
                             </div>
@@ -1149,12 +1147,12 @@ export default function PublicExplorer() {
               </div>
 
               {batchTriggerSuccess && (
-                <div className="p-4 bg-green-500/5 backdrop-blur-md border border-green-500/20 text-green-950 rounded-sm shadow-sm space-y-2">
-                  <h4 className="font-bold text-sm flex items-center text-green-950">
-                    <Binary className="w-4 h-4 mr-2 text-green-600" />
+                <div className="p-4 bg-slate-50 border border-slate-200 border-l-4 border-l-emerald-800 text-slate-800 rounded-none shadow-sm space-y-2">
+                  <h4 className="font-bold text-sm flex items-center text-slate-900">
+                    <Binary className="w-4 h-4 mr-2 text-emerald-800" />
                     Batch Anchored Successfully!
                   </h4>
-                  <div className="font-mono text-xs space-y-1 mt-1 text-green-900/80">
+                  <div className="font-mono text-xs space-y-1 mt-1 text-slate-700">
                     <div><strong>Batch ID:</strong> #{batchTriggerSuccess.batch_id}</div>
                     <div className="truncate"><strong>Merkle Root:</strong> {batchTriggerSuccess.merkle_root}</div>
                     <div className="truncate"><strong>Transaction Hash:</strong> {batchTriggerSuccess.transaction_hash}</div>
@@ -1163,8 +1161,8 @@ export default function PublicExplorer() {
               )}
 
               {batchTriggerError && (
-                <div className="p-4 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 text-xs flex items-center font-medium shadow-sm rounded-sm">
-                  <AlertTriangle className="w-4 h-4 mr-2 text-rose-600 flex-shrink-0" />
+                <div className="p-4 bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 text-slate-800 text-xs flex items-center font-medium shadow-sm rounded-none">
+                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
                   {batchTriggerError}
                 </div>
               )}
