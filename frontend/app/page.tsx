@@ -447,68 +447,65 @@ export default function PublicExplorer() {
   const eligibleCount = registry.filter((app) => app.status === "eligible").length;
 
   return (
-    <main className="min-h-screen bg-[#fafaf9] p-4 md:p-8 font-sans text-slate-800">
-      <div className="max-w-5xl mx-auto">
+    <main className="min-h-screen bg-[#faf9f6] p-4 md:p-10 font-sans text-slate-800">
+      <div className="max-w-5xl mx-auto space-y-8">
 
-        {/* Algerian Government Inspired Header */}
-        <header className="mb-10 text-center relative overflow-hidden rounded bg-gradient-to-r from-green-800 via-green-700 to-green-950 p-6 md:p-10 shadow-xl border border-green-900/20">
-          <div className="absolute -left-16 -top-16 w-40 h-40 bg-green-500/10 rounded-full blur-3xl"></div>
-          <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-green-300/10 rounded-full blur-3xl"></div>
-
-          <h1 className="text-xl md:text-2xl font-bold  text-green-200 tracking-tight drop-shadow-md">
+        {/* Executive Document Header */}
+        <header className="bg-[#006633] border-b-4 border-b-amber-500/80 p-8 md:p-10 text-center space-y-3 rounded-sm shadow-md text-white">
+          <div className="text-base md:text-lg font-bold text-amber-200 tracking-wide font-serif">
             الجمهورية الجزائرية الديمقراطية الشعبية
+          </div>
+          <h1 className="text-3xl md:text-5xl font-bold text-white tracking-wide font-serif">
+            AADL_ON Verification Notary Portal
           </h1>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mt-2 tracking-wide font-serif">
-            AADL_ON
-          </h2>
-          <p className="text-sm md:text-base text-green-100/80 mt-2 max-w-xl mx-auto">
-            Algorithmically transparent, cryptographically verifiable, and permanently anchored on Ethereum Sepolia Testnet.
+          <p className="text-xs md:text-sm text-green-100/90 tracking-wide max-w-2xl mx-auto pt-2 border-t border-green-500/40">
+            Algorithmically transparent, cryptographically verifiable, permanently anchored on Ethereum.
           </p>
         </header>
 
-        {/* Tab Controls */}
-        <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-sm shadow-sm border overflow-x-auto gap-1">
+        {/* Executive Document Tab Controls */}
+        <div className="grid grid-cols-2 md:grid-cols-4 border border-[#e2e0d8] bg-white rounded-sm divide-x divide-y md:divide-y-0 divide-[#e2e0d8] font-serif text-xs uppercase tracking-wider shadow-sm">
           <button
             onClick={() => setActiveTab("register")}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "register"
-              ? "bg-green-700 text-white shadow"
-              : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+            className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "register"
+              ? "bg-[#006633] text-white"
+              : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
-            Apply for Housing
+            01. Apply
           </button>
           <button
             onClick={() => setActiveTab("citizen")}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "citizen"
-              ? "bg-green-700 text-white shadow"
-              : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+            className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "citizen"
+              ? "bg-[#006633] text-white"
+              : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
-            Verify Receipt
+            02. Verify
           </button>
           <button
             onClick={() => {
               setActiveTab("admin");
               fetchRegistry();
             }}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "admin"
-              ? "bg-green-700 text-white shadow"
-              : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+            className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "admin"
+              ? "bg-[#006633] text-white"
+              : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
-            Admin Console
+            03. Admin
           </button>
           <button
             onClick={() => {
               setActiveTab("explorer");
               fetchBatches();
             }}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "explorer"
-              ? "bg-green-700 text-white shadow"
-              : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+            className={`py-3.5 px-4 text-center font-bold transition-colors ${activeTab === "explorer"
+              ? "bg-[#006633] text-white"
+              : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
-            Blockchain Explorer
+            04. Explorer
           </button>
         </div>
 
@@ -516,13 +513,13 @@ export default function PublicExplorer() {
         {activeTab === "register" && (
           <div className="max-w-2xl mx-auto">
             {!regSuccess ? (
-              <div className="bg-white rounded shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
-                <div>
-                  <h3 className="text-xl font-bold text-slate-900 border-b pb-3 mb-2">
+              <div className="bg-white border border-[#e2e0d8] p-6 md:p-8 space-y-6 rounded-sm shadow-sm text-slate-800">
+                <div className="border-b border-[#e2e0d8] pb-4">
+                  <h3 className="text-xl font-bold text-slate-900 font-serif">
                     Housing Application Form (استمارة طلب سكن)
                   </h3>
-                  <p className="text-slate-500 text-sm">
-                    Please submit your citizen information accurately. Once approved, your queue placement is cryptographically locked on-chain.
+                  <p className="text-slate-500 text-xs font-sans mt-1">
+                    Enter citizen details accurately. Approved entries are notarized on the Ethereum blockchain.
                   </p>
                 </div>
 
@@ -672,7 +669,7 @@ export default function PublicExplorer() {
                   <button
                     type="submit"
                     disabled={regLoading}
-                    className="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded-sm flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50 mt-4 text-sm uppercase tracking-wide"
+                    className="w-full bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold py-3.5 transition-colors cursor-pointer disabled:opacity-50 mt-4 text-xs uppercase tracking-widest rounded-sm shadow-sm"
                   >
                     Submit Application
                   </button>
@@ -738,7 +735,7 @@ export default function PublicExplorer() {
                   <div className="flex gap-3">
                     <button
                       onClick={startNewApplication}
-                      className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-sm transition-colors cursor-pointer text-sm"
+                    className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-sm transition-colors cursor-pointer text-sm"
                     >
                       New Application
                     </button>
