@@ -3,19 +3,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Batch } from "./types";
-import { 
-  ShieldCheck, 
-  ShieldAlert, 
-  ExternalLink, 
-  Loader2, 
-  Search, 
-  UserCheck, 
-  Hash, 
-  Copy, 
-  Check, 
-  FileText, 
-  Globe, 
-  Clock, 
+import {
+  ShieldCheck,
+  ShieldAlert,
+  ExternalLink,
+  Loader2,
+  Search,
+  UserCheck,
+  Hash,
+  Copy,
+  Check,
+  FileText,
+  Globe,
+  Clock,
   Cpu,
   Calendar,
   AlertTriangle,
@@ -224,7 +224,7 @@ export default function PublicExplorer() {
     setZkError(null);
     setZkProofData(null);
     setZkStatus("Computing witness trace inside ZoKrates...");
-    
+
     try {
       const response = await axios.post(`http://127.0.0.1:8000/v1/applicants/${nationalId}/prove`);
       setZkStatus("Synthesizing SNARK proof parameters...");
@@ -362,7 +362,7 @@ export default function PublicExplorer() {
 
       addStep("Step 2: Packing and hashing leaf inputs (Solidity ABI encoded)...");
       await new Promise((r) => setTimeout(r, 600));
-      
+
       const leafHash = keccak256(
         encodePacked(
           ["bytes32", "bytes32", "uint64", "uint16"],
@@ -389,14 +389,14 @@ export default function PublicExplorer() {
         const isLeft = idx % 2 === 0;
 
         addStep(`  ├─ Hash step #${i + 1}: ${isLeft ? "Leaf + Sibling" : "Sibling + Leaf"}`);
-        
+
         const packed = encodePacked(
           ["bytes32", "bytes32"],
           isLeft ? [current, siblingHex] : [siblingHex, current]
         );
         current = keccak256(packed);
         idx = Math.floor(idx / 2);
-        
+
         await new Promise((r) => setTimeout(r, 500));
         addStep(`  │   └─ Resulting Hash: ${current.substring(0, 16)}...`);
       }
@@ -448,16 +448,16 @@ export default function PublicExplorer() {
   return (
     <main className="min-h-screen bg-[#fafaf9] p-4 md:p-8 font-sans text-slate-800">
       <div className="max-w-5xl mx-auto">
-        
+
         {/* Algerian Government Inspired Header */}
         <header className="mb-10 text-center relative overflow-hidden rounded bg-gradient-to-r from-green-800 via-green-700 to-green-950 p-6 md:p-10 shadow-xl border border-green-900/20">
           <div className="absolute -left-16 -top-16 w-40 h-40 bg-green-500/10 rounded-full blur-3xl"></div>
           <div className="absolute -right-16 -bottom-16 w-45 h-45 bg-green-300/10 rounded-full blur-3xl"></div>
-          
+
           <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-green-900/60 border border-green-700/50">
             <Building className="w-5 h-5 text-green-200" />
           </div>
-          
+
           <h1 className="text-xl md:text-2xl font-bold  text-green-200 tracking-tight drop-shadow-md">
             الجمهورية الجزائرية الديمقراطية الشعبية
           </h1>
@@ -473,22 +473,20 @@ export default function PublicExplorer() {
         <div className="flex border-b border-slate-200 mb-8 bg-white p-1.5 rounded-sm shadow-sm border overflow-x-auto gap-1">
           <button
             onClick={() => setActiveTab("register")}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
-              activeTab === "register"
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "register"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <UserPlus className="w-4 h-4 mr-2" />
             Apply for Housing
           </button>
           <button
             onClick={() => setActiveTab("citizen")}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
-              activeTab === "citizen"
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "citizen"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <UserCheck className="w-4 h-4 mr-2" />
             Verify Receipt
@@ -498,11 +496,10 @@ export default function PublicExplorer() {
               setActiveTab("admin");
               fetchRegistry();
             }}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
-              activeTab === "admin"
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "admin"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <Settings className="w-4 h-4 mr-2" />
             Admin Console
@@ -512,11 +509,10 @@ export default function PublicExplorer() {
               setActiveTab("explorer");
               fetchBatches();
             }}
-            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${
-              activeTab === "explorer"
+            className={`flex-1 min-w-[120px] flex items-center justify-center py-3 text-sm font-semibold rounded-sm transition-all ${activeTab === "explorer"
                 ? "bg-green-700 text-white shadow"
                 : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <Globe className="w-4 h-4 mr-2" />
             Blockchain Explorer
@@ -777,7 +773,7 @@ export default function PublicExplorer() {
         {/* Tab 2: Citizen Audit Portal */}
         {activeTab === "citizen" && (
           <div className="space-y-8">
-            
+
             {/* Search Input Box */}
             <div className="bg-white rounded shadow-lg border border-slate-100 p-6">
               <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center">
@@ -787,7 +783,7 @@ export default function PublicExplorer() {
               <p className="text-slate-500 text-sm mb-4">
                 Enter your 12-digit National Identification Number (NID) to retrieve your official cryptographic receipt and status.
               </p>
-              
+
               <form onSubmit={handleSearch} className="flex gap-2">
                 <input
                   type="text"
@@ -821,15 +817,15 @@ export default function PublicExplorer() {
             {/* Applicant Details Panel */}
             {applicant && (
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
+
                 {/* Left Panel: Status Timeline */}
                 <div className="lg:col-span-1 bg-white rounded shadow-lg border border-slate-100 p-6 h-fit">
                   <h4 className="text-md font-bold text-slate-900 mb-6 border-b pb-3">
                     Application Status
                   </h4>
-                  
+
                   <div className="relative pl-6 space-y-8 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-slate-200">
-                    
+
                     {/* Timeline Node 1: Submitted */}
                     <div className="relative">
                       <div className="absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white bg-green-600 shadow-sm flex items-center justify-center"></div>
@@ -838,31 +834,27 @@ export default function PublicExplorer() {
                     </div>
 
                     {/* Timeline Node 2: Approved / Eligible */}
-                    <div className={`relative ${
-                      applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
+                    <div className={`relative ${applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
                         ? "text-slate-850"
                         : "text-slate-450"
-                    }`}>
-                      <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${
-                        applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
+                      }`}>
+                      <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${applicant.status === "eligible" || applicant.status === "batched" || applicant.status === "selected"
                           ? "bg-green-600"
                           : "bg-slate-200"
-                      }`}></div>
+                        }`}></div>
                       <div className="font-semibold text-sm">Approved & Eligible</div>
                       <div className="text-slate-450 text-xs mt-0.5">Audited by administration</div>
                     </div>
 
                     {/* Timeline Node 3: Batched / Notarized */}
-                    <div className={`relative ${
-                      applicant.status === "batched" || applicant.status === "selected"
+                    <div className={`relative ${applicant.status === "batched" || applicant.status === "selected"
                         ? "text-slate-850"
                         : "text-slate-455"
-                    }`}>
-                      <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${
-                        applicant.status === "batched" || applicant.status === "selected"
+                      }`}>
+                      <div className={`absolute -left-[20px] top-[4px] w-5 h-5 rounded-full border-4 border-white shadow-sm flex items-center justify-center ${applicant.status === "batched" || applicant.status === "selected"
                           ? "bg-green-600"
                           : "bg-slate-200"
-                      }`}></div>
+                        }`}></div>
                       <div className="font-semibold text-sm">Notarized on Ethereum</div>
                       <div className="text-slate-455 text-xs mt-0.5 font-serif">Commitment Anchored</div>
                     </div>
@@ -871,7 +863,7 @@ export default function PublicExplorer() {
 
                 {/* Right Panel: Digital Receipt & Verification Card */}
                 <div className="lg:col-span-2 space-y-6">
-                  
+
                   {/* Digital Receipt Card */}
                   <div className="bg-white rounded shadow-lg border border-slate-100 overflow-hidden">
                     <div className="bg-gradient-to-r from-green-800 to-green-700 text-white px-6 py-4 flex justify-between items-center">
@@ -883,7 +875,7 @@ export default function PublicExplorer() {
                     </div>
 
                     <div className="p-6 space-y-4">
-                      
+
                       {/* Name & ID row */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-b pb-4">
                         <div>
@@ -998,11 +990,10 @@ export default function PublicExplorer() {
 
                       {/* Successful Audit Notification */}
                       {verificationResult && (
-                        <div className={`p-4 rounded-none border backdrop-blur-md shadow-sm flex items-start ${
-                          verificationResult.success
+                        <div className={`p-4 rounded-none border backdrop-blur-md shadow-sm flex items-start ${verificationResult.success
                             ? "bg-emerald-950/5 border-emerald-800/20 text-slate-800"
                             : "bg-rose-950/5 border-rose-800/20 text-slate-800"
-                        }`}>
+                          }`}>
                           {verificationResult.success ? (
                             <>
                               <Fingerprint className="w-4 h-4 mr-2.5 text-emerald-900 flex-shrink-0 mt-0.5" />
@@ -1110,7 +1101,7 @@ export default function PublicExplorer() {
         {/* Tab 3: Admin Console (Operational Approval and Batch trigger) */}
         {activeTab === "admin" && (
           <div className="space-y-8">
-            
+
             {/* Top Widget: Batch Notarization Control */}
             <div className="bg-white rounded shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
               <div>
@@ -1226,13 +1217,12 @@ export default function PublicExplorer() {
                             {app.priority_score ?? 0} pts
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-semibold border ${
-                              app.status === "pending"
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-semibold border ${app.status === "pending"
                                 ? "bg-amber-50 text-amber-700 border-amber-200"
                                 : app.status === "eligible"
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : "bg-green-50 text-green-700 border-green-200"
-                            }`}>
+                                  ? "bg-blue-50 text-blue-700 border-blue-200"
+                                  : "bg-green-50 text-green-700 border-green-200"
+                              }`}>
                               {app.status}
                             </span>
                           </td>
@@ -1277,7 +1267,7 @@ export default function PublicExplorer() {
                 <Globe className="w-5 h-5 mr-2 text-slate-600" />
                 On-Chain Batch Registrations
               </h3>
-              <button 
+              <button
                 onClick={fetchBatches}
                 className="text-xs text-green-700 hover:underline flex items-center font-semibold cursor-pointer"
               >
@@ -1285,7 +1275,7 @@ export default function PublicExplorer() {
                 Refresh Registry
               </button>
             </div>
-            
+
             {batchesError && (
               <div className="m-6 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm">
                 {batchesError}
@@ -1345,7 +1335,7 @@ export default function PublicExplorer() {
                     ))}
                   </tbody>
                 </table>
-                
+
                 {batches.length === 0 && (
                   <div className="p-12 text-center text-slate-400 text-sm">
                     No batches have been committed to the block registry yet.
