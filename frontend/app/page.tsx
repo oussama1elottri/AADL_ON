@@ -673,7 +673,7 @@ export default function PublicExplorer() {
                   </div>
 
                   {regError && (
-                    <div className="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 p-3.5 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-xs flex items-center shadow-sm rounded-none">
+                    <div className="bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-3.5 rounded-sm shadow-sm text-xs flex items-center font-medium">
                       <AlertTriangle className="w-4.5 h-4.5 mr-2 text-rose-600 flex-shrink-0" />
                       {regError}
                     </div>
@@ -808,7 +808,7 @@ export default function PublicExplorer() {
               </form>
 
               {searchError && (
-                <div className="mt-4 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 p-3.5 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-sm flex items-center shadow-sm rounded-none">
+                <div className="mt-4 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-3.5 rounded-sm shadow-sm text-sm flex items-center font-medium">
                   <AlertTriangle className="w-4.5 h-4.5 mr-2 text-rose-600 flex-shrink-0" />
                   {searchError}
                 </div>
@@ -995,18 +995,20 @@ export default function PublicExplorer() {
 
                       {/* Successful Audit Notification */}
                       {verificationResult && (
-                        <div className={`p-4 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 flex items-start shadow-sm rounded-none bg-white dark:bg-slate-900 ${
-                          verificationResult.success ? "border-l-green-600" : "border-l-rose-600"
+                        <div className={`p-4 rounded-sm border backdrop-blur-md shadow-sm flex items-start ${
+                          verificationResult.success
+                            ? "bg-green-500/5 border-green-500/20 text-green-950"
+                            : "bg-rose-500/5 border-rose-500/20 text-rose-950"
                         }`}>
                           {verificationResult.success ? (
                             <>
                               <ShieldCheck className="w-6 h-6 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-md flex items-center text-slate-900 dark:text-white">
+                                <h5 className="font-bold text-md flex items-center text-green-950">
                                   Audit Successful
                                   <Award className="w-4 h-4 ml-1.5 text-green-600" />
                                 </h5>
-                                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                <p className="text-xs text-green-900/80 mt-1 leading-relaxed">
                                   Your local computed hash correctly matches the on-chain notarized Merkle Root <strong>{applicant.merkle_root}</strong>. Your registration timestamp and queue sequence are permanently locked in Block #1 on Sepolia.
                                 </p>
                               </div>
@@ -1015,8 +1017,8 @@ export default function PublicExplorer() {
                             <>
                               <ShieldAlert className="w-6 h-6 mr-3 text-rose-600 flex-shrink-0 mt-0.5" />
                               <div>
-                                <h5 className="font-bold text-md text-slate-900 dark:text-white">Audit Failed</h5>
-                                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                                <h5 className="font-bold text-md text-rose-950">Audit Failed</h5>
+                                <p className="text-xs text-rose-900/80 mt-1 leading-relaxed">
                                   Reconstructed leaf hashes resolve to <strong>{verificationResult.computedRoot}</strong> which does NOT match the root stored on the block registry <strong>{applicant.merkle_root}</strong>.
                                 </p>
                               </div>
@@ -1052,7 +1054,7 @@ export default function PublicExplorer() {
 
                       {/* Proving Status Logs */}
                       {zkStatus && (
-                        <div className="flex items-center text-xs text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-green-600 p-3.5 shadow-sm rounded-none font-medium">
+                        <div className="flex items-center text-xs text-green-950 bg-green-500/5 backdrop-blur-md border border-green-500/20 p-3.5 rounded-sm shadow-sm font-medium">
                           <Loader2 className="w-4 h-4 animate-spin mr-2 text-green-600" />
                           {zkStatus}
                         </div>
@@ -1060,7 +1062,7 @@ export default function PublicExplorer() {
 
                       {/* Error block */}
                       {zkError && (
-                        <div className="bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 p-3.5 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-xs flex items-center font-medium shadow-sm rounded-none">
+                        <div className="bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-3.5 rounded-sm shadow-sm text-xs flex items-center font-medium">
                           <AlertTriangle className="w-4 h-4 mr-2 text-rose-600 flex-shrink-0" />
                           {zkError}
                         </div>
@@ -1084,11 +1086,11 @@ export default function PublicExplorer() {
                             </div>
                           </div>
 
-                          <div className="p-4 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-green-600 text-slate-800 dark:text-slate-200 flex items-start shadow-sm rounded-none">
+                          <div className="p-4 bg-green-500/5 backdrop-blur-md border border-green-500/20 text-green-950 flex items-start shadow-sm rounded-sm">
                             <CheckCircle className="w-5 h-5 mr-3 text-green-600 flex-shrink-0 mt-0.5" />
                             <div>
-                              <h5 className="font-bold text-sm">ZK Verification Verified Locally</h5>
-                              <p className="text-xxs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                              <h5 className="font-bold text-sm text-green-950">ZK Verification Verified Locally</h5>
+                              <p className="text-xxs text-green-900/80 mt-1 leading-relaxed">
                                 The proof contains variables proving mathematically that the private criteria input values result in the score of <strong>{applicant.priority_score} pts</strong>. You can verify this key on-chain at the <strong>Verifier.sol</strong> contract.
                               </p>
                             </div>
@@ -1145,12 +1147,12 @@ export default function PublicExplorer() {
               </div>
 
               {batchTriggerSuccess && (
-                <div className="p-4 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-green-600 text-slate-800 dark:text-slate-200 rounded-none shadow-sm space-y-2">
-                  <h4 className="font-bold text-sm flex items-center text-slate-900 dark:text-white font-bold">
+                <div className="p-4 bg-green-500/5 backdrop-blur-md border border-green-500/20 text-green-950 rounded-sm shadow-sm space-y-2">
+                  <h4 className="font-bold text-sm flex items-center text-green-950">
                     <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
                     Batch Anchored Successfully!
                   </h4>
-                  <div className="font-mono text-xs space-y-1 mt-1 text-slate-600 dark:text-slate-400">
+                  <div className="font-mono text-xs space-y-1 mt-1 text-green-900/80">
                     <div><strong>Batch ID:</strong> #{batchTriggerSuccess.batch_id}</div>
                     <div className="truncate"><strong>Merkle Root:</strong> {batchTriggerSuccess.merkle_root}</div>
                     <div className="truncate"><strong>Transaction Hash:</strong> {batchTriggerSuccess.transaction_hash}</div>
@@ -1159,7 +1161,7 @@ export default function PublicExplorer() {
               )}
 
               {batchTriggerError && (
-                <div className="p-4 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-slate-700 dark:text-slate-300 text-xs flex items-center shadow-sm rounded-none">
+                <div className="p-4 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 text-xs flex items-center font-medium shadow-sm rounded-sm">
                   <AlertTriangle className="w-4 h-4 mr-2 text-rose-600 flex-shrink-0" />
                   {batchTriggerError}
                 </div>
@@ -1183,7 +1185,7 @@ export default function PublicExplorer() {
               </div>
 
               {registryError && (
-                <div className="m-6 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-slate-700 dark:text-slate-300 p-4 text-center text-sm shadow-sm rounded-none">
+                <div className="m-6 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm">
                   {registryError}
                 </div>
               )}
@@ -1283,7 +1285,7 @@ export default function PublicExplorer() {
             </div>
             
             {batchesError && (
-              <div className="m-6 bg-white dark:bg-slate-900 border-y border-r border-slate-200 dark:border-slate-800 border-l-4 border-l-rose-600 text-slate-700 dark:text-slate-300 p-4 text-center text-sm shadow-sm rounded-none">
+              <div className="m-6 bg-rose-500/5 backdrop-blur-md border border-rose-500/20 text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm">
                 {batchesError}
               </div>
             )}
