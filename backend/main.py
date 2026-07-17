@@ -184,7 +184,7 @@ def trigger_batch_creation(db: Session = Depends(get_db)):
             db.query(models.Leaf).delete()
             db.query(models.Batch).delete()
             db.query(models.Applicant).filter(
-                models.Applicant.status == models.ApplicantStatus.NOTARIZED
+                models.Applicant.status == models.ApplicantStatus.BATCHED
             ).update({models.Applicant.status: models.ApplicantStatus.ELIGIBLE}, synchronize_session=False)
             db.commit()
         else:
