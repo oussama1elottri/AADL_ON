@@ -530,7 +530,7 @@ export default function PublicExplorer() {
               <div className="bg-white rounded shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 flex items-center border-b pb-3 mb-2">
-                    <UserPlus className="w-5.5 h-5.5 mr-2 text-green-600" />
+                    <UserPlus className="w-5 h-5 mr-2 text-slate-600" />
                     Housing Application Form (استمارة طلب سكن)
                   </h3>
                   <p className="text-slate-500 text-sm">
@@ -676,9 +676,9 @@ export default function PublicExplorer() {
                   </div>
 
                   {regError && (
-                    <div className="bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 p-3.5 text-slate-800 text-xs flex items-center shadow-sm rounded-none">
-                      <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
-                      <span className="font-medium text-slate-800">{regError}</span>
+                    <div className="bg-rose-950/5 border border-rose-800/20 backdrop-blur-md text-slate-800 p-3.5 rounded-none shadow-sm text-xs flex items-center font-medium">
+                      <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                      <span>{regError}</span>
                     </div>
                   )}
 
@@ -781,7 +781,7 @@ export default function PublicExplorer() {
             {/* Search Input Box */}
             <div className="bg-white rounded shadow-lg border border-slate-100 p-6">
               <h3 className="text-lg font-bold text-slate-900 mb-2 flex items-center">
-                <Search className="w-5 h-5 mr-2 text-green-600" />
+                <Search className="w-5 h-5 mr-2 text-slate-600" />
                 Query Applicant Notary Receipt
               </h3>
               <p className="text-slate-500 text-sm mb-4">
@@ -811,9 +811,9 @@ export default function PublicExplorer() {
               </form>
 
               {searchError && (
-                <div className="mt-4 bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 p-3.5 text-slate-800 text-xs flex items-center shadow-sm rounded-none">
-                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
-                  <span className="font-medium text-slate-800">{searchError}</span>
+                <div className="mt-4 bg-rose-950/5 border border-rose-800/20 backdrop-blur-md text-slate-800 p-3.5 rounded-none shadow-sm text-xs flex items-center font-medium">
+                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                  <span>{searchError}</span>
                 </div>
               )}
             </div>
@@ -966,7 +966,7 @@ export default function PublicExplorer() {
                     <div className="bg-white rounded shadow-lg border border-slate-100 p-6 space-y-4">
                       <div className="flex justify-between items-center border-b pb-4">
                         <h4 className="text-md font-bold text-slate-900 flex items-center">
-                          <Cpu className="w-5 h-5 mr-2 text-green-600" />
+                          <Cpu className="w-4.5 h-4.5 mr-2 text-slate-600" />
                           Cryptographic Receipt Audit
                         </h4>
                         <button
@@ -998,12 +998,14 @@ export default function PublicExplorer() {
 
                       {/* Successful Audit Notification */}
                       {verificationResult && (
-                        <div className={`p-4 border border-slate-200 border-l-4 shadow-sm flex items-start rounded-none bg-slate-50 text-slate-800 ${
-                          verificationResult.success ? "border-l-emerald-800" : "border-l-rose-800"
+                        <div className={`p-4 rounded-none border backdrop-blur-md shadow-sm flex items-start ${
+                          verificationResult.success
+                            ? "bg-emerald-950/5 border-emerald-800/20 text-slate-800"
+                            : "bg-rose-950/5 border-rose-800/20 text-slate-800"
                         }`}>
                           {verificationResult.success ? (
                             <>
-                              <Fingerprint className="w-4 h-4 mr-2.5 text-emerald-800 flex-shrink-0 mt-0.5" />
+                              <Fingerprint className="w-4 h-4 mr-2.5 text-emerald-900 flex-shrink-0 mt-0.5" />
                               <div>
                                 <h5 className="font-bold text-sm text-slate-900">
                                   Audit Successful
@@ -1015,7 +1017,7 @@ export default function PublicExplorer() {
                             </>
                           ) : (
                             <>
-                              <ShieldAlert className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0 mt-0.5" />
+                              <ShieldAlert className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0 mt-0.5" />
                               <div>
                                 <h5 className="font-bold text-sm text-slate-900">Audit Failed</h5>
                                 <p className="text-xs text-slate-700 mt-1 leading-relaxed">
@@ -1054,7 +1056,7 @@ export default function PublicExplorer() {
 
                       {/* Proving Status Logs */}
                       {zkStatus && (
-                        <div className="flex items-center text-xs text-slate-800 bg-slate-50 border border-slate-200 border-l-4 border-l-slate-600 p-3.5 shadow-sm rounded-none font-medium">
+                        <div className="flex items-center text-xs text-slate-800 bg-slate-900/5 border border-slate-700/20 backdrop-blur-md p-3.5 shadow-sm rounded-none font-medium">
                           <Loader2 className="w-3.5 h-3.5 animate-spin mr-2.5 text-slate-600" />
                           {zkStatus}
                         </div>
@@ -1062,9 +1064,9 @@ export default function PublicExplorer() {
 
                       {/* Error block */}
                       {zkError && (
-                        <div className="bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 p-3.5 text-slate-800 text-xs flex items-center shadow-sm rounded-none font-medium">
-                          <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
-                          {zkError}
+                        <div className="bg-rose-950/5 border border-rose-800/20 backdrop-blur-md p-3.5 text-xs flex items-center text-slate-800 shadow-sm rounded-none font-medium">
+                          <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                          <span>{zkError}</span>
                         </div>
                       )}
 
@@ -1086,8 +1088,8 @@ export default function PublicExplorer() {
                             </div>
                           </div>
 
-                          <div className="p-4 bg-slate-50 border border-slate-200 border-l-4 border-l-emerald-800 text-slate-800 flex items-start shadow-sm rounded-none">
-                            <KeyRound className="w-4 h-4 mr-2.5 text-emerald-800 flex-shrink-0 mt-0.5" />
+                          <div className="p-4 bg-emerald-950/5 border border-emerald-800/20 backdrop-blur-md text-slate-800 flex items-start shadow-sm rounded-none">
+                            <KeyRound className="w-4 h-4 mr-2.5 text-emerald-900 flex-shrink-0 mt-0.5" />
                             <div>
                               <h5 className="font-bold text-sm text-slate-900">ZK Verification Verified Locally</h5>
                               <p className="text-xs text-slate-700 mt-1 leading-relaxed">
@@ -1113,7 +1115,7 @@ export default function PublicExplorer() {
             <div className="bg-white rounded shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
               <div>
                 <h3 className="text-xl font-bold text-slate-900 flex items-center border-b pb-3 mb-2">
-                  <Settings className="w-5.5 h-5.5 mr-2 text-green-600" />
+                  <Settings className="w-5 h-5 mr-2 text-slate-600" />
                   On-Chain Batch Notarization Controller
                 </h3>
                 <p className="text-slate-500 text-sm">
@@ -1147,9 +1149,9 @@ export default function PublicExplorer() {
               </div>
 
               {batchTriggerSuccess && (
-                <div className="p-4 bg-slate-50 border border-slate-200 border-l-4 border-l-emerald-800 text-slate-800 rounded-none shadow-sm space-y-2">
+                <div className="p-4 bg-emerald-950/5 border border-emerald-800/20 backdrop-blur-md text-slate-800 rounded-none shadow-sm space-y-2">
                   <h4 className="font-bold text-sm flex items-center text-slate-900">
-                    <Binary className="w-4 h-4 mr-2 text-emerald-800" />
+                    <Binary className="w-4 h-4 mr-2 text-emerald-900" />
                     Batch Anchored Successfully!
                   </h4>
                   <div className="font-mono text-xs space-y-1 mt-1 text-slate-700">
@@ -1161,9 +1163,9 @@ export default function PublicExplorer() {
               )}
 
               {batchTriggerError && (
-                <div className="p-4 bg-slate-50 border border-slate-200 border-l-4 border-l-rose-800 text-slate-800 text-xs flex items-center font-medium shadow-sm rounded-none">
-                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-800 flex-shrink-0" />
-                  {batchTriggerError}
+                <div className="p-4 bg-rose-950/5 border border-rose-800/20 backdrop-blur-md text-slate-800 text-xs flex items-center font-medium shadow-sm rounded-none">
+                  <AlertTriangle className="w-4 h-4 mr-2.5 text-rose-900 flex-shrink-0" />
+                  <span>{batchTriggerError}</span>
                 </div>
               )}
             </div>
@@ -1172,7 +1174,7 @@ export default function PublicExplorer() {
             <div className="bg-white rounded shadow-lg border border-slate-100 overflow-hidden">
               <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                 <h3 className="text-lg font-bold text-slate-900 flex items-center">
-                  <UserCheck className="w-5 h-5 mr-2 text-green-600" />
+                  <UserCheck className="w-5 h-5 mr-2 text-slate-600" />
                   Applicant Approval Registry
                 </h3>
                 <button
@@ -1272,7 +1274,7 @@ export default function PublicExplorer() {
           <div className="bg-white shadow-lg rounded overflow-hidden border border-slate-100">
             <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
               <h3 className="text-lg font-bold text-slate-900 flex items-center">
-                <Globe className="w-5 h-5 mr-2 text-green-600" />
+                <Globe className="w-5 h-5 mr-2 text-slate-600" />
                 On-Chain Batch Registrations
               </h3>
               <button 
