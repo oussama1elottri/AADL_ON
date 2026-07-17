@@ -677,56 +677,53 @@ export default function PublicExplorer() {
               </div>
             ) : (
               /* Success view */
-              <div className="bg-white rounded shadow-lg border border-slate-100 overflow-hidden">
-                <div className="bg-gradient-to-r from-green-800 to-green-700 text-white p-6 text-center">
-                  <div className="inline-flex p-3 rounded-full bg-green-600/40 border border-green-500/30 mb-3">
-                    <span className="font-mono text-xs font-bold text-white bg-green-900/40 border border-green-400/30 px-2 py-0.5 rounded-sm uppercase">[ SUCCESS ]</span>
-                  </div>
+              <div className="bg-white border border-[#e2e0d8] rounded-sm shadow-sm overflow-hidden text-slate-800">
+                <div className="bg-[#006633] border-b-2 border-b-amber-500/80 text-white p-6 text-center space-y-2 font-serif">
                   <h4 className="text-xl font-bold">Application Received Successfully!</h4>
-                  <p className="text-xs text-green-100/80 mt-1">
+                  <p className="text-xs text-green-100/90 font-sans">
                     Your records have been notarized in the AADL local register.
                   </p>
                 </div>
 
                 <div className="p-6 md:p-8 space-y-6">
-                  <div className="bg-slate-50 border border-slate-100 rounded-sm p-5 space-y-4">
-                    <div className="grid grid-cols-2 gap-4 border-b pb-3.5">
+                  <div className="bg-[#faf9f6] border border-[#e2e0d8] rounded-sm p-5 space-y-4">
+                    <div className="grid grid-cols-2 gap-4 border-b border-[#e2e0d8] pb-3.5">
                       <div>
-                        <span className="text-slate-400 text-xxs uppercase block">Full Name</span>
-                        <span className="font-bold text-slate-800 text-sm">{regSuccess.full_name}</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-serif">Full Name</span>
+                        <span className="font-bold text-slate-900 text-sm">{regSuccess.full_name}</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 text-xxs uppercase block">National ID</span>
-                        <span className="font-mono font-bold text-slate-800 text-sm">{regSuccess.national_id}</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-serif">National ID</span>
+                        <span className="font-mono font-bold text-slate-900 text-sm">{regSuccess.national_id}</span>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4 border-b pb-3.5">
+                    <div className="grid grid-cols-3 gap-4 border-b border-[#e2e0d8] pb-3.5">
                       <div>
-                        <span className="text-slate-400 text-xxs uppercase block">Wilaya Code</span>
-                        <span className="font-bold text-slate-800 text-sm">{regSuccess.wilaya_code}</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-serif">Wilaya Code</span>
+                        <span className="font-bold text-slate-900 text-sm">{regSuccess.wilaya_code}</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 text-xxs uppercase block">Priority Score</span>
-                        <span className="font-bold text-green-700 text-sm">{regSuccess.priority_score ?? 0} pts</span>
+                        <span className="text-slate-500 text-xxs uppercase block font-serif">Priority Score</span>
+                        <span className="font-bold text-[#006633] text-sm">{regSuccess.priority_score ?? 0} pts</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 text-xxs uppercase block">Initial Status</span>
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 capitalize">
+                        <span className="text-slate-500 text-xxs uppercase block font-serif">Initial Status</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-mono bg-[#f5f4ee] text-slate-800 border border-[#e2e0d8] capitalize">
                           {regSuccess.status}
                         </span>
                       </div>
                     </div>
 
-                    <div className="font-mono text-xs space-y-1 bg-slate-900 text-green-400 p-4 rounded border border-slate-950 shadow-inner relative overflow-hidden">
-                      <span className="text-slate-500 text-xxs uppercase block">Applicant Unique Key Hash</span>
+                    <div className="font-mono text-xs space-y-1 bg-slate-900 text-emerald-400 p-4 rounded-sm border border-slate-950 shadow-inner relative overflow-hidden">
+                      <span className="text-slate-400 text-xxs uppercase block">Applicant Unique Key Hash</span>
                       <div className="flex items-center justify-between mt-1">
                         <span className="truncate mr-3">{regSuccess.applicant_hash}</span>
                         <button
                           onClick={() => handleCopy(regSuccess.applicant_hash, "appHash")}
-                          className="text-slate-500 hover:text-green-300 flex-shrink-0 cursor-pointer"
+                          className="text-slate-400 hover:text-emerald-300 flex-shrink-0 cursor-pointer"
                         >
-                          {copiedText === "appHash" ? <span className="font-bold text-green-400">[ OK ]</span> : <span className="font-bold">[ COPY ]</span>}
+                          {copiedText === "appHash" ? <span className="font-bold text-emerald-400">[ OK ]</span> : <span className="font-bold">[ COPY ]</span>}
                         </button>
                       </div>
                     </div>
@@ -735,13 +732,13 @@ export default function PublicExplorer() {
                   <div className="flex gap-3">
                     <button
                       onClick={startNewApplication}
-                    className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 rounded-sm transition-colors cursor-pointer text-sm"
+                      className="flex-1 bg-[#f5f4ee] hover:bg-[#e8e6dd] border border-[#e2e0d8] text-slate-800 font-serif font-semibold py-3 rounded-sm transition-colors cursor-pointer text-xs uppercase tracking-wider"
                     >
                       New Application
                     </button>
                     <button
                       onClick={() => proceedToVerify(regSuccess.national_id)}
-                      className="flex-1 bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded-sm transition-colors cursor-pointer text-sm flex items-center justify-center"
+                      className="flex-1 bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold py-3 rounded-sm transition-colors cursor-pointer text-xs uppercase tracking-wider flex items-center justify-center"
                     >
                       Verify Status
                     </button>
@@ -771,12 +768,12 @@ export default function PublicExplorer() {
                   placeholder="e.g. 222333444555"
                   value={searchId}
                   onChange={(e) => setSearchId(e.target.value)}
-                  className="flex-1 px-4 py-3 rounded-sm border border-slate-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-base font-mono bg-[#fafaf9]"
+                  className="flex-1 px-4 py-3 rounded-sm border border-[#e2e0d8] focus:outline-none focus:border-[#006633] focus:ring-1 focus:ring-[#006633] text-sm font-mono bg-white"
                 />
                 <button
                   type="submit"
                   disabled={searchLoading}
-                  className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-sm font-semibold flex items-center transition-colors disabled:opacity-50 cursor-pointer"
+                  className="bg-[#006633] hover:bg-[#005229] text-white px-6 py-3 rounded-sm font-serif font-bold text-xs uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   Search
                 </button>
@@ -930,15 +927,15 @@ export default function PublicExplorer() {
 
                   {/* Verification Widget */}
                   {applicant.status === "batched" && (
-                    <div className="bg-white rounded shadow-lg border border-slate-100 p-6 space-y-4">
-                      <div className="flex justify-between items-center border-b pb-4">
-                        <h4 className="text-md font-bold text-slate-900 border-b pb-2">
+                    <div className="bg-white border border-[#e2e0d8] p-6 space-y-4 rounded-sm shadow-sm">
+                      <div className="flex justify-between items-center border-b border-[#e2e0d8] pb-4">
+                        <h4 className="text-md font-bold text-slate-900 font-serif">
                           Cryptographic Receipt Audit
                         </h4>
                         <button
                           onClick={verifyReceiptLocally}
                           disabled={verifying}
-                          className="bg-green-700 hover:bg-green-800 text-white font-semibold px-4 py-2 rounded-sm text-sm flex items-center transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
                         >
                           Verify Receipt
                         </button>
@@ -983,20 +980,20 @@ export default function PublicExplorer() {
 
                   {/* Zero-Knowledge Proof Widget */}
                   {applicant && (
-                    <div className="bg-white rounded shadow-lg border border-slate-100 p-6 space-y-4">
-                      <div className="flex justify-between items-center border-b pb-4">
+                    <div className="bg-white border border-[#e2e0d8] p-6 space-y-4 rounded-sm shadow-sm">
+                      <div className="flex justify-between items-center border-b border-[#e2e0d8] pb-4">
                         <div>
-                          <h4 className="text-md font-bold text-slate-900">
+                          <h4 className="text-md font-bold text-slate-900 font-serif">
                             Zero-Knowledge Priority Proof
                           </h4>
-                          <p className="text-slate-500 text-xxs mt-0.5">
+                          <p className="text-slate-500 text-xxs font-sans mt-0.5">
                             Prove public score calculation accuracy without exposing private criteria.
                           </p>
                         </div>
                         <button
                           onClick={() => generateZkProof(applicant.national_id)}
                           disabled={zkLoading}
-                          className="bg-green-700 hover:bg-green-800 text-white font-semibold px-4 py-2 rounded-sm text-sm flex items-center transition-all cursor-pointer disabled:opacity-50"
+                          className="bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold px-4 py-2 rounded-sm text-xs uppercase tracking-wider transition-all cursor-pointer disabled:opacity-50"
                         >
                           Generate ZK Proof
                         </button>
@@ -1060,22 +1057,22 @@ export default function PublicExplorer() {
           <div className="space-y-8">
 
             {/* Top Widget: Batch Notarization Control */}
-            <div className="bg-white rounded shadow-lg border border-slate-100 p-6 md:p-8 space-y-6">
-              <div>
-                <h3 className="text-xl font-bold text-slate-900 border-b pb-3 mb-2">
+            <div className="bg-white border border-[#e2e0d8] p-6 md:p-8 space-y-6 rounded-sm shadow-sm text-slate-800">
+              <div className="border-b border-[#e2e0d8] pb-3">
+                <h3 className="text-xl font-bold text-slate-900 font-serif">
                   On-Chain Batch Notarization Controller
                 </h3>
-                <p className="text-slate-500 text-sm">
+                <p className="text-slate-500 text-xs font-sans mt-1">
                   Commit all approved citizens' queue slots to the Ethereum blockchain as an immutable cryptographic batch.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-                <div className="md:col-span-2 bg-slate-50 p-5 rounded-sm border border-slate-100">
-                  <span className="text-slate-400 text-xxs uppercase block font-bold">Approved Queue Status</span>
-                  <div className="text-2xl font-bold text-slate-800 mt-1 flex items-baseline">
+                <div className="md:col-span-2 bg-[#faf9f6] p-5 rounded-sm border border-[#e2e0d8]">
+                  <span className="text-slate-500 text-xxs uppercase block font-serif font-bold">Approved Queue Status</span>
+                  <div className="text-2xl font-bold text-slate-900 mt-1 flex items-baseline font-mono">
                     {eligibleCount}
-                    <span className="text-slate-500 text-xs font-normal ml-2">
+                    <span className="text-slate-500 text-xs font-sans font-normal ml-2">
                       {eligibleCount === 1 ? "applicant is" : "applicants are"} approved and waiting in the pool
                     </span>
                   </div>
@@ -1084,7 +1081,7 @@ export default function PublicExplorer() {
                 <button
                   onClick={triggerBatchNotarization}
                   disabled={eligibleCount === 0 || batchTriggerLoading}
-                  className="bg-green-700 hover:bg-green-800 disabled:opacity-50 text-white font-bold py-4 rounded-sm flex items-center justify-center transition-colors cursor-pointer text-sm uppercase tracking-wide shadow"
+                  className="bg-[#006633] hover:bg-[#005229] disabled:opacity-50 text-white font-serif font-bold py-4 rounded-sm flex items-center justify-center transition-colors cursor-pointer text-xs uppercase tracking-widest shadow-sm"
                 >
                   Commit Batch On-Chain
                 </button>
@@ -1111,65 +1108,59 @@ export default function PublicExplorer() {
             </div>
 
             {/* Bottom Widget: Applicant Registry Approval list */}
-            <div className="bg-white rounded shadow-lg border border-slate-100 overflow-hidden">
-              <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-                <h3 className="text-lg font-bold text-slate-900 border-b pb-2">
+            <div className="bg-white border border-[#e2e0d8] rounded-sm shadow-sm overflow-hidden text-slate-800">
+              <div className="px-6 py-5 border-b border-[#e2e0d8] flex items-center justify-between font-serif">
+                <h3 className="text-lg font-bold text-slate-900">
                   Applicant Approval Registry
                 </h3>
                 <button
                   onClick={fetchRegistry}
-                  className="text-xs text-green-700 hover:underline flex items-center font-semibold cursor-pointer"
+                  className="text-xs text-[#006633] hover:underline font-bold cursor-pointer uppercase tracking-wider"
                 >
                   Refresh List
                 </button>
               </div>
 
               {registryError && (
-                <div className="m-6 bg-rose-700/10 border border-rose-700/30 backdrop-blur-md text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm flex items-center justify-center">
-                  <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
+                <div className="m-6 bg-rose-700/10 border-l-4 border-l-rose-700 border-t border-r border-b border-rose-700/30 text-rose-950 p-4 text-center text-sm font-medium rounded-r-sm">
                   <span>{registryError}</span>
                 </div>
               )}
 
               {registryLoading ? (
                 <div className="flex flex-col justify-center items-center h-48">
-                  <span className="mt-2 text-sm text-slate-500">Querying registry database...</span>
+                  <span className="mt-2 text-sm text-slate-500 font-serif">Querying registry database...</span>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
-                    <thead className="bg-[#fafaf9] border-b border-slate-200">
+                    <thead className="bg-[#f5f4ee] border-b border-[#e2e0d8] font-serif text-xs text-slate-700 uppercase tracking-wider">
                       <tr>
-                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Citizen Name</th>
-                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">National ID</th>
-                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Wilaya</th>
-                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Priority Score</th>
-                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                        <th className="px-6 py-4">Citizen Name</th>
+                        <th className="px-6 py-4">National ID</th>
+                        <th className="px-6 py-4">Wilaya</th>
+                        <th className="px-6 py-4">Priority Score</th>
+                        <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-[#e2e0d8]">
                       {registry.map((app) => (
-                        <tr key={app.id} className="hover:bg-slate-50/50 transition-colors">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800">
+                        <tr key={app.id} className="hover:bg-[#faf9f6] transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900 font-sans">
                             {app.full_name}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-500">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-slate-600">
                             {app.national_id ? `${app.national_id.substring(0, 4)}••••${app.national_id.substring(8)}` : "Masked ID"}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-sans">
                             {ALGERIAN_WILAYAS.find((w) => w.code === app.wilaya_code)?.name || app.wilaya_code}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-700">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-[#006633] font-mono">
                             {app.priority_score ?? 0} pts
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-semibold border ${app.status === "pending"
-                              ? "bg-amber-50 text-amber-700 border-amber-200"
-                              : app.status === "eligible"
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : "bg-green-50 text-green-700 border-green-200"
-                              }`}>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-mono bg-[#f5f4ee] text-slate-800 border border-[#e2e0d8] capitalize">
                               {app.status}
                             </span>
                           </td>
@@ -1177,14 +1168,14 @@ export default function PublicExplorer() {
                             {app.status === "pending" ? (
                               <button
                                 onClick={() => approveCitizen(app.applicant_hash)}
-                                className="bg-green-700 hover:bg-green-800 text-white font-bold py-1 px-3.5 rounded text-xs transition-colors cursor-pointer"
+                                className="bg-[#006633] hover:bg-[#005229] text-white font-serif font-bold py-1 px-3.5 rounded-sm text-xs transition-colors cursor-pointer uppercase"
                               >
                                 Approve
                               </button>
                             ) : app.status === "eligible" ? (
-                              <span className="text-slate-400 text-xs italic">Awaiting Notarization</span>
+                              <span className="text-slate-400 text-xs italic font-serif">Awaiting Notarization</span>
                             ) : (
-                              <span className="text-green-700 text-xs font-semibold flex items-center justify-end">
+                              <span className="text-[#006633] text-xs font-bold font-serif uppercase">
                                 Notarized
                               </span>
                             )}
@@ -1207,75 +1198,66 @@ export default function PublicExplorer() {
 
         {/* Tab 4: Blockchain Explorer */}
         {activeTab === "explorer" && (
-          <div className="bg-white shadow-lg rounded overflow-hidden border border-slate-100">
-            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="text-lg font-bold text-slate-900 border-b pb-2">
+          <div className="bg-white border border-[#e2e0d8] rounded-sm shadow-sm overflow-hidden text-slate-800">
+            <div className="px-6 py-5 border-b border-[#e2e0d8] flex items-center justify-between font-serif">
+              <h3 className="text-lg font-bold text-slate-900">
                 On-Chain Batch Registrations
               </h3>
               <button
                 onClick={fetchBatches}
-                className="text-xs text-green-700 hover:underline flex items-center font-semibold cursor-pointer"
+                className="text-xs text-[#006633] hover:underline font-bold cursor-pointer uppercase tracking-wider"
               >
-                <Clock className="w-3.5 h-3.5 mr-1" />
                 Refresh Registry
               </button>
             </div>
 
             {batchesError && (
-              <div className="m-6 bg-rose-700/10 border border-rose-700/30 backdrop-blur-md text-rose-950 p-4 text-center text-sm font-medium shadow-sm rounded-sm flex items-center justify-center">
-                <XCircle className="w-4.5 h-4.5 mr-2 text-rose-700 flex-shrink-0" />
-                <span className="font-semibold text-rose-900 uppercase tracking-wide text-[10px] bg-rose-200/60 px-1.5 py-0.5 rounded border border-rose-300/80 mr-2">Failed</span>
+              <div className="m-6 bg-rose-700/10 border-l-4 border-l-rose-700 border-t border-r border-b border-rose-700/30 text-rose-950 p-4 text-center text-sm font-medium rounded-r-sm">
                 <span>{batchesError}</span>
               </div>
             )}
 
             {batchesLoading ? (
-              <div className="flex flex-col justify-center items-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-green-700" />
+              <div className="flex flex-col justify-center items-center h-64 font-serif">
                 <span className="mt-2 text-sm text-slate-500">Querying Block Registry...</span>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
-                  <thead className="bg-[#fafaf9] border-b border-slate-200">
+                  <thead className="bg-[#f5f4ee] border-b border-[#e2e0d8] font-serif text-xs text-slate-700 uppercase tracking-wider">
                     <tr>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Batch ID</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Commitment Timestamp</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Merkle Root (Commitment)</th>
-                      <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Sepolia Proof Link</th>
+                      <th className="px-6 py-4">Batch ID</th>
+                      <th className="px-6 py-4">Commitment Timestamp</th>
+                      <th className="px-6 py-4">Merkle Root (Commitment)</th>
+                      <th className="px-6 py-4">Sepolia Proof Link</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-[#e2e0d8]">
                     {batches.map((batch) => (
-                      <tr key={batch.id} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900">
+                      <tr key={batch.id} className="hover:bg-[#faf9f6] transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-900 font-mono">
                           #{batch.id}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 flex items-center">
-                          <Calendar className="w-3.5 h-3.5 mr-1.5 text-slate-400" />
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-serif">
                           {new Date(batch.created_at).toLocaleString()}
                         </td>
                         <td className="px-6 py-4 text-sm font-mono text-slate-600">
-                          <div className="flex items-center space-x-2">
-                            <ShieldCheck className="w-4 h-4 text-green-600 flex-shrink-0" />
-                            <span title={batch.merkle_root}>
-                              {batch.merkle_root.substring(0, 10)}...{batch.merkle_root.substring(58)}
-                            </span>
-                          </div>
+                          <span title={batch.merkle_root}>
+                            {batch.merkle_root.substring(0, 10)}...{batch.merkle_root.substring(58)}
+                          </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-[#006633]">
                           {batch.tx_hash ? (
                             <a
                               href={`https://sepolia.etherscan.io/tx/${batch.tx_hash.startsWith("0x") ? batch.tx_hash : "0x" + batch.tx_hash}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center hover:underline font-semibold"
+                              className="hover:underline font-bold font-serif uppercase text-xs"
                             >
                               Etherscan
-                              <ExternalLink className="w-3 h-3 ml-1" />
                             </a>
                           ) : (
-                            <span className="text-slate-400 italic">Pending Anchor</span>
+                            <span className="text-slate-400 italic font-serif">Pending Anchor</span>
                           )}
                         </td>
                       </tr>
