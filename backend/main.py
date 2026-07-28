@@ -7,8 +7,8 @@ from .services import blockchain_service
 from typing import List 
 from .services import merkle_service
 
-# Import all the modules we've built
 from . import models, schemas, security
+from .rate_limiter import limiter_standard, limiter_heavy
 from .database import SessionLocal, engine
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -59,7 +59,7 @@ def get_db():
 
 # --- API Endpoints ---
 
-@app.post("/v1/applicants/", response_model=schemas.Applicant, status_code=201, tags=["Applicants"])
+@app.post("/v1/applicants/", response_model=schemas.Applicant, status_code=201, dependencies=[Depends(limiter_standard)], tags=["Applicants"])
 def create_applicant(applicant_data: schemas.ApplicantCreate, db: Session = Depends(get_db)):
     """
     Registers a new applicant in the system.
@@ -370,11 +370,12 @@ def check_applicant_status(national_id: str, db: Session = Depends(get_db)):
 
     return response
 
-@app.post("/v1/applicants/{national_id}/prove", tags=["Applicants"])
-def prove_applicant_priority(national_id: str, db: Session = Depends(get_db)):
+@app.post("/v1/applicants/{national_id}/prove", dependencies=[Depends(limiter_heavy)], tags=["Applicants"])
+async def prove_applicant_priority(national_id: str, db: Session = Depends(get_db)):
     """
     Generates a Zero-Knowledge Proof verifying that the applicant's priority score 
     was calculated correctly based on their private criteria (age, income, etc).
+    Executed asynchronously off the main event loop thread.
     """
     from . import zk_service
     
@@ -385,9 +386,9 @@ def prove_applicant_priority(national_id: str, db: Session = Depends(get_db)):
     if not applicant:
         raise HTTPException(status_code=404, detail="Applicant not found")
         
-    # 2. Run ZoKrates witness and proof generation
+    # 2. Run ZoKrates witness and proof generation asynchronously
     try:
-        proof_payload = zk_service.generate_zk_proof(
+        proof_payload = await zk_service.async_generate_zk_proof(
             age=applicant.age,
             is_married=applicant.is_married,
             children=applicant.number_of_children,

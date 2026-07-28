@@ -451,11 +451,11 @@ export default function PublicExplorer() {
       <div className="max-w-5xl mx-auto space-y-8">
 
         {/* Executive Document Header */}
-        <header className="bg-[#006633] border-b-4 border-b-amber-500 p-8 md:p-10 text-center space-y-3 rounded-sm shadow-md text-white">
-          <div className="text-base md:text-lg font-bold text-amber-300 tracking-wide font-sans flex items-center justify-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+        <header className="bg-[#006633] border-b-4 border-b-amber-500 p-8 md:p-10 text-center space-y-3 rounded-sm --tw-shadow-color text-white">
+          <div className="text-2xl md:text-2xl font-bold text-amber-300 tracking-wide font-sans flex items-center justify-center gap-2">
+            {/* <span className="w-2 h-2 rounded-full bg-amber-400"></span> */}
             الجمهورية الجزائرية الديمقراطية الشعبية
-            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+            {/* <span className="w-2 h-2 rounded-full bg-amber-400"></span> */}
           </div>
           <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight font-sans">
             AADL_ON Verification Notary Portal

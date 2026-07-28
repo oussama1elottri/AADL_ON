@@ -100,3 +100,14 @@ def generate_zk_proof(age: int, is_married: bool, children: int, income: int, is
         proof_data = json.load(f)
         
     return proof_data
+
+import asyncio
+
+async def async_generate_zk_proof(age: int, is_married: bool, children: int, income: int, is_disabled: bool, public_score: int) -> dict:
+    """
+    Asynchronous non-blocking wrapper around generate_zk_proof.
+    Runs ZoKrates witness and proof computation off the main thread event loop.
+    """
+    return await asyncio.to_thread(
+        generate_zk_proof, age, is_married, children, income, is_disabled, public_score
+    )
