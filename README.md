@@ -37,17 +37,6 @@ graph TD
 
 ---
 
-## Key Engineering Challenges & Learnings
-
-<!--
-[Author Note]: Write 1-2 paragraphs here sharing your technical takeaways.
-- What was the most interesting technical challenge you solved? (e.g. non-blocking async ZoKrates worker threads, Merkle proof tree folding in TypeScript, or custom error gas optimization in Solidity).
-- How did this project shape your understanding of Web3 architecture?
--->
-*[Add your personal reflections here: Highlight 1 or 2 specific technical hurdles you overcame while building the system.]*
-
----
-
 ## Quick Start
 
 ### Prerequisites
