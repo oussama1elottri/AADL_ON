@@ -6,12 +6,9 @@
 
 ## Project Motivation
 
-<!--
-[Author Note]: Write 2-3 sentences here in your own words explaining your motivation.
-- What inspired you to build a blockchain notary for national housing programs like AADL?
-- Why is combining privacy (ZK) with public auditability (Ethereum) critical for public trust?
--->
-*[Add your personal introduction here: Explain why you chose to tackle algorithmic transparency and privacy in public housing allocation.]*
+In public sector allocation programs, transparency, auditability, and privacy are the most critical requirements alongside operability. The current AADL housing program faces challenges with data opacity: citizens cannot independently audit their application status, and sensitive personal financial data remains exposed to database operators. 
+
+AADL_ON addresses these challenges by combining Distributed Ledger Technology (DLT) with Zero-Knowledge Proofs (ZK-SNARKs). Ethereum Merkle notarization provides public queue transparency and immutable tracking, while Zero-Knowledge proofs preserve applicant privacy. Combined, they establish an end-to-end, tamper-proof audit pipeline from the moment an application is marked eligible until its allocation turn comes.
 
 ---
 
