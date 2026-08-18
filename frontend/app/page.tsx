@@ -1175,12 +1175,17 @@ export default function PublicExplorer() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right">
                             {app.status === "pending" ? (
-                              <button
-                                onClick={() => approveCitizen(app.applicant_hash)}
-                                className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold py-1 px-3.5 rounded-sm text-xs transition-colors cursor-pointer uppercase"
-                              >
-                                Approve
-                              </button>
+                              <div className="flex items-center justify-end space-x-2">
+                                <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-sm">
+                                  Docs Audited ✓
+                                </span>
+                                <button
+                                  onClick={() => approveCitizen(app.applicant_hash)}
+                                  className="bg-[#006633] hover:bg-[#005229] text-white font-sans font-bold py-1 px-3.5 rounded-sm text-xs transition-colors cursor-pointer uppercase shadow-sm"
+                                >
+                                  Approve
+                                </button>
+                              </div>
                             ) : app.status === "eligible" ? (
                               <span className="text-slate-400 text-xs italic font-sans">Awaiting Notarization</span>
                             ) : (

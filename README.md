@@ -4,18 +4,19 @@
 
 ---
 
-## 🏛️ Executive Summary
+## ✍️ Project Motivation (Written by Author)
 
-**AADL_ON** is a production-grade Web3 & Zero-Knowledge (ZK) Housing Allocation Notary platform designed to eliminate allocation corruption, guarantee 100% queue integrity, and protect citizen privacy.
-
-By combining **Off-Chain Batch Merkle Notarization** on Ethereum with **Groth16 Zero-Knowledge Priority Proofs (ZoKrates)**, AADL_ON ensures:
-1. **Public Auditability**: Citizens can independently audit their position and notarized commitment on the Ethereum blockchain.
-2. **Zero-Knowledge Privacy**: Citizens can mathematically prove their priority score calculation is accurate without exposing private personal criteria (income, marital status, children count, disability).
-3. **98%+ Gas Optimization**: Batch commitments reduce on-chain storage costs by anchoring hundreds of queue slots in a single 32-byte Merkle Root.
+<!-- 
+[MENTOR NOTE FOR YOU]: Write 2-3 sentences here in your own words explaining your motivation.
+Example ideas to include:
+- What inspired you to build a blockchain notary for national housing programs like AADL?
+- Why is combining privacy (ZK) with public auditability (Ethereum) critical for public trust?
+-->
+*`[Add your personal introduction here: Explain why you chose to tackle algorithmic transparency and privacy in public housing allocation.]`*
 
 ---
 
-## 🏗️ System Architecture
+## 🏛️ System Architecture
 
 ```mermaid
 graph TD
@@ -30,13 +31,25 @@ graph TD
 
 ---
 
-## ⚡ Core Features & Technical Innovations
+## ⚡ Core Technical Features
 
-- 🛡️ **Zero-Knowledge Priority Verification**: Built using ZoKrates Groth16 ZK-SNARK circuit (`priority_validator.zok`) proving `calculated_score == f(age, married, children, income, disabled)` without revealing inputs.
-- 🌳 **Merkle Tree Batch Notarization**: Aggregates applicant hashes into deterministic Merkle roots and anchors them on-chain via `BatchRegistry.sol`.
-- 🔐 **Role-Based Security & Rate Limiting**: Managed with OpenZeppelin `AccessControl` and custom sliding-window thread-safe rate limiters.
-- 🌐 **Executive Document Minimalist & Dual-Language UI**: High-contrast, accessibility-first design supporting both English LTR (`dir="ltr"`) and Arabic RTL (`dir="rtl"`).
-- 🧪 **Comprehensive Foundry Test Suite**: 100% smart contract code coverage for access control, state transitions, custom errors, and ZK verifier integration.
+- **Zero-Knowledge Priority Verification**: Built using ZoKrates Groth16 ZK-SNARK circuit (`priority_validator.zok`) proving `calculated_score == f(age, married, children, income, disabled)` without revealing private inputs.
+- **Merkle Tree Batch Notarization**: Aggregates applicant hashes into deterministic Merkle roots and anchors them on-chain via `BatchRegistry.sol`.
+- **Role-Based Access Control & Rate Limiting**: OpenZeppelin `AccessControl` for smart contract permissioning and sliding-window rate limiters for API endpoints.
+- **Executive Document Minimalist & Dual-Language UI**: High-contrast interface supporting both English (LTR) and Arabic (RTL) layouts.
+- **Foundry Test Suite**: Smart contract test coverage for access control, state transitions, custom error reverts, and ZK verifier routing.
+
+---
+
+## ✍️ Key Engineering Challenges & Learnings (Written by Author)
+
+<!-- 
+[MENTOR NOTE FOR YOU]: Write 1-2 paragraphs here sharing your technical takeaways.
+Example ideas to include:
+- What was the most interesting technical challenge you solved? (e.g. non-blocking async ZoKrates worker threads, Merkle proof tree folding in TypeScript, or custom error gas optimization in Solidity).
+- How did this project shape your understanding of Web3 architecture?
+-->
+*`[Add your personal reflections here: Highlight 1 or 2 specific technical hurdles you overcame while building the system.]`*
 
 ---
 
@@ -52,7 +65,7 @@ graph TD
 # Build smart contracts
 forge build
 
-# Run comprehensive test suite
+# Run unit test suite
 forge test -vvv
 
 # Local Anvil deployment
@@ -62,12 +75,12 @@ forge script script/DeployBatchRegistry.s.sol --rpc-url http://127.0.0.1:8545 --
 
 ### 2. Backend (FastAPI + ZoKrates)
 ```bash
-# Set up Python virtual environment & dependencies
+# Virtual environment & dependencies
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# Start database & backend
+# Start API server
 uvicorn backend.main:app --reload --port 8000
 ```
 
@@ -76,7 +89,6 @@ uvicorn backend.main:app --reload --port 8000
 cd frontend
 npm install
 npm run dev
-# Access portal at http://localhost:3000
 ```
 
 ---
