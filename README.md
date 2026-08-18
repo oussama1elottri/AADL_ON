@@ -4,7 +4,7 @@
 
 ---
 
-## Project Motivation
+## Problem Statement & National Impact
 
 In public sector allocation programs, transparency, auditability, and privacy are the most critical requirements alongside operability. The current AADL housing program faces challenges with data opacity: citizens cannot independently audit their application status, and sensitive personal financial data remains exposed to database operators. 
 
