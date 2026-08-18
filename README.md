@@ -1,22 +1,21 @@
-# AADL_ON — Algorithmic Housing Allocation Notary & ZK Audit Portal
+# AADL_ON: Algorithmic Housing Allocation Notary & ZK Audit Portal
 
-> **Algorithmic Housing Allocation Notary & Zero-Knowledge Priority Verification Platform for National Programs.**
+> Algorithmic housing allocation notary and zero-knowledge priority verification platform for national programs.
 
 ---
 
-## ✍️ Project Motivation (Written by Author)
+## Project Motivation
 
-<!-- 
-[MENTOR NOTE FOR YOU]: Write 2-3 sentences here in your own words explaining your motivation.
-Example ideas to include:
+<!--
+[Author Note]: Write 2-3 sentences here in your own words explaining your motivation.
 - What inspired you to build a blockchain notary for national housing programs like AADL?
 - Why is combining privacy (ZK) with public auditability (Ethereum) critical for public trust?
 -->
-*`[Add your personal introduction here: Explain why you chose to tackle algorithmic transparency and privacy in public housing allocation.]`*
+*[Add your personal introduction here: Explain why you chose to tackle algorithmic transparency and privacy in public housing allocation.]*
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TD
@@ -31,32 +30,31 @@ graph TD
 
 ---
 
-## ⚡ Core Technical Features
+## Key Technical Features
 
-- **Zero-Knowledge Priority Verification**: Built using ZoKrates Groth16 ZK-SNARK circuit (`priority_validator.zok`) proving `calculated_score == f(age, married, children, income, disabled)` without revealing private inputs.
-- **Merkle Tree Batch Notarization**: Aggregates applicant hashes into deterministic Merkle roots and anchors them on-chain via `BatchRegistry.sol`.
+- **Zero-Knowledge Priority Verification**: Uses ZoKrates Groth16 ZK-SNARK circuit (`priority_validator.zok`) proving `calculated_score == f(age, married, children, income, disabled)` without exposing private input criteria.
+- **Merkle Tree Batch Notarization**: Hashes applicant records into deterministic Merkle roots and anchors commitments on-chain via `BatchRegistry.sol`.
 - **Role-Based Access Control & Rate Limiting**: OpenZeppelin `AccessControl` for smart contract permissioning and sliding-window rate limiters for API endpoints.
-- **Executive Document Minimalist & Dual-Language UI**: High-contrast interface supporting both English (LTR) and Arabic (RTL) layouts.
-- **Foundry Test Suite**: Smart contract test coverage for access control, state transitions, custom error reverts, and ZK verifier routing.
+- **Executive Document UI & Dual-Language Support**: Accessible interface supporting both English (LTR) and Arabic (RTL) layouts.
+- **Foundry Test Suite**: Smart contract unit tests covering access control, state transitions, custom error reverts, and ZK verifier routing.
 
 ---
 
-## ✍️ Key Engineering Challenges & Learnings (Written by Author)
+## Key Engineering Challenges & Learnings
 
-<!-- 
-[MENTOR NOTE FOR YOU]: Write 1-2 paragraphs here sharing your technical takeaways.
-Example ideas to include:
+<!--
+[Author Note]: Write 1-2 paragraphs here sharing your technical takeaways.
 - What was the most interesting technical challenge you solved? (e.g. non-blocking async ZoKrates worker threads, Merkle proof tree folding in TypeScript, or custom error gas optimization in Solidity).
 - How did this project shape your understanding of Web3 architecture?
 -->
-*`[Add your personal reflections here: Highlight 1 or 2 specific technical hurdles you overcame while building the system.]`*
+*[Add your personal reflections here: Highlight 1 or 2 specific technical hurdles you overcame while building the system.]*
 
 ---
 
-## 🚀 Quick Start (Local Setup)
+## Quick Start
 
 ### Prerequisites
-- **Foundry** (`forge`, `anvil`): [https://getfoundry.sh](https://getfoundry.sh)
+- **Foundry** (`forge`, `anvil`): https://getfoundry.sh
 - **Python 3.10+** & **Docker Compose**
 - **Node.js 18+** & **npm**
 
@@ -93,7 +91,7 @@ npm run dev
 
 ---
 
-## 🔬 ZK-SNARK Circuit Specification (`priority_validator.zok`)
+## Circuit Specification (`priority_validator.zok`)
 
 ```rust
 def main(
@@ -118,6 +116,6 @@ def main(
 
 ---
 
-## ⚖️ License
+## License
 
-Distributed under the **MIT License**. See `LICENSE` for details.
+Distributed under the MIT License. See `LICENSE` for details.

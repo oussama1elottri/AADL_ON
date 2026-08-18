@@ -47,9 +47,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Dependency for Database Session ---
-# This function provides a database session to our API endpoints and ensures it's
-# always closed after the request is finished. This is a crucial pattern.
 def get_db():
     db = SessionLocal()
     try:
@@ -57,36 +54,22 @@ def get_db():
     finally:
         db.close()
 
-# --- API Endpoints ---
-
 @app.post("/v1/applicants/", response_model=schemas.Applicant, status_code=201, dependencies=[Depends(limiter_standard)], tags=["Applicants"])
 def create_applicant(applicant_data: schemas.ApplicantCreate, db: Session = Depends(get_db)):
     """
-    Registers a new applicant in the system.
-
-    - **Validates** incoming data via the `schemas.ApplicantCreate` model.
-    - **Hashes** the `national_id` for privacy and uniqueness.
-    - **Checks for duplicates** based on the generated hash.
-    - **Stores** the new applicant in the database with all required fields.
+    Registers a new applicant, computes privacy hash, and calculates priority score.
     """
-    # Hash the sensitive identifier using our security utility.
     applicant_hash = security.hash_identifier(applicant_data.national_id)
 
-    # Check for duplicates to prevent the same person from applying multiple times.
     existing_applicant = db.query(models.Applicant).filter(models.Applicant.applicant_hash == applicant_hash).first()
     if existing_applicant:
         raise HTTPException(
-            status_code=409, # 409 Conflict is the correct HTTP status code for a duplicate resource.
+            status_code=409,
             detail="Conflict: An applicant with this National ID already exists."
         )
     
-    # --- Mocking the File Hash ---
-    # In a real system, this hash would come from a file upload service after
-    # hashing the contents of an uploaded document. For now, we generate a 
-    # random 32-byte hash to satisfy our data model's requirements.
     mock_file_hash = "0x" + secrets.token_hex(32)
 
-    # Create the SQLAlchemy model instance with all the required data.
     score = 0
     if 30 <= applicant_data.age <= 45:
         score += 20
