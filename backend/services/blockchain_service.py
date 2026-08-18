@@ -1,21 +1,15 @@
-# backend/services/blockchain_service.py
-
 import os
 import json
 from dotenv import load_dotenv
 from web3 import Web3
-
-# Import our Merkle Tree logic
 from .merkle_service import MerkleTree, create_applicant_leaf
 
-# --- CONFIGURATION ---
 load_dotenv()
 RPC_URL = os.getenv("SEPOLIA_RPC_URL")
 OPERATOR_PRIVATE_KEY = os.getenv("SEPOLIA_PRIVATE_KEY")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
 ABI_PATH = os.getenv("ABI_PATH", "out/BatchRegistry.sol/BatchRegistry.json")
 
-# --- WEB3 SETUP ---
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 if not w3.is_connected():
     raise ConnectionError(f"Failed to connect to RPC: {RPC_URL}")
@@ -24,7 +18,6 @@ operator_account = w3.eth.account.from_key(OPERATOR_PRIVATE_KEY)
 
 with open(ABI_PATH, "r") as f:
     contract_abi = json.load(f)["abi"]
-
 
 batch_registry_contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=contract_abi)
 

@@ -17,16 +17,12 @@ class Applicant(Base):
     id = Column(Integer, primary_key=True, index=True)
     applicant_hash = Column(String(66), unique=True, index=True, nullable=False)
     
-    # --- PII Fields ---
     full_name = Column(String(100), nullable=False)
     address = Column(String(255), nullable=False)
     
-    # --- Data required for Merkle Leaf ---
     wilaya_code = Column(Integer, nullable=False)
-    # For now, we'll store a mock file_hash. Later, this would come from a document upload service.
     file_hash = Column(String(66), nullable=False) 
 
-    # --- Priority Engine Criteria ---
     age = Column(Integer, default=0, nullable=False)
     is_married = Column(Boolean, default=False, nullable=False)
     number_of_children = Column(Integer, default=0, nullable=False)
@@ -34,7 +30,6 @@ class Applicant(Base):
     is_disabled = Column(Boolean, default=False, nullable=False)
     priority_score = Column(Integer, default=0, index=True, nullable=False)
 
-    # --- System Fields ---
     status = Column(Enum(ApplicantStatus), default=ApplicantStatus.PENDING, nullable=False)
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())

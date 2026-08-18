@@ -7,21 +7,15 @@ from web3 import Web3
 from dotenv import load_dotenv
 from sqlalchemy.orm import Session
 
-# --- Logging Setup ---
-# A professional service should have proper logging, not just print statements.
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# --- Path Setup ---
-# This ensures we can import modules from the 'backend' directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-# Now we can import from the backend
 from backend.database import SessionLocal
 from backend import models
 
-# --- CONFIGURATION ---
 load_dotenv()
 WEBSOCKET_RPC_URL = os.getenv("SEPOLIA_WEBSOCKET_RPC_URL")
 CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
@@ -30,7 +24,6 @@ ABI_PATH = os.getenv("ABI_PATH", "out/BatchRegistry.sol/BatchRegistry.json")
 if not WEBSOCKET_RPC_URL:
     raise ValueError("SEPOLIA_WEBSOCKET_RPC_URL must be set in .env file.")
 
-# --- WEB3 SETUP ---
 w3 = Web3(Web3.LegacyWebSocketProvider(WEBSOCKET_RPC_URL))
 with open(ABI_PATH, "r") as f:
     contract_abi = json.load(f)["abi"]
