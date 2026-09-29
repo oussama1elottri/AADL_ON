@@ -32,21 +32,9 @@ contract BatchRegistryTest is Test {
         bytes memory sampleMetadata = abi.encodePacked("Q1_2026");
 
         vm.expectEmit(true, true, true, true);
-        emit BatchRegistry.BatchCommitted(
-            1,
-            sampleMerkleRoot,
-            deployer,
-            sampleWilaya,
-            sampleBatchSize,
-            sampleMetadata
-        );
+        emit BatchRegistry.BatchCommitted(1, sampleMerkleRoot, deployer, sampleWilaya, sampleBatchSize, sampleMetadata);
 
-        uint256 batchId = batchRegistry.commitBatch(
-            sampleMerkleRoot,
-            sampleWilaya,
-            sampleBatchSize,
-            sampleMetadata
-        );
+        uint256 batchId = batchRegistry.commitBatch(sampleMerkleRoot, sampleWilaya, sampleBatchSize, sampleMetadata);
 
         assertEq(batchId, 1);
         assertEq(batchRegistry.merkleRoots(1), sampleMerkleRoot);
@@ -75,7 +63,7 @@ contract BatchRegistryTest is Test {
 
     function test_SetVerifier_Success() public {
         Verifier newVerifier = new Verifier();
-        
+
         vm.expectEmit(true, false, false, false);
         emit BatchRegistry.VerifierUpdated(address(newVerifier));
 

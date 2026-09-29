@@ -63,10 +63,7 @@ contract BatchRegistry is AccessControl {
         return _batchCounter;
     }
 
-    function verifyZkProof(
-        Verifier.Proof memory _proof,
-        uint256[1] memory _publicInputs
-    ) public view returns (bool) {
+    function verifyZkProof(Verifier.Proof memory _proof, uint256[1] memory _publicInputs) public view returns (bool) {
         if (address(verifier) == address(0)) revert VerifierNotSet();
         return verifier.verifyTx(_proof, _publicInputs);
     }
@@ -75,5 +72,4 @@ contract BatchRegistry is AccessControl {
         return _batchCounter;
     }
 }
-
 

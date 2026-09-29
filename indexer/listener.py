@@ -90,8 +90,7 @@ def process_and_save_batch(db: Session, event: dict):
 
 
 def handle_event(event: dict):
-
-    print("\n---////// ---")
+    logging.info(f"Processing BatchCommitted event for Batch ID {event.args.batchId} (Tx: {event.transactionHash.hex()})")
     
     # The event data is in a dictionary-like object
     batch_id = event.args.batchId
