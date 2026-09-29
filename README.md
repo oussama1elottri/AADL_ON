@@ -40,39 +40,35 @@ graph TD
 ## Quick Start
 
 ### Prerequisites
+- **Docker Compose** & **Docker**
 - **Foundry** (`forge`, `anvil`): https://getfoundry.sh
-- **Python 3.10+** & **Docker Compose**
-- **Node.js 18+** & **npm**
 
-### 1. Smart Contracts (Foundry)
+### 1. Run Microservices (Docker Compose)
+
 ```bash
-# Build smart contracts
+# 1. Copy environment configuration
+cp .env.example .env
+
+# 2. Start services (PostgreSQL, Anvil, Backend, Indexer, Frontend)
+docker compose up --build
+```
+
+- **Frontend Portal:** `http://localhost:3000`
+- **API Documentation:** `http://localhost:8000/docs`
+
+### 2. Smart Contract Testing (Foundry)
+
+```bash
+# Build contracts and run unit test suite
 forge build
-
-# Run unit test suite
 forge test -vvv
-
-# Local Anvil deployment
-anvil &
-forge script script/DeployBatchRegistry.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
 ```
 
-### 2. Backend (FastAPI + ZoKrates)
-```bash
-# Virtual environment & dependencies
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+### 3. Integration Verification Test
 
-# Start API server
-uvicorn backend.main:app --reload --port 8000
-```
-
-### 3. Frontend (Next.js 14)
 ```bash
-cd frontend
-npm install
-npm run dev
+# Execute end-to-end integration test
+python3 test_integration.py
 ```
 
 ---

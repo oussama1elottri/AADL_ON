@@ -117,30 +117,40 @@ def handle_event(event: dict):
         db.close()
 
 
-async def log_loop(event_filter, poll_interval):
-    logging.info("Indexer started. Listening for BatchCommitted events...")
+async def log_loop(poll_interval):
+    logging.info("Indexer started. Listening for BatchCommitted events via block logs...")
+    last_processed_block = w3.eth.block_number
+    
     while True:
         try:
-            for event in event_filter.get_new_entries():
-                handle_event(event)
+            current_block = w3.eth.block_number
+            if current_block >= last_processed_block:
+                events = batch_registry_contract.events.BatchCommitted.get_logs(
+                    from_block=last_processed_block,
+                    to_block=current_block
+                )
+                for event in events:
+                    handle_event(event)
+                last_processed_block = current_block + 1
             await asyncio.sleep(poll_interval)
         except Exception as e:
-            logging.error(f"Error in main event loop: {e}. Retrying...")
-            # A simple sleep is a basic retry mechanism.
-            await asyncio.sleep(poll_interval * 5)
+            logging.error(f"Error in main event loop: {e}. Re-syncing from current block...")
+            await asyncio.sleep(poll_interval * 2)
+            try:
+                last_processed_block = max(0, w3.eth.block_number - 10)
+            except Exception:
+                pass
 
 
 def main():
     """
-    Sets up the event filter and starts the listening loop.
+    Starts the persistent event indexing loop.
     """
-    event_filter = batch_registry_contract.events.BatchCommitted.create_filter(from_block='latest')
-    
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(
             asyncio.gather(
-                log_loop(event_filter, 5) # Poll every 5 seconds
+                log_loop(3) # Poll block range every 3 seconds
             )
         )
     except KeyboardInterrupt:

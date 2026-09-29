@@ -22,7 +22,8 @@ class MerkleTree:
             for i in range(0, len(cur), 2):
                 a = cur[i]
                 b = cur[i+1]
-                node = Web3.keccak(a + b)
+                # Domain separation (0x01 prefix) to prevent second-preimage attacks
+                node = Web3.keccak(b'\x01' + a + b)
                 nxt.append(node)
             cur = nxt
             self.levels.insert(0, cur)

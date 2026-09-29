@@ -13,9 +13,9 @@ def verify_merkle_proof(leaf_hash: bytes, proof: list, root: str, index: int) ->
     for sibling in proof:
         sibling_bytes = bytes.fromhex(sibling.replace("0x", ""))
         if idx % 2 == 0:
-            current = Web3.keccak(current + sibling_bytes)
+            current = Web3.keccak(b'\x01' + current + sibling_bytes)
         else:
-            current = Web3.keccak(sibling_bytes + current)
+            current = Web3.keccak(b'\x01' + sibling_bytes + current)
         idx = idx // 2
     return current.hex().lower().replace("0x", "") == root.lower().replace("0x", "")
 

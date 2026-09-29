@@ -10,7 +10,14 @@ contract BatchRegistry is AccessControl {
 
     uint256 private _batchCounter;
 
-    mapping(uint256 => bytes32) public merkleRoots;
+    struct BatchRecord {
+        bytes32 merkleRoot;
+        uint16 wilaya;
+        uint32 batchSize;
+        uint64 timestamp;
+    }
+
+    mapping(uint256 => BatchRecord) public batches;
     Verifier public verifier;
 
     // CUSTOM ERRORS
@@ -46,6 +53,10 @@ contract BatchRegistry is AccessControl {
         emit VerifierUpdated(_verifierAddress);
     }
 
+    function merkleRoots(uint256 _batchId) public view returns (bytes32) {
+        return batches[_batchId].merkleRoot;
+    }
+
     function commitBatch(bytes32 _merkleRoot, uint16 _wilaya, uint256 _batchSize, bytes calldata _metadata)
         public
         virtual
@@ -56,7 +67,9 @@ contract BatchRegistry is AccessControl {
         if (_batchSize == 0) revert InvalidBatchSize();
 
         _batchCounter++;
-        merkleRoots[_batchCounter] = _merkleRoot;
+        batches[_batchCounter] = BatchRecord({
+            merkleRoot: _merkleRoot, wilaya: _wilaya, batchSize: uint32(_batchSize), timestamp: uint64(block.timestamp)
+        });
 
         emit BatchCommitted(_batchCounter, _merkleRoot, msg.sender, _wilaya, _batchSize, _metadata);
 
