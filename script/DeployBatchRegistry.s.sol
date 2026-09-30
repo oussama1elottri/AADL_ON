@@ -11,8 +11,9 @@ contract DeployBatchRegistry is Script {
     function run() public returns (BatchRegistry, Verifier) {
         vm.startBroadcast();
 
+        BatchRegistry batchRegistry = new BatchRegistry(address(0));
         Verifier verifier = new Verifier();
-        BatchRegistry batchRegistry = new BatchRegistry(address(verifier));
+        batchRegistry.setVerifier(address(verifier));
 
         vm.stopBroadcast();
         return (batchRegistry, verifier);

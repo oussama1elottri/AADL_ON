@@ -6,9 +6,9 @@
 
 ## Executive Overview & Problem Statement
 
-In public sector allocation programs, transparency, auditability, and privacy are the most critical requirements alongside operability. The current AADL housing program faces challenges with data opacity: citizens cannot independently audit their application status, and sensitive personal financial data remains exposed to database operators. 
+In public sector allocation programs, transparency, auditability, and privacy are the most critical requirements alongside operability . The current AADL housing program faces challenges with data opacity: citizens cannot independently audit their queue position, and sensitive personal financial data remains exposed to database operators. 
 
-AADL_ON addresses these challenges by combining Distributed Ledger Technology (DLT) with Zero-Knowledge Proofs (ZK-SNARKs). Ethereum Merkle notarization provides public queue transparency and immutable tracking, while Zero-Knowledge proofs preserve applicant privacy. Combined, they establish an end-to-end, tamper-proof audit pipeline from the moment an application is marked eligible until its allocation turn comes.
+AADL_ON addresses these challenges by combining Distributed Ledger Technology (DLT) with Zero-Knowledge Proofs (ZK-SNARKs). Ethereum Merkle notarization provides public queue transparency and immutable tracking, while Zero-Knowledge proofs preserve applicant privacy. Combined, they establish an end-to-end, audit-verifiable pipeline from initial application scoring through on-chain batch commitment
 
 ---
 
@@ -21,53 +21,44 @@ graph TD
     API -->|Async ZoKrates Execution| ZK[ZoKrates Groth16 Prover]
     ZK -->|proof.json & Public Inputs| User
     API -->|Batch Commitment Notary| Web3[Web3.py Notary Client]
-    Web3 -->|Merkle Root & TX Hash| Chain[Ethereum Blockchain - Sepolia / Anvil]
+    Web3 -->|Merkle Root & TX Hash| Chain[Ethereum Blockchain - Sepolia]
     Chain -->|BatchRegistry & Verifier.sol| Contracts[Smart Contracts]
 ```
 
----
+## Features
 
-## Key Technical Features
-
-- **Zero-Knowledge Priority Verification**: Uses ZoKrates Groth16 ZK-SNARK circuit (`priority_validator.zok`) proving `calculated_score == f(age, married, children, income, disabled)` without exposing private input criteria.
-- **Merkle Tree Batch Notarization**: Hashes applicant records into deterministic Merkle roots and anchors commitments on-chain via `BatchRegistry.sol`.
-- **Role-Based Access Control & Rate Limiting**: OpenZeppelin `AccessControl` for smart contract permissioning and sliding-window rate limiters for API endpoints.
-- **Executive Document UI & Dual-Language Support**: Accessible interface supporting both English (LTR) and Arabic (RTL) layouts.
-- **Foundry Test Suite**: Smart contract unit tests covering access control, state transitions, custom error reverts, and ZK verifier routing.
-
----
+- **Zero-Knowledge Priority Verification**: ZoKrates Groth16 ZK-SNARK circuit (`priority_validator.zok`) proving priority score calculation without revealing raw applicant data.
+- **Merkle Tree Batch Notarization**: Hashes applicant records into Merkle trees and commits roots on-chain in `BatchRegistry.sol`.
+- **Role-Based Access Control**: OpenZeppelin `AccessControl` managing contract operator permissions.
+- **Dual-Language UI**: Next.js frontend supporting English and Arabic.
 
 ## Quick Start
 
 ### Prerequisites
 - **Docker Compose** & **Docker**
-- **Foundry** (`forge`, `anvil`): https://getfoundry.sh
+- **Foundry** (`forge`): https://getfoundry.sh
 
-### 1. Run Microservices (Docker Compose)
+### 1. Run Microservices
 
 ```bash
-# 1. Copy environment configuration
 cp .env.example .env
-
-# 2. Start services (PostgreSQL, Anvil, Backend, Indexer, Frontend)
 docker compose up --build
 ```
 
-- **Frontend Portal:** `http://localhost:3000`
-- **API Documentation:** `http://localhost:8000/docs`
+- **Frontend Citizen Portal:** `http://localhost:3000`
+- **FastAPI OpenAPI Docs:** `http://localhost:8000/docs`
 
-### 2. Smart Contract Testing (Foundry)
+### 2. Smart Contract Testing
 
 ```bash
-# Build contracts and run unit test suite
 forge build
 forge test -vvv
 ```
 
-### 3. Integration Verification Test
+### 3. Integration Testing
 
 ```bash
-# Execute end-to-end integration test
+# Execute database-agnostic integration test suite
 python3 test_integration.py
 ```
 
@@ -84,14 +75,15 @@ def main(
     private bool is_disabled,
     public u32 public_score
 ) {
-    u32 score = 0;
-    score = score + (age >= 30 && age <= 45 ? 20 : 0);
-    score = score + (is_married ? 15 : 0);
-    score = score + number_of_children * 10;
-    score = score + (monthly_income < 50000 ? 30 : 0);
-    score = score + (is_disabled ? 40 : 0);
+    u32 age_points = if age >= 30 && age <= 45 { 20 } else { 0 };
+    u32 married_points = if is_married { 15 } else { 0 };
+    u32 children_points = number_of_children * 10;
+    u32 income_points = if monthly_income < 50000 { 30 } else { 0 };
+    u32 disabled_points = if is_disabled { 40 } else { 0 };
 
-    assert(score == public_score);
+    u32 computed_score = age_points + married_points + children_points + income_points + disabled_points;
+
+    assert(computed_score == public_score);
     return;
 }
 ```

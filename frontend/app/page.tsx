@@ -308,7 +308,10 @@ export default function PublicExplorer() {
       const response = await axios.post(
         "http://127.0.0.1:8000/v1/batches/",
         {},
-        { headers: { "X-Admin-Key": "government-secret-notary-key" } }
+        {
+          headers: { "X-Admin-Key": "government-secret-notary-key" },
+          timeout: 180000 // 3 minute timeout to wait for Sepolia transaction receipt
+        }
       );
       if (response.status === 202) {
         setBatchTriggerSuccess(response.data);
