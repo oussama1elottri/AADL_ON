@@ -26,7 +26,7 @@ services:
       - SEPOLIA_WEBSOCKET_RPC_URL=${SEPOLIA_WEBSOCKET_RPC_URL}
       - CONTRACT_ADDRESS=${CONTRACT_ADDRESS}
       - SEPOLIA_PRIVATE_KEY=${SEPOLIA_PRIVATE_KEY}
-      - ADMIN_API_KEY=${ADMIN_API_KEY:-government-secret-notary-key}
+      - OPERATOR_API_KEY=${OPERATOR_API_KEY:-government-secret-notary-key}
     volumes:
       - ./backend:/app/backend
     depends_on:

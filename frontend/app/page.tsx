@@ -291,7 +291,7 @@ export default function PublicExplorer() {
       await axios.put(
         `http://127.0.0.1:8000/v1/applicants/${applicantHash}/approve`,
         {},
-        { headers: { "X-Admin-Key": "government-secret-notary-key" } }
+        { headers: { "X-Operator-Key": "government-secret-notary-key" } }
       );
       fetchRegistry();
     } catch (err: any) {
@@ -309,7 +309,7 @@ export default function PublicExplorer() {
         "http://127.0.0.1:8000/v1/batches/",
         {},
         {
-          headers: { "X-Admin-Key": "government-secret-notary-key" },
+          headers: { "X-Operator-Key": "government-secret-notary-key" },
           timeout: 180000 // 3 minute timeout to wait for Sepolia transaction receipt
         }
       );
@@ -498,7 +498,7 @@ export default function PublicExplorer() {
               : "text-slate-600 hover:text-slate-900 hover:bg-[#f5f4ee]"
               }`}
           >
-            03. Admin
+            03. Operator
           </button>
           <button
             onClick={() => {

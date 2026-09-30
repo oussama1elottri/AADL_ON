@@ -18,14 +18,20 @@ from fastapi.middleware.cors import CORSMiddleware
 models.Base.metadata.create_all(bind=engine)
 
 # API Key Authentication dependency
-ADMIN_API_KEY = os.getenv("ADMIN_API_KEY", "government-secret-notary-key")
+OPERATOR_API_KEY = os.getenv("OPERATOR_API_KEY", os.getenv("ADMIN_API_KEY", "government-secret-notary-key"))
 
-def verify_admin_auth(x_admin_key: str = Header(None, alias="X-Admin-Key")):
-    if not x_admin_key or x_admin_key != ADMIN_API_KEY:
+def verify_operator_auth(
+    x_operator_key: str = Header(None, alias="X-Operator-Key"),
+    x_admin_key: str = Header(None, alias="X-Admin-Key")
+):
+    key = x_operator_key or x_admin_key
+    if not key or key != OPERATOR_API_KEY:
         raise HTTPException(
             status_code=401,
-            detail="Unauthorized Admin Access: Invalid or missing X-Admin-Key header."
+            detail="Unauthorized Operator Access: Invalid or missing X-Operator-Key header."
         )
+
+verify_admin_auth = verify_operator_auth
 
 app = FastAPI(
     title="AADL_ON API",

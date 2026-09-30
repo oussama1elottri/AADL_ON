@@ -6,9 +6,9 @@
 
 ## Executive Overview & Problem Statement
 
-In public sector allocation programs, transparency, auditability, and privacy are the most critical requirements alongside operability . The current AADL housing program faces challenges with data opacity: citizens cannot independently audit their queue position, and sensitive personal financial data remains exposed to database operators. 
+In public sector allocation programs, transparency, auditability, and privacy are the most critical requirements alongside operability. The current AADL housing program faces challenges with data opacity: citizens cannot independently audit their queue position, and sensitive personal financial data remains exposed to database operators. 
 
-AADL_ON addresses these challenges by combining Distributed Ledger Technology (DLT) with Zero-Knowledge Proofs (ZK-SNARKs). Ethereum Merkle notarization provides public queue transparency and immutable tracking, while Zero-Knowledge proofs preserve applicant privacy. Combined, they establish an end-to-end, audit-verifiable pipeline from initial application scoring through on-chain batch commitment
+AADL_ON addresses these challenges by combining Distributed Ledger Technology (DLT) with Zero-Knowledge Proofs (ZK-SNARKs). Ethereum Merkle notarization provides public queue transparency and immutable tracking, while Zero-Knowledge proofs preserve applicant privacy. Combined, they establish an end-to-end, audit-verifiable pipeline from initial application scoring through on-chain batch commitment.
 
 ---
 
@@ -16,7 +16,7 @@ AADL_ON addresses these challenges by combining Distributed Ledger Technology (D
 
 ```mermaid
 graph TD
-    User([Citizen / Admin Client]) -->|Next.js App / REST| API[FastAPI Backend Server]
+    User([Citizen / Operator Client]) -->|Next.js App / REST| API[FastAPI Backend Server]
     API -->|PostgreSQL Engine| DB[(PostgreSQL Database)]
     API -->|Async ZoKrates Execution| ZK[ZoKrates Groth16 Prover]
     ZK -->|proof.json & Public Inputs| User
@@ -31,6 +31,8 @@ graph TD
 - **Merkle Tree Batch Notarization**: Hashes applicant records into Merkle trees and commits roots on-chain in `BatchRegistry.sol`.
 - **Role-Based Access Control**: OpenZeppelin `AccessControl` managing contract operator permissions.
 - **Dual-Language UI**: Next.js frontend supporting English and Arabic.
+
+---
 
 ## Quick Start
 
